@@ -4,25 +4,34 @@
 HeroSprite::HeroSprite()
 {
 	this->hoveringAnimation = Animation::create();
+	this->hoveringAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_00.jpg");
 	this->hoveringAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_01.jpg");
 	this->hoveringAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_02.jpg");
 	this->hoveringAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_03.jpg");
-	this->hoveringAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_04.jpg");
 	this->hoveringAnimation->setDelayPerUnit(0.5f);
 	this->hoveringAnimation->setRestoreOriginalFrame(true);
 
-	ValueMap info;
-	info["FrameId"] = Value("Frame3");
-	info["three"] = Value(3);
-	log("here three = %s,",info["FrameId"].asString());
+	ValueMap hoveringAnimationFrame04info;
+	ValueMap hoveringAnimationFrame02info;
+	hoveringAnimationFrame04info["1"] = Value(1);
+	hoveringAnimationFrame02info["2"] = Value(2);
+	//log("here three = %s,", hoveringAnimationFrame04info["FrameId"].asString());
 
-	hoveringAnimation->getFrames().at(3)->setUserInfo(info);
+	hoveringAnimation->getFrames().at(3)->setUserInfo(hoveringAnimationFrame04info);
+	hoveringAnimation->getFrames().at(1)->setUserInfo(hoveringAnimationFrame02info);
 
-	EventListenerCustom * flyingEvtLsnCstm = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this,info](EventCustom * event){
+
+	EventListenerCustom * flyingEvtLsnCstm = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, hoveringAnimationFrame04info, hoveringAnimationFrame02info](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
-		log("Target %p with data %s , three = %d. ", userData->target, Value(userData->userInfo).getDescription().c_str(), *userData->userInfo == info);
+		log("Target %p with data %s , three = %d. ", userData->target, Value(userData->userInfo).getDescription().c_str(), *userData->userInfo == hoveringAnimationFrame04info);
 		//log("Value(userData->userInfo).asString = %s",Value(userData->userInfo).asString());
-		this->setPositionY(this->getPositionY()+33);
+		if (*userData->userInfo == hoveringAnimationFrame04info){
+			this->setPositionY(this->getPositionY() + 33);
+		}
+		if (*userData->userInfo == hoveringAnimationFrame02info){
+			this->setPositionY(this->getPositionY() - 33);
+		}
+		
 	});
 
 	_eventDispatcher->addEventListenerWithFixedPriority(flyingEvtLsnCstm,-1);
@@ -36,92 +45,92 @@ HeroSprite::HeroSprite()
 
 
 	this->movingUpAnimation = Animation::create();
+	this->movingUpAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_00.jpg");
 	this->movingUpAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_01.jpg");
 	this->movingUpAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_02.jpg");
 	this->movingUpAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_03.jpg");
-	this->movingUpAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_04.jpg");
 	this->movingUpAnimation->setDelayPerUnit(0.5f);
 	this->movingUpAnimation->setRestoreOriginalFrame(true);
 	this->movingUpAnimation->retain();
 
 	this->movingDownAnimation = Animation::create();
+	this->movingDownAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_00.jpg");
 	this->movingDownAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_01.jpg");
 	this->movingDownAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_02.jpg");
 	this->movingDownAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_03.jpg");
-	this->movingDownAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_04.jpg");
 	this->movingDownAnimation->setDelayPerUnit(0.5f);
 	this->movingDownAnimation->setRestoreOriginalFrame(true);
 	this->movingDownAnimation->retain();
 
 	this->movingRightAnimation = Animation::create();
+	this->movingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_00.jpg");
 	this->movingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_01.jpg");
 	this->movingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_02.jpg");
 	this->movingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_03.jpg");
-	this->movingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_04.jpg");
 	this->movingRightAnimation->setDelayPerUnit(0.5f);
 	this->movingRightAnimation->setRestoreOriginalFrame(true);
 	this->movingRightAnimation->retain();
 
 	this->movingUpRightAnimation = Animation::create();
+	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_00.jpg");
 	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_01.jpg");
 	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_02.jpg");
 	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_03.jpg");
-	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_04.jpg");
 	this->movingUpRightAnimation->setDelayPerUnit(0.5f);
 	this->movingUpRightAnimation->setRestoreOriginalFrame(true);
 	this->movingUpRightAnimation->retain();
 
 	this->movingDownRightAnimation = Animation::create();
+	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_00.jpg");
 	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_01.jpg");
 	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_02.jpg");
 	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_03.jpg");
-	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_04.jpg");
 	this->movingDownRightAnimation->setDelayPerUnit(0.5f);
 	this->movingDownRightAnimation->setRestoreOriginalFrame(true);
 	this->movingDownRightAnimation->retain();
 
 	this->movingLeftAnimation = Animation::create();
+	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_00.jpg");
 	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_01.jpg");
 	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_02.jpg");
 	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_03.jpg");
-	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_04.jpg");
 	this->movingLeftAnimation->setDelayPerUnit(0.5f);
 	this->movingLeftAnimation->setRestoreOriginalFrame(true);
 	this->movingLeftAnimation->retain();
 
 	this->movingDownLeftAnimation = Animation::create();
+	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_00.jpg");
 	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_01.jpg");
 	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_02.jpg");
 	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_03.jpg");
-	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_04.jpg");
 	this->movingDownLeftAnimation->setDelayPerUnit(0.5f);
 	this->movingDownLeftAnimation->setRestoreOriginalFrame(true);
 	this->movingDownLeftAnimation->retain();
 
 	this->movingUpLeftAnimation = Animation::create();
+	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_00.jpg");
 	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_01.jpg");
 	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_02.jpg");
 	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_03.jpg");
-	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_04.jpg");
 	this->movingUpLeftAnimation->setDelayPerUnit(0.5f);
 	this->movingUpLeftAnimation->setRestoreOriginalFrame(true);
 	this->movingUpLeftAnimation->retain();
 
 	this->blowingWindAnimation = Animation::create();
+	this->blowingWindAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_windattacking_00.jpg");
 	this->blowingWindAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_windattacking_01.jpg");
 	this->blowingWindAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_windattacking_02.jpg");
 	this->blowingWindAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_windattacking_03.jpg");
-	this->blowingWindAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_windattacking_04.jpg");
 	this->blowingWindAnimation->setDelayPerUnit(0.2f);
 	this->blowingWindAnimation->setRestoreOriginalFrame(true);
 	this->blowingWindAnimation->retain();
 
 
 	this->windBulletFlyingAnimation = Animation::create();
+	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_00.jpg");
 	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_01.jpg");
 	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_02.jpg");
 	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_03.jpg");
-	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_04.jpg");
 	this->windBulletFlyingAnimation->setDelayPerUnit(0.2f);
 	this->windBulletFlyingAnimation->setRestoreOriginalFrame(true);
 	this->windBulletFlyingAnimation->retain();
@@ -154,51 +163,64 @@ void HeroSprite::windAttack(){
 }
 
 //这个move对外开放，主角的普通移动只调用它。为了调试方便，所有细节目前都是public。八方向移动方法此时是public，今后应改为private。
+//在此验证了主角在调用move方法时的可移动性。
+//one more 废话：move是说方向按钮造成的位移，dash是说冲刺技能造成的位移。
 void HeroSprite::move(){
-	if (this->directionToMoveRight) {
-		moveRight();
-	}
-	if (this->directionToMoveLeft){
-		moveLeft();
-	}
-	if (this->directionToMoveUp){
-		moveUp();
-	}
-	if (this->directionToMoveDown){
-		moveDown();
-	}
+	if (this->moveable){
+		if (this->directionToMoveRight) {
+			moveRight();
+		}
+		if (this->directionToMoveLeft){
+			moveLeft();
+		}
+		if (this->directionToMoveUp){
+			moveUp();
+		}
+		if (this->directionToMoveDown){
+			moveDown();
+		}
 
-	if (this->directionToMoveUpRight){
-		moveUpRight();
-	}
-	if (this->directionToMoveUpLeft){
-		moveUpLeft();
-	}
-	if (this->directionToMoveDownRight){
-		moveDownRight();
-	}
-	if (this->directionToMoveDownLeft){
-		moveDownLeft();
-	}
-	if (this->directionToMoveUpRight == false &&
-		this->directionToMoveRight == false &&
-		this->directionToMoveDownRight == false &&
-		this->directionToMoveDown == false &&
-		this->directionToMoveDownLeft == false &&
-		this->directionToMoveLeft == false &&
-		this->directionToMoveUpLeft == false &&
-		this->directionToMoveUp == false){
-		moveBrake();
+		if (this->directionToMoveUpRight){
+			moveUpRight();
+		}
+		if (this->directionToMoveUpLeft){
+			moveUpLeft();
+		}
+		if (this->directionToMoveDownRight){
+			moveDownRight();
+		}
+		if (this->directionToMoveDownLeft){
+			moveDownLeft();
+		}
+		if (this->directionToMoveUpRight == false &&
+			this->directionToMoveRight == false &&
+			this->directionToMoveDownRight == false &&
+			this->directionToMoveDown == false &&
+			this->directionToMoveDownLeft == false &&
+			this->directionToMoveLeft == false &&
+			this->directionToMoveUpLeft == false &&
+			this->directionToMoveUp == false){
+			moveBrake();
+		}
 	}
 }
 //moving in 8 directions
+//仅仅将向右移动和播放移动动画一起run一下，没做是否可移动的验证。剩下的七个动画亦然。以后要加入扑打翅膀的声音
 void HeroSprite::moveRight(){
+	this->facingRight = true;
+	this->facingLeft = false;
 	this->stopAllActions();
-	//this->runAction(Spawn::create(RepeatForever::create(MoveBy::create(2.0f,Vec2(33,0))),RepeatForever::create(Animate::create(this->movingRightAnimation)),nullptr));不知为何，这行用不了，提示[Action update] override me
+
+	//this->runAction(Spawn::create(RepeatForever::create(MoveBy::create(2.0f,Vec2(33,0))),RepeatForever::create(Animate::create(this->movingRightAnimation)),nullptr));//不知为何，这行用不了，提示[Action update] override me
+	/*
+	Sequence和Spawn就是不能和RepeatForever一起用的。理由见源码，RepeatForever的interval = 0，不能做除数，跳入另一流程。
+	*/
 	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second, 0))));
 	this->runAction(RepeatForever::create(Animate::create(this->movingRightAnimation)));
 }
 void HeroSprite::moveLeft(){
+	this->facingRight = false;
+	this->facingLeft = true;
 	this->stopAllActions();
 	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second, 0))));
 	this->runAction(RepeatForever::create(Animate::create(this->movingLeftAnimation)));
@@ -214,21 +236,29 @@ void HeroSprite::moveDown(){
 	this->runAction(RepeatForever::create(Animate::create(this->movingDownAnimation)));
 }
 void HeroSprite::moveUpRight(){
+	this->facingRight = true;
+	this->facingLeft = false;
 	this->stopAllActions();
 	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.4142, this->speed_flying_pixel_per_second / 1.4142))));
 	this->runAction(RepeatForever::create(Animate::create(this->movingUpRightAnimation)));
 }
 void HeroSprite::moveUpLeft(){
+	this->facingRight = false;
+	this->facingLeft = true;
 	this->stopAllActions();
 	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second / 1.4142, this->speed_flying_pixel_per_second / 1.4142))));
 	this->runAction(RepeatForever::create(Animate::create(this->movingUpLeftAnimation)));
 }
 void HeroSprite::moveDownRight(){
+	this->facingRight = true;
+	this->facingLeft = false;
 	this->stopAllActions();
 	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.4142, -this->speed_flying_pixel_per_second / 1.4142))));
 	this->runAction(RepeatForever::create(Animate::create(this->movingDownRightAnimation)));
 }
 void HeroSprite::moveDownLeft(){
+	this->facingRight = false;
+	this->facingLeft = true;
 	this->stopAllActions();
 	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second / 1.4142, -this->speed_flying_pixel_per_second / 1.4142))));
 	this->runAction(RepeatForever::create(Animate::create(this->movingDownLeftAnimation)));
