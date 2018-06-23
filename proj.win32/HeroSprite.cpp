@@ -10,9 +10,29 @@ HeroSprite::HeroSprite()
 	this->hoveringAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_04.jpg");
 	this->hoveringAnimation->setDelayPerUnit(0.5f);
 	this->hoveringAnimation->setRestoreOriginalFrame(true);
+
+	ValueMap info;
+	info["FrameId"] = Value("Frame3");
+	info["three"] = Value(3);
+	log("here three = %s,",info["FrameId"].asString());
+
+	hoveringAnimation->getFrames().at(3)->setUserInfo(info);
+
+	EventListenerCustom * flyingEvtLsnCstm = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this,info](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		log("Target %p with data %s , three = %d. ", userData->target, Value(userData->userInfo).getDescription().c_str(), *userData->userInfo == info);
+		//log("Value(userData->userInfo).asString = %s",Value(userData->userInfo).asString());
+		this->setPositionY(this->getPositionY()+33);
+	});
+
+	_eventDispatcher->addEventListenerWithFixedPriority(flyingEvtLsnCstm,-1);
+
 	this->stopAllActions();
 	this->runAction(RepeatForever::create(Animate::create(this->hoveringAnimation)));
 	this->hoveringAnimation->retain();
+
+	
+
 
 
 	this->movingUpAnimation = Animation::create();

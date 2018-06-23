@@ -1,6 +1,7 @@
 #include "Stage1Scene.h"
 #include "Stage1GameplayLayer.h"
 #include "HeroSprite.h"
+#include <iostream>
 
 Stage1Scene::Stage1Scene()
 {
@@ -44,6 +45,8 @@ bool Stage1Scene::init(){
 		if (keyCode == EventKeyboard::KeyCode::KEY_A) {
 			this->key_A_down = true;
 			this->updateHeroDirectionAndSetHimMoving();
+			std::cout << "A hit";
+			log("A hit");
 		}
 		if (keyCode == EventKeyboard::KeyCode::KEY_S) { 
 			this->key_S_down = true; 
@@ -97,6 +100,7 @@ bool Stage1Scene::init(){
 		}
 	};
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(kbListener1, this);
+
 
 	this->schedule(schedule_selector(Stage1Scene::myUpdate));
 

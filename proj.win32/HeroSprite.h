@@ -55,6 +55,8 @@ public:
 	bool isFish = false;
 
 	//主角的运动状态，这些状态与技能施放有关。例如，只有在飞行时才能施放风弹
+	bool facingRight = true;
+	bool facingLeft = false;
 	bool flying = true;
 	bool walking = false;
 	bool swimming = false;
