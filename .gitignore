@@ -329,5 +329,9 @@ proj.win32/Debug.win32/
 # Excluding this one
 !proj.win32/Debug.win32/libbullet.lib
 
-# tLog files
+# tlog files
 *.tlog
+
+# .idb files
+cocos2d/cocos/editor-support/spine/proj.win32/Debug.win32/vc120.idb
+cocos2d/external/Box2D/proj.win32/Debug.win32/vc120.idb
