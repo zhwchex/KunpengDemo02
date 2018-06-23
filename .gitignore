@@ -326,4 +326,8 @@ ASALocalRun/
 # Debug.win32 files
 proj.win32/Debug.win32/
 
+# Excluding this one
 !proj.win32/Debug.win32/libbullet.lib
+
+# tLog files
+*.1.tlog
