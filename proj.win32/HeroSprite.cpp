@@ -28,10 +28,10 @@ HeroSprite::HeroSprite()
 		log("Target %p with data %s , if this frame added 03 = %d. ", userData->target, Value(userData->userInfo).getDescription().c_str(), *userData->userInfo == hoveringAnimationFrame03info);
 		//log("Value(userData->userInfo).asString = %s",Value(userData->userInfo).asString());
 		if (*userData->userInfo == hoveringAnimationFrame03info){
-			this->setPositionY(this->getPositionY() + 33);
+			this->setPositionY(this->getPositionY() + 3);
 		}
 		if (*userData->userInfo == hoveringAnimationFrame01info){
-			this->setPositionY(this->getPositionY() - 33);
+			this->setPositionY(this->getPositionY() - 3);
 		}
 	});
 
