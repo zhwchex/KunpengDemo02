@@ -47,8 +47,6 @@ bool Stage1Scene::init(){
 		if (keyCode == EventKeyboard::KeyCode::KEY_A) {
 			this->key_A_down = true;
 			this->updateHeroDirectionAndSetHimMoving();
-			std::cout << "A hit";
-			log("A hit");
 		}
 		if (keyCode == EventKeyboard::KeyCode::KEY_S) { 
 			this->key_S_down = true; 
@@ -69,6 +67,8 @@ bool Stage1Scene::init(){
 		}
 		if (keyCode == EventKeyboard::KeyCode::KEY_K) {
 			this->key_K_down = true;
+			HeroSprite * kp = (HeroSprite*)gameplayLayer->getChildByTag(2);
+			kp->dash();
 		}
 		if (keyCode == EventKeyboard::KeyCode::KEY_L) {
 			this->key_L_down = true;

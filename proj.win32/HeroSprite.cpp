@@ -23,9 +23,10 @@ HeroSprite::HeroSprite()
 	hoveringAnimation->getFrames().at(1)->setUserInfo(hoveringAnimationFrame01info);
 
 
+
 	EventListenerCustom * hoveringAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, hoveringAnimationFrame03info, hoveringAnimationFrame01info](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
-		log("Target %p with data %s , if this frame added 03 = %d. ", userData->target, Value(userData->userInfo).getDescription().c_str(), *userData->userInfo == hoveringAnimationFrame03info);
+		//log("Target %p with data %s , if this frame added 03 = %d. ", userData->target, Value(userData->userInfo).getDescription().c_str(), *userData->userInfo == hoveringAnimationFrame03info);
 		//log("Value(userData->userInfo).asString = %s",Value(userData->userInfo).asString());
 		if (*userData->userInfo == hoveringAnimationFrame03info){
 			this->setPositionY(this->getPositionY() + 3);
@@ -33,6 +34,7 @@ HeroSprite::HeroSprite()
 		if (*userData->userInfo == hoveringAnimationFrame01info){
 			this->setPositionY(this->getPositionY() - 3);
 		}
+	
 	});
 
 	//将该事件添加到事件分发器
@@ -47,7 +49,7 @@ HeroSprite::HeroSprite()
 	
 
 
-
+	//Moving events won't need frame events. However, slight up-down swings during horizontal flights would be welcome.
 	this->movingUpAnimation = Animation::create();
 	this->movingUpAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_00.jpg");
 	this->movingUpAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_01.jpg");
@@ -146,10 +148,32 @@ HeroSprite::HeroSprite()
 	this->dashingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_right_01.jpg");
 	this->dashingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_right_02.jpg");
 	this->dashingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_right_03.jpg");
-	this->dashingRightAnimation->setDelayPerUnit(0.4f);
+	this->dashingRightAnimation->setDelayPerUnit(0.1f);
 	this->dashingRightAnimation->setRestoreOriginalFrame(true);
 	this->dashingRightAnimation->retain();
 
+	
+	ValueMap dashingRightFrame00Info;
+	ValueMap dashingRightFrame02Info;
+	dashingRightFrame00Info["3"] = Value(3);
+	dashingRightFrame02Info["4"] = Value(4);
+
+	this->dashingRightAnimation->getFrames().at(0)->setUserInfo(dashingRightFrame00Info);
+	this->dashingRightAnimation->getFrames().at(2)->setUserInfo(dashingRightFrame02Info);
+
+	EventListenerCustom * dashingRightAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, dashingRightFrame00Info, dashingRightFrame02Info](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == dashingRightFrame00Info){
+			log("dashing right started");
+			this->moveable = false;
+		}
+		if (*userData->userInfo == dashingRightFrame02Info){
+			log("dashing right frame 02");
+			this->moveable = true;
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(dashingRightAnimationFrameEventListener, -1);
+	
 	this->dashingDownRightAnimation = Animation::create();
 	this->dashingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downright_00.jpg");
 	this->dashingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downright_01.jpg");
@@ -187,10 +211,10 @@ HeroSprite::HeroSprite()
 	this->dashingUpLeftAnimation->retain();
 
 	this->dashingDownLeftAnimation = Animation::create();
-	this->dashingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_left_00.jpg");
-	this->dashingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_left_03.jpg");
-	this->dashingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_left_03.jpg");
-	this->dashingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_left_03.jpg");
+	this->dashingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downleft_00.jpg");
+	this->dashingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downleft_03.jpg");
+	this->dashingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downleft_03.jpg");
+	this->dashingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downleft_03.jpg");
 	this->dashingDownLeftAnimation->setDelayPerUnit(0.4f);
 	this->dashingDownLeftAnimation->setRestoreOriginalFrame(true);
 	this->dashingDownLeftAnimation->retain();
@@ -266,6 +290,86 @@ void HeroSprite::move(){
 		}
 	}
 }
+
+
+
+
+void HeroSprite::dash(){
+	if (this->dashable){
+		if (this->directionToMoveRight){
+			dashRight();
+		}
+		else if (this->directionToMoveDown){
+			dashDown();
+		}
+		else if (this->directionToMoveDownLeft){
+			dashDownLeft();
+		}
+		else if (this->directionToMoveDownRight){
+			dashDownRight();
+		}
+		else if (this->directionToMoveLeft){
+			dashLeft();
+		}
+		else if(this->directionToMoveUp){
+			dashUp();
+		}
+		else if (this->directionToMoveUpLeft){
+			dashUpLeft();
+		}
+		else if (this->directionToMoveUpRight){
+			dashUpRight();
+		}
+		if (this->directionToMoveDown == false &&
+			this->directionToMoveUp == false &&
+			this->directionToMoveRight == false &&
+			this->directionToMoveLeft == false &&
+			this->directionToMoveDownLeft == false &&
+			this->directionToMoveDownRight == false &&
+			this->directionToMoveUpLeft == false &&
+			this->directionToMoveUpRight == false){
+
+			if (this->facingRight){
+				dashRight();
+			}
+			else if (this->facingLeft){
+				dashLeft();
+			}
+		}
+
+	}
+}
+
+
+//dashing in 8 directions.
+void HeroSprite::dashUp(){
+
+}
+void HeroSprite::dashDown(){
+
+}
+void HeroSprite::dashLeft(){
+
+}
+void HeroSprite::dashRight(){
+	this->stopAllActions();
+	this->runAction(Sequence::create(MoveBy::create(0.3f, Vec2(200, 0)),MoveBy::create(0.2f,Vec2(20,0)),nullptr));
+	this->runAction(Animate::create(this->dashingRightAnimation));
+}
+void HeroSprite::dashUpRight(){
+
+}
+void HeroSprite::dashUpLeft(){
+
+}
+void HeroSprite::dashDownRight(){
+
+}
+void HeroSprite::dashDownLeft(){
+
+}
+
+
 //moving in 8 directions
 //仅仅将向右移动和播放移动动画一起run一下，没做是否可移动的验证。剩下的七个动画亦然。以后要加入扑打翅膀的声音
 void HeroSprite::moveRight(){

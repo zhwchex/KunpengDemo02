@@ -98,7 +98,7 @@ public:
 	static HeroSprite * create(const std::string & filename);
 
 	void move();//多个重载。！！**这是一个延时动作**！！
-	void move(double direction);
+
 	void moveBrake();
 
 
@@ -123,6 +123,16 @@ public:
 
 	
 
+
+	void dash();
+	void dashRight();
+	void dashUp();
+	void dashDown();
+	void dashLeft();
+	void dashUpRight();
+	void dashUpLeft();
+	void dashDownRight();
+	void dashDownLeft();
 
 	void windAttack();//多个重载
 	void pawAttack();
