@@ -58,7 +58,7 @@ public:
 	bool facingRight = true;
 	bool facingLeft = false;
 	bool flying = true;
-	bool walking = false;
+	//bool walking = false;//放弃主角降落在地面并欢快奔跑的构想
 	bool swimming = false;
 
 	//主角正在干嘛。
