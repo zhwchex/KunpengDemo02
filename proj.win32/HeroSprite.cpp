@@ -11,30 +11,34 @@ HeroSprite::HeroSprite()
 	this->hoveringAnimation->setDelayPerUnit(0.5f);
 	this->hoveringAnimation->setRestoreOriginalFrame(true);
 
-	ValueMap hoveringAnimationFrame04info;
-	ValueMap hoveringAnimationFrame02info;
-	hoveringAnimationFrame04info["1"] = Value(1);
-	hoveringAnimationFrame02info["2"] = Value(2);
-	//log("here three = %s,", hoveringAnimationFrame04info["FrameId"].asString());
 
-	hoveringAnimation->getFrames().at(3)->setUserInfo(hoveringAnimationFrame04info);
-	hoveringAnimation->getFrames().at(1)->setUserInfo(hoveringAnimationFrame02info);
+	//以下是在第3帧和第1帧上加事件的例子，其中回调函数以lambda函数的形式给出
+	ValueMap hoveringAnimationFrame03info;
+	ValueMap hoveringAnimationFrame01info;
+	hoveringAnimationFrame03info["1"] = Value(1);//除了让该info指向一个新地址外没有别的用处
+	hoveringAnimationFrame01info["2"] = Value(2);//除了让该info指向一个新地址外没有别的用处
+	//log("here three = %s,", hoveringAnimationFrame04info["FrameId"].asString());//不知为什么不能输出string，string会变成？？，只能正确输出数字。
+
+	hoveringAnimation->getFrames().at(3)->setUserInfo(hoveringAnimationFrame03info);
+	hoveringAnimation->getFrames().at(1)->setUserInfo(hoveringAnimationFrame01info);
 
 
-	EventListenerCustom * flyingEvtLsnCstm = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, hoveringAnimationFrame04info, hoveringAnimationFrame02info](EventCustom * event){
+	EventListenerCustom * hoveringAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, hoveringAnimationFrame03info, hoveringAnimationFrame01info](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
-		log("Target %p with data %s , three = %d. ", userData->target, Value(userData->userInfo).getDescription().c_str(), *userData->userInfo == hoveringAnimationFrame04info);
+		log("Target %p with data %s , if this frame added 03 = %d. ", userData->target, Value(userData->userInfo).getDescription().c_str(), *userData->userInfo == hoveringAnimationFrame03info);
 		//log("Value(userData->userInfo).asString = %s",Value(userData->userInfo).asString());
-		if (*userData->userInfo == hoveringAnimationFrame04info){
+		if (*userData->userInfo == hoveringAnimationFrame03info){
 			this->setPositionY(this->getPositionY() + 33);
 		}
-		if (*userData->userInfo == hoveringAnimationFrame02info){
+		if (*userData->userInfo == hoveringAnimationFrame01info){
 			this->setPositionY(this->getPositionY() - 33);
 		}
-		
 	});
 
-	_eventDispatcher->addEventListenerWithFixedPriority(flyingEvtLsnCstm,-1);
+	//将该事件添加到事件分发器
+	_eventDispatcher->addEventListenerWithFixedPriority(hoveringAnimationFrameEventListener, -1);
+	//帧事件例子结束。
+
 
 	this->stopAllActions();
 	this->runAction(RepeatForever::create(Animate::create(this->hoveringAnimation)));
@@ -134,6 +138,64 @@ HeroSprite::HeroSprite()
 	this->windBulletFlyingAnimation->setDelayPerUnit(0.2f);
 	this->windBulletFlyingAnimation->setRestoreOriginalFrame(true);
 	this->windBulletFlyingAnimation->retain();
+
+
+	//dashing animations would need frame events.
+	this->dashingRightAnimation = Animation::create();
+	this->dashingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_right_00.jpg");
+	this->dashingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_right_01.jpg");
+	this->dashingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_right_02.jpg");
+	this->dashingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_right_03.jpg");
+	this->dashingRightAnimation->setDelayPerUnit(0.4f);
+	this->dashingRightAnimation->setRestoreOriginalFrame(true);
+	this->dashingRightAnimation->retain();
+
+	this->dashingDownRightAnimation = Animation::create();
+	this->dashingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downright_00.jpg");
+	this->dashingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downright_01.jpg");
+	this->dashingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downright_02.jpg");
+	this->dashingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downright_03.jpg");
+	this->dashingDownRightAnimation->setDelayPerUnit(0.4f);
+	this->dashingDownRightAnimation->setRestoreOriginalFrame(true);
+	this->dashingDownRightAnimation->retain();
+
+	this->dashingUpRightAnimation = Animation::create();
+	this->dashingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upright_00.jpg");
+	this->dashingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upright_01.jpg");
+	this->dashingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upright_02.jpg");
+	this->dashingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upright_03.jpg");
+	this->dashingUpRightAnimation->setDelayPerUnit(0.4f);
+	this->dashingUpRightAnimation->setRestoreOriginalFrame(true);
+	this->dashingUpRightAnimation->retain();
+
+	this->dashingLeftAnimation = Animation::create();
+	this->dashingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_left_00.jpg");
+	this->dashingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_left_01.jpg");
+	this->dashingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_left_02.jpg");
+	this->dashingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_left_03.jpg");
+	this->dashingLeftAnimation->setDelayPerUnit(0.4f);
+	this->dashingLeftAnimation->setRestoreOriginalFrame(true);
+	this->dashingLeftAnimation->retain();
+
+	this->dashingUpLeftAnimation = Animation::create();
+	this->dashingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upleft_00.jpg");
+	this->dashingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upleft_01.jpg");
+	this->dashingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upleft_02.jpg");
+	this->dashingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upleft_03.jpg");
+	this->dashingUpLeftAnimation->setDelayPerUnit(0.4f);
+	this->dashingUpLeftAnimation->setRestoreOriginalFrame(true);
+	this->dashingUpLeftAnimation->retain();
+
+	this->dashingDownLeftAnimation = Animation::create();
+	this->dashingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_left_00.jpg");
+	this->dashingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_left_03.jpg");
+	this->dashingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_left_03.jpg");
+	this->dashingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_left_03.jpg");
+	this->dashingDownLeftAnimation->setDelayPerUnit(0.4f);
+	this->dashingDownLeftAnimation->setRestoreOriginalFrame(true);
+	this->dashingDownLeftAnimation->retain();
+
+
 
 }
 

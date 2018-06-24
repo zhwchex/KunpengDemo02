@@ -6,7 +6,7 @@ USING_NS_CC;
 class Stage1Scene :	public Scene
 {
 public:
-	//HeroSprite * hero;
+	
 
 	bool key_A_down = false;
 	bool key_D_down = false;

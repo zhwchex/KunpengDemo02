@@ -24,9 +24,18 @@
     <ClCompile Include="HeroSprite.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="Stage1Scene.cpp" />
-    <ClCompile Include="Stage1GameplayLayer.cpp" />
-    <ClCompile Include="Stage1UILayer.cpp" />
+    <ClCompile Include="GeneralEnemy.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage1GameplayLayer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage1Scene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage1UILayer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -41,9 +50,18 @@
     <ClInclude Include="HeroSprite.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="Stage1Scene.h" />
-    <ClInclude Include="Stage1GameplayLayer.h" />
-    <ClInclude Include="Stage1UILayer.h" />
+    <ClInclude Include="GeneralEnemy.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage1GameplayLayer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage1Scene.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage1UILayer.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">
