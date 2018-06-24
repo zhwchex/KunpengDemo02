@@ -1,5 +1,5 @@
 #pragma once
-#include "D:\cocos_workspace\KunpengDemo02\cocos2d\cocos\2d\CCSprite.h"
+//#include "D:\cocos_workspace\KunpengDemo02\cocos2d\cocos\2d\CCSprite.h"
 #include "cocos2d.h"
 USING_NS_CC;
 class GeneralEnemy :public Sprite

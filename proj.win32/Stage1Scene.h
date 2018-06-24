@@ -1,5 +1,5 @@
 #pragma once
-#include "D:\cocos_workspace\KunpengDemo02\cocos2d\cocos\2d\CCScene.h"
+//#include "D:\cocos_workspace\KunpengDemo02\cocos2d\cocos\2d\CCScene.h"
 #include "cocos2d.h"
 #include "HeroSprite.h"
 USING_NS_CC;

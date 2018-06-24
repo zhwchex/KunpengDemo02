@@ -32,9 +32,6 @@ Stage1Scene * Stage1Scene::createScene(){
 
 bool Stage1Scene::init(){
 
-	Sprite * someSprite = Sprite::create("somePic.png");
-	someSprite->setPosition(300,300);
-	this->addChild(someSprite,4);
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Stage1GameplayLayer * gameplayLayer = Stage1GameplayLayer::create();
