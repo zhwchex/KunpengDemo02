@@ -9,6 +9,9 @@ public:
 	int speed_flying_pixel_per_second = 266;
 	int speed_swimming_pixel_per_second = 200;
 
+	int DISTANCE_DASHING = 200;
+	int DISTANCE_DASHING_BRAKING = 20;
+
 	//ÐüÍ£¶¯»­
 	Animation * hoveringAnimation;
 

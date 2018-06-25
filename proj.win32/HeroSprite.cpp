@@ -155,6 +155,7 @@ HeroSprite::HeroSprite()
 	
 	ValueMap dashingRightFrame00Info;
 	ValueMap dashingRightFrame02Info;
+
 	dashingRightFrame00Info["3"] = Value(3);
 	dashingRightFrame02Info["4"] = Value(4);
 
@@ -164,12 +165,24 @@ HeroSprite::HeroSprite()
 	EventListenerCustom * dashingRightAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, dashingRightFrame00Info, dashingRightFrame02Info](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == dashingRightFrame00Info){
-			log("dashing right started");
+			//log("dashing right started");
 			this->moveable = false;
+			this->dashable = false;
 		}
 		if (*userData->userInfo == dashingRightFrame02Info){
-			log("dashing right frame 02");
+			//log("dashing right frame 02");
 			this->moveable = true;
+			this->dashable = true;
+			if (this->directionToMoveUpRight  ||
+				this->directionToMoveRight ||
+				this->directionToMoveDownRight ||
+				this->directionToMoveDown ||
+				this->directionToMoveDownLeft ||
+				this->directionToMoveLeft ||
+				this->directionToMoveUpLeft||
+				this->directionToMoveUp){
+				this->move();
+			}
 		}
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(dashingRightAnimationFrameEventListener, -1);
@@ -179,18 +192,84 @@ HeroSprite::HeroSprite()
 	this->dashingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downright_01.jpg");
 	this->dashingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downright_02.jpg");
 	this->dashingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downright_03.jpg");
-	this->dashingDownRightAnimation->setDelayPerUnit(0.4f);
+	this->dashingDownRightAnimation->setDelayPerUnit(0.1f);
 	this->dashingDownRightAnimation->setRestoreOriginalFrame(true);
 	this->dashingDownRightAnimation->retain();
+
+	ValueMap dashingDownRightFrame00Info;
+	ValueMap dashingDownRightFrame02Info;
+
+	dashingDownRightFrame00Info["5"] = Value(3);
+	dashingDownRightFrame02Info["6"] = Value(4);
+
+	this->dashingDownRightAnimation->getFrames().at(0)->setUserInfo(dashingDownRightFrame00Info);
+	this->dashingDownRightAnimation->getFrames().at(2)->setUserInfo(dashingDownRightFrame02Info);
+
+	EventListenerCustom * dashingDownRightAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, dashingDownRightFrame00Info, dashingDownRightFrame02Info](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == dashingDownRightFrame00Info){
+			this->moveable = false;
+			this->dashable = false;
+		}
+		if (*userData->userInfo == dashingDownRightFrame02Info){
+			this->moveable = true;
+			this->dashable = true;
+			if (this->directionToMoveUpRight ||
+				this->directionToMoveRight ||
+				this->directionToMoveDownRight ||
+				this->directionToMoveDown ||
+				this->directionToMoveDownLeft ||
+				this->directionToMoveLeft ||
+				this->directionToMoveUpLeft ||
+				this->directionToMoveUp){
+				this->move();
+			}
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(dashingDownRightAnimationFrameEventListener, -1);
+
 
 	this->dashingUpRightAnimation = Animation::create();
 	this->dashingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upright_00.jpg");
 	this->dashingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upright_01.jpg");
 	this->dashingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upright_02.jpg");
 	this->dashingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upright_03.jpg");
-	this->dashingUpRightAnimation->setDelayPerUnit(0.4f);
+	this->dashingUpRightAnimation->setDelayPerUnit(0.1f);
 	this->dashingUpRightAnimation->setRestoreOriginalFrame(true);
 	this->dashingUpRightAnimation->retain();
+
+	ValueMap dashingUpRightFrame00info;
+	ValueMap dashingUpRightFrame02info;
+
+	dashingUpRightFrame00info["7"] = Value(7);
+	dashingUpRightFrame02info["8"] = Value(8);
+
+	dashingUpRightAnimation->getFrames().at(0)->setUserInfo(dashingUpRightFrame00info);
+	dashingUpRightAnimation->getFrames().at(2)->setUserInfo(dashingUpRightFrame02info);
+
+
+	EventListenerCustom * dashingUpRightAnimationFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, dashingUpRightFrame00info, dashingUpRightFrame02info](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == dashingUpRightFrame00info){
+			this->moveable = false;
+			this->dashable = false;
+		}
+		if (*userData->userInfo == dashingUpRightFrame02info){
+			this->moveable = true;
+			this->dashable = true;
+			if (this->directionToMoveUpRight ||
+				this->directionToMoveRight ||
+				this->directionToMoveDownRight ||
+				this->directionToMoveDown ||
+				this->directionToMoveDownLeft ||
+				this->directionToMoveLeft ||
+				this->directionToMoveUpLeft ||
+				this->directionToMoveUp){
+				this->move();
+			}
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(dashingUpRightAnimationFrameEventListener, -1);
 
 	this->dashingLeftAnimation = Animation::create();
 	this->dashingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_left_00.jpg");
@@ -343,30 +422,54 @@ void HeroSprite::dash(){
 
 //dashing in 8 directions.
 void HeroSprite::dashUp(){
-
+	this->stopAllActions();
+	this->runAction(Sequence::create(MoveBy::create(0.3f, Vec2(0,this->DISTANCE_DASHING)), MoveBy::create(0.2f, Vec2(0,this->DISTANCE_DASHING_BRAKING)), nullptr));
+	if (this->facingRight){
+		this->runAction(Animate::create(this->dashingUpRightAnimation));
+	}
+	else if(this->facingLeft){
+		this->runAction(Animate::create(this->dashingUpLeftAnimation));
+	}
 }
 void HeroSprite::dashDown(){
-
+	this->stopAllActions();
+	this->runAction(Sequence::create(MoveBy::create(0.3f, Vec2(0, -this->DISTANCE_DASHING)), MoveBy::create(0.2f, Vec2(0, -this->DISTANCE_DASHING_BRAKING)), nullptr));
+	if (this->facingRight){
+		this->runAction(Animate::create(this->dashingDownRightAnimation));
+	}
+	else if(this->facingLeft){
+		this->runAction(Animate::create(this->dashingDownLeftAnimation));
+	}
 }
 void HeroSprite::dashLeft(){
-
+	this->stopAllActions();
+	this->runAction(Sequence::create(MoveBy::create(0.3f, Vec2(-this->DISTANCE_DASHING, 0)), MoveBy::create(0.2f, Vec2(-this->DISTANCE_DASHING_BRAKING, 0)), nullptr));
+	this->runAction(Animate::create(this->dashingLeftAnimation));
 }
 void HeroSprite::dashRight(){
 	this->stopAllActions();
-	this->runAction(Sequence::create(MoveBy::create(0.3f, Vec2(200, 0)),MoveBy::create(0.2f,Vec2(20,0)),nullptr));
+	this->runAction(Sequence::create(MoveBy::create(0.3f, Vec2(this->DISTANCE_DASHING, 0)),MoveBy::create(0.2f,Vec2(this->DISTANCE_DASHING_BRAKING,0)),nullptr));
 	this->runAction(Animate::create(this->dashingRightAnimation));
 }
 void HeroSprite::dashUpRight(){
-
+	this->stopAllActions();
+	this->runAction(Sequence::create(MoveBy::create(0.3f, Vec2(this->DISTANCE_DASHING / 1.414, this->DISTANCE_DASHING / 1.414)), MoveBy::create(0.2f, Vec2(this->DISTANCE_DASHING_BRAKING / 1.414, this->DISTANCE_DASHING_BRAKING / 1.414)), nullptr));
+	this->runAction(Animate::create(this->dashingUpRightAnimation));
 }
 void HeroSprite::dashUpLeft(){
-
+	this->stopAllActions();
+	this->runAction(Sequence::create(MoveBy::create(0.3f, Vec2(-this->DISTANCE_DASHING / 1.414, this->DISTANCE_DASHING / 1.414)), MoveBy::create(0.2f, Vec2(-this->DISTANCE_DASHING_BRAKING / 1.414, this->DISTANCE_DASHING_BRAKING / 1.414)), nullptr));
+	this->runAction(Animate::create(this->dashingUpLeftAnimation));
 }
 void HeroSprite::dashDownRight(){
-
+	this->stopAllActions();
+	this->runAction(Sequence::create(MoveBy::create(0.3f, Vec2(this->DISTANCE_DASHING / 1.414, -this->DISTANCE_DASHING / 1.414)), MoveBy::create(0.2f, Vec2(this->DISTANCE_DASHING_BRAKING / 1.414, -this->DISTANCE_DASHING_BRAKING / 1.414)), nullptr));
+	this->runAction(Animate::create(this->dashingDownRightAnimation));
 }
 void HeroSprite::dashDownLeft(){
-
+	this->stopAllActions();
+	this->runAction(Sequence::create(MoveBy::create(0.3f, Vec2(-this->DISTANCE_DASHING / 1.414, -this->DISTANCE_DASHING / 1.414)), MoveBy::create(0.2f, Vec2(-this->DISTANCE_DASHING_BRAKING / 1.414, -this->DISTANCE_DASHING_BRAKING / 1.414)), nullptr));
+	this->runAction(Animate::create(this->dashingDownLeftAnimation));
 }
 
 
