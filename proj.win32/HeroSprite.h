@@ -6,11 +6,15 @@ class HeroSprite :	public Sprite
 
 public:
 
+	float TIME_FOR_ANIMATION_FRAME_INTERVAL = 0.2f;
+
 	int speed_flying_pixel_per_second = 266;
 	int speed_swimming_pixel_per_second = 200;
 
-	int DISTANCE_DASHING = 200;
-	int DISTANCE_DASHING_BRAKING = 20;
+	int DISTANCE_AIR_DASHING = 200;
+	int DISTANCE_AIR_DASHING_BRAKING = 20;
+	float TIME_FOR_AIR_DASHING = 0.3f;
+	float TIME_FOR_AIR_DASHING_BRAKING = 0.2f;
 
 	//悬停动画
 	Animation * hoveringAnimation;
@@ -75,7 +79,7 @@ public:
 
 	//主角当前能干嘛的状态。
 	bool moveable = true;//能自由移动
-	bool longRangeAttackable = true;//翅膀未被占用，能发射风弹
+	bool windAttackable = true;//翅膀未被占用，能发射风弹
 	bool pawAttackable = true;//爪子未被占用，能撕扯。例：当使用爪子提起物品或敌人时该项设为false，该项为false时即使敌人近身也无法触发近战爪子攻击
 	bool dashable = true;//能否冲刺。
 	bool catchable = true;//爪子能否抓东西。例：剧情安排或正在撕扯时该项为false。
