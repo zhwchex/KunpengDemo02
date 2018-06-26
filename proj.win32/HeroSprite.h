@@ -17,7 +17,8 @@ public:
 	float TIME_FOR_AIR_DASHING_BRAKING = 0.2f;
 
 	//悬停动画
-	Animation * hoveringAnimation;
+	Animation * hoveringRightAnimation;
+	Animation * hoveringLeftAnimation;
 
 	//普通移动的动画
 	Animation * movingUpAnimation;	
@@ -44,7 +45,10 @@ public:
 
 	//技能动画
 	Animation * blowingWindAnimation;
-	Animation * scratchingAnimation;
+	Animation * scratchingRightAnimation;
+	Animation * scratchingRightAnimation2;
+	Animation * scratchingLeftAnimation;
+	Animation * scratchingLeftAnimation2;
 
 	Animation * tryCatchAnimation;//试图使用一下投技
 	Animation * holdingObjectAnimation;//抓住物品不放的动画
@@ -103,6 +107,13 @@ public:
 	bool DirectionToPawhold = false;
 
 	static HeroSprite * create(const std::string & filename);
+
+
+	void disableAllAbilities();
+	void enableAllAbilities();
+
+
+	void hover();
 
 	void move();//多个重载。！！**这是一个延时动作**！！
 

@@ -3,24 +3,38 @@
 
 HeroSprite::HeroSprite()
 {
-	this->hoveringAnimation = Animation::create();
-	this->hoveringAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_00.jpg");
-	this->hoveringAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_01.jpg");
-	this->hoveringAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_02.jpg");
-	this->hoveringAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_03.jpg");
-	this->hoveringAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
-	this->hoveringAnimation->setRestoreOriginalFrame(true);
+	this->hoveringRightAnimation = Animation::create();
+	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_right_00.png");
+	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_right_01.png");
+	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_right_02.png");
+	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_right_03.png");
+	this->hoveringRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->hoveringRightAnimation->setRestoreOriginalFrame(true);
+	this->hoveringRightAnimation->retain();
+
+	this->hoveringLeftAnimation = Animation::create();
+	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_left_00.png");
+	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_left_01.png");
+	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_left_02.png");
+	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_left_03.png");
+	this->hoveringLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->hoveringLeftAnimation->setRestoreOriginalFrame(true);
+	this->hoveringLeftAnimation->retain();
+
 
 
 	//以下是在第3帧和第1帧上加事件的例子，其中回调函数以lambda函数的形式给出
-	ValueMap hoveringAnimationFrame03info;
 	ValueMap hoveringAnimationFrame01info;
-	hoveringAnimationFrame03info["1"] = Value(1);//除了让该info指向一个新地址外没有别的用处
-	hoveringAnimationFrame01info["2"] = Value(2);//除了让该info指向一个新地址外没有别的用处
+	ValueMap hoveringAnimationFrame03info;
+	hoveringAnimationFrame01info["1"] = Value(1);//除了让该info指向一个新地址外没有别的用处
+	hoveringAnimationFrame03info["2"] = Value(2);//除了让该info指向一个新地址外没有别的用处
 	//log("here three = %s,", hoveringAnimationFrame04info["FrameId"].asString());//不知为什么不能输出string，string会变成？？，只能正确输出数字。
 
-	hoveringAnimation->getFrames().at(3)->setUserInfo(hoveringAnimationFrame03info);
-	hoveringAnimation->getFrames().at(1)->setUserInfo(hoveringAnimationFrame01info);
+	hoveringRightAnimation->getFrames().at(1)->setUserInfo(hoveringAnimationFrame01info);
+	hoveringRightAnimation->getFrames().at(3)->setUserInfo(hoveringAnimationFrame03info);
+
+	hoveringLeftAnimation->getFrames().at(1)->setUserInfo(hoveringAnimationFrame01info);
+	hoveringLeftAnimation->getFrames().at(3)->setUserInfo(hoveringAnimationFrame03info);
 
 
 
@@ -41,10 +55,10 @@ HeroSprite::HeroSprite()
 	_eventDispatcher->addEventListenerWithFixedPriority(hoveringAnimationFrameEventListener, -1);
 	//帧事件例子结束。
 
-
 	this->stopAllActions();
-	this->runAction(RepeatForever::create(Animate::create(this->hoveringAnimation)));
-	this->hoveringAnimation->retain();
+	this->runAction(RepeatForever::create(Animate::create(this->hoveringRightAnimation)));
+	
+	
 
 	
 
@@ -155,24 +169,23 @@ HeroSprite::HeroSprite()
 	
 	ValueMap dashingRightFrame00Info;
 	ValueMap dashingRightFrame02Info;
+	ValueMap dashingRightFrame03Info;
 
 	dashingRightFrame00Info["3"] = Value(3);
 	dashingRightFrame02Info["4"] = Value(4);
+	dashingRightFrame03Info["333"] = Value(333);
 
 	this->dashingRightAnimation->getFrames().at(0)->setUserInfo(dashingRightFrame00Info);
 	this->dashingRightAnimation->getFrames().at(2)->setUserInfo(dashingRightFrame02Info);
+	this->dashingRightAnimation->getFrames().at(3)->setUserInfo(dashingRightFrame03Info);
 
-	EventListenerCustom * dashingRightAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, dashingRightFrame00Info, dashingRightFrame02Info](EventCustom * event){
+	EventListenerCustom * dashingRightAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, dashingRightFrame00Info, dashingRightFrame02Info, dashingRightFrame03Info](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == dashingRightFrame00Info){
-			this->windAttackable = false;
-			this->moveable = false;
-			this->dashable = false;
+			this->disableAllAbilities();
 		}
 		if (*userData->userInfo == dashingRightFrame02Info){
-			this->windAttackable = true;
-			this->moveable = true;
-			this->dashable = true;
+			this->enableAllAbilities();
 			if (this->directionToMoveUpRight  ||
 				this->directionToMoveRight ||
 				this->directionToMoveDownRight ||
@@ -183,6 +196,10 @@ HeroSprite::HeroSprite()
 				this->directionToMoveUp){
 				this->move();
 			}
+		}
+		if (*userData->userInfo == dashingRightFrame03Info){
+			log("Hitting last frame of dashing. Hovering.");
+			this->hover();
 		}
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(dashingRightAnimationFrameEventListener, -1);
@@ -196,39 +213,10 @@ HeroSprite::HeroSprite()
 	this->dashingDownRightAnimation->setRestoreOriginalFrame(true);
 	this->dashingDownRightAnimation->retain();
 
-	ValueMap dashingDownRightFrame00Info;
-	ValueMap dashingDownRightFrame02Info;
+	this->dashingDownRightAnimation->getFrames().at(0)->setUserInfo(dashingRightFrame00Info);
+	this->dashingDownRightAnimation->getFrames().at(2)->setUserInfo(dashingRightFrame02Info);
+	this->dashingDownRightAnimation->getFrames().at(3)->setUserInfo(dashingRightFrame03Info);
 
-	dashingDownRightFrame00Info["5"] = Value(3);
-	dashingDownRightFrame02Info["6"] = Value(4);
-
-	this->dashingDownRightAnimation->getFrames().at(0)->setUserInfo(dashingDownRightFrame00Info);
-	this->dashingDownRightAnimation->getFrames().at(2)->setUserInfo(dashingDownRightFrame02Info);
-
-	EventListenerCustom * dashingDownRightAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, dashingDownRightFrame00Info, dashingDownRightFrame02Info](EventCustom * event){
-		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
-		if (*userData->userInfo == dashingDownRightFrame00Info){
-			this->windAttackable = false;
-			this->moveable = false;
-			this->dashable = false;
-		}
-		if (*userData->userInfo == dashingDownRightFrame02Info){
-			this->windAttackable = true;
-			this->moveable = true;
-			this->dashable = true;
-			if (this->directionToMoveUpRight ||
-				this->directionToMoveRight ||
-				this->directionToMoveDownRight ||
-				this->directionToMoveDown ||
-				this->directionToMoveDownLeft ||
-				this->directionToMoveLeft ||
-				this->directionToMoveUpLeft ||
-				this->directionToMoveUp){
-				this->move();
-			}
-		}
-	});
-	_eventDispatcher->addEventListenerWithFixedPriority(dashingDownRightAnimationFrameEventListener, -1);
 
 
 	this->dashingUpRightAnimation = Animation::create();
@@ -240,40 +228,10 @@ HeroSprite::HeroSprite()
 	this->dashingUpRightAnimation->setRestoreOriginalFrame(true);
 	this->dashingUpRightAnimation->retain();
 
-	ValueMap dashingUpRightFrame00info;
-	ValueMap dashingUpRightFrame02info;
+	this->dashingUpRightAnimation->getFrames().at(0)->setUserInfo(dashingRightFrame00Info);
+	this->dashingUpRightAnimation->getFrames().at(2)->setUserInfo(dashingRightFrame02Info);
+	this->dashingUpRightAnimation->getFrames().at(3)->setUserInfo(dashingRightFrame03Info);
 
-	dashingUpRightFrame00info["7"] = Value(7);
-	dashingUpRightFrame02info["8"] = Value(8);
-
-	dashingUpRightAnimation->getFrames().at(0)->setUserInfo(dashingUpRightFrame00info);
-	dashingUpRightAnimation->getFrames().at(2)->setUserInfo(dashingUpRightFrame02info);
-
-
-	EventListenerCustom * dashingUpRightAnimationFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, dashingUpRightFrame00info, dashingUpRightFrame02info](EventCustom * event){
-		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
-		if (*userData->userInfo == dashingUpRightFrame00info){
-			this->windAttackable = false;
-			this->moveable = false;
-			this->dashable = false;
-		}
-		if (*userData->userInfo == dashingUpRightFrame02info){
-			this->windAttackable = true;
-			this->moveable = true;
-			this->dashable = true;
-			if (this->directionToMoveUpRight ||
-				this->directionToMoveRight ||
-				this->directionToMoveDownRight ||
-				this->directionToMoveDown ||
-				this->directionToMoveDownLeft ||
-				this->directionToMoveLeft ||
-				this->directionToMoveUpLeft ||
-				this->directionToMoveUp){
-				this->move();
-			}
-		}
-	});
-	_eventDispatcher->addEventListenerWithFixedPriority(dashingUpRightAnimationFrameEventListener, -1);
 
 
 
@@ -286,39 +244,10 @@ HeroSprite::HeroSprite()
 	this->dashingLeftAnimation->setRestoreOriginalFrame(true);
 	this->dashingLeftAnimation->retain();
 
-	ValueMap dashingLeftFrame00Info;
-	ValueMap dashingLeftFrame02Info;
+	this->dashingLeftAnimation->getFrames().at(0)->setUserInfo(dashingRightFrame00Info);
+	this->dashingLeftAnimation->getFrames().at(2)->setUserInfo(dashingRightFrame02Info);
+	this->dashingLeftAnimation->getFrames().at(3)->setUserInfo(dashingRightFrame03Info);
 
-	dashingLeftFrame00Info["9"] = Value(9);
-	dashingLeftFrame02Info["10"] = Value(10);
-
-	this->dashingLeftAnimation->getFrames().at(0)->setUserInfo(dashingLeftFrame00Info);
-	this->dashingLeftAnimation->getFrames().at(2)->setUserInfo(dashingLeftFrame02Info);
-
-	EventListenerCustom * dashingLeftAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, dashingLeftFrame00Info, dashingLeftFrame02Info](EventCustom * event){
-		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
-		if (*userData->userInfo == dashingLeftFrame00Info){
-			this->windAttackable = false;
-			this->moveable = false;
-			this->dashable = false;
-		}
-		if (*userData->userInfo == dashingLeftFrame02Info){
-			this->windAttackable = true;
-			this->moveable = true;
-			this->dashable = true;
-			if (this->directionToMoveUpRight ||
-				this->directionToMoveRight ||
-				this->directionToMoveDownRight ||
-				this->directionToMoveDown ||
-				this->directionToMoveDownLeft ||
-				this->directionToMoveLeft ||
-				this->directionToMoveUpLeft ||
-				this->directionToMoveUp){
-				this->move();
-			}
-		}
-	});
-	_eventDispatcher->addEventListenerWithFixedPriority(dashingLeftAnimationFrameEventListener, -1);
 
 
 	this->dashingUpLeftAnimation = Animation::create();
@@ -330,39 +259,10 @@ HeroSprite::HeroSprite()
 	this->dashingUpLeftAnimation->setRestoreOriginalFrame(true);
 	this->dashingUpLeftAnimation->retain();
 
-	ValueMap dashingUpLeftFrame00Info;
-	ValueMap dashingUpLeftFrame02Info;
+	this->dashingUpLeftAnimation->getFrames().at(0)->setUserInfo(dashingRightFrame00Info);
+	this->dashingUpLeftAnimation->getFrames().at(2)->setUserInfo(dashingRightFrame02Info);
+	this->dashingUpLeftAnimation->getFrames().at(3)->setUserInfo(dashingRightFrame03Info);
 
-	dashingUpLeftFrame00Info["11"] = Value(11);
-	dashingUpLeftFrame02Info["12"] = Value(12);
-
-	this->dashingUpLeftAnimation->getFrames().at(0)->setUserInfo(dashingUpLeftFrame00Info);
-	this->dashingUpLeftAnimation->getFrames().at(2)->setUserInfo(dashingUpLeftFrame02Info);
-
-	EventListenerCustom * dashingUpLeftAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, dashingUpLeftFrame00Info, dashingUpLeftFrame02Info](EventCustom * event){
-		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
-		if (*userData->userInfo == dashingUpLeftFrame00Info){
-			this->windAttackable = false;
-			this->moveable = false;
-			this->dashable = false;
-		}
-		if (*userData->userInfo == dashingUpLeftFrame02Info){
-			this->windAttackable = true;
-			this->moveable = true;
-			this->dashable = true;
-			if (this->directionToMoveUpRight ||
-				this->directionToMoveRight ||
-				this->directionToMoveDownRight ||
-				this->directionToMoveDown ||
-				this->directionToMoveDownLeft ||
-				this->directionToMoveLeft ||
-				this->directionToMoveUpLeft ||
-				this->directionToMoveUp){
-				this->move();
-			}
-		}
-	});
-	_eventDispatcher->addEventListenerWithFixedPriority(dashingUpLeftAnimationFrameEventListener, -1);
 
 	this->dashingDownLeftAnimation = Animation::create();
 	this->dashingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downleft_00.jpg");
@@ -373,40 +273,55 @@ HeroSprite::HeroSprite()
 	this->dashingDownLeftAnimation->setRestoreOriginalFrame(true);
 	this->dashingDownLeftAnimation->retain();
 
-	ValueMap dashingDownLeftFrame00Info;
-	ValueMap dashingDownLeftFrame02Info;
+	this->dashingDownLeftAnimation->getFrames().at(0)->setUserInfo(dashingRightFrame00Info);
+	this->dashingDownLeftAnimation->getFrames().at(2)->setUserInfo(dashingRightFrame02Info);
+	this->dashingDownLeftAnimation->getFrames().at(3)->setUserInfo(dashingRightFrame03Info);
 
-	dashingDownLeftFrame00Info["13"] = Value(13);
-	dashingDownLeftFrame02Info["14"] = Value(14);
 
-	this->dashingDownLeftAnimation->getFrames().at(0)->setUserInfo(dashingDownLeftFrame00Info);
-	this->dashingDownLeftAnimation->getFrames().at(2)->setUserInfo(dashingDownLeftFrame02Info);
 
-	EventListenerCustom * dashingDownLeftAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, dashingDownLeftFrame00Info, dashingDownLeftFrame02Info](EventCustom * event){
-		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
-		if (*userData->userInfo == dashingDownLeftFrame00Info){
-			this->windAttackable = false;
-			this->moveable = false;
-			this->dashable = false;
-		}
-		if (*userData->userInfo == dashingDownLeftFrame02Info){
-			this->windAttackable = true;
-			this->moveable = true;
-			this->dashable = true;
-			if (this->directionToMoveUpRight ||
-				this->directionToMoveRight ||
-				this->directionToMoveDownRight ||
-				this->directionToMoveDown ||
-				this->directionToMoveDownLeft ||
-				this->directionToMoveLeft ||
-				this->directionToMoveUpLeft ||
-				this->directionToMoveUp){
-				this->move();
-			}
-		}
-	});
-	_eventDispatcher->addEventListenerWithFixedPriority(dashingDownLeftAnimationFrameEventListener, -1);
 
+
+	//paws scratching right will need 2 animations: horizontal scratching and vertical scratching
+	//same for scratching left.
+	this->scratchingRightAnimation = Animation::create();
+	this->scratchingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching_right_00.jpg");
+	this->scratchingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching_right_01.jpg");
+	this->scratchingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching_right_02.jpg");
+	this->scratchingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching_right_03.jpg");
+	this->scratchingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching_right_04.jpg");
+	this->scratchingRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->scratchingRightAnimation->setRestoreOriginalFrame(true);
+	this->scratchingRightAnimation->retain();
+
+	this->scratchingRightAnimation2 = Animation::create();
+	this->scratchingRightAnimation2->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching2_right_00.png");
+	this->scratchingRightAnimation2->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching2_right_01.png");
+	this->scratchingRightAnimation2->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching2_right_02.png");
+	this->scratchingRightAnimation2->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching2_right_03.png");
+	this->scratchingRightAnimation2->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching2_right_04.png");
+	this->scratchingRightAnimation2->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->scratchingRightAnimation2->setRestoreOriginalFrame(true);
+	this->scratchingRightAnimation2->retain();
+
+	this->scratchingLeftAnimation = Animation::create();
+	this->scratchingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching_left_00.png");
+	this->scratchingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching_left_01.png");
+	this->scratchingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching_left_02.png");
+	this->scratchingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching_left_03.png");
+	this->scratchingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching_left_04.png");
+	this->scratchingLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->scratchingLeftAnimation->setRestoreOriginalFrame(true);
+	this->scratchingLeftAnimation->retain();
+
+	this->scratchingLeftAnimation2 = Animation::create();
+	this->scratchingLeftAnimation2->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching2_left_00.png");
+	this->scratchingLeftAnimation2->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching2_left_01.png");
+	this->scratchingLeftAnimation2->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching2_left_02.png");
+	this->scratchingLeftAnimation2->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching2_left_03.png");
+	this->scratchingLeftAnimation2->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching2_left_04.png");
+	this->scratchingLeftAnimation2->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->scratchingLeftAnimation2->setRestoreOriginalFrame(true);
+	this->scratchingLeftAnimation2->retain();
 
 
 }
@@ -426,6 +341,24 @@ HeroSprite * HeroSprite::create(const std::string &filename){
 	CC_SAFE_DELETE(mySprite);
 	return nullptr;
 }
+
+void HeroSprite::disableAllAbilities(){
+	this->catchable = false;
+	this->dashable = false;
+	this->moveable = false;
+	this->windAttackable = false;
+	this->pawAttackable = false;
+	this->throwable = false;
+}
+void HeroSprite::enableAllAbilities(){
+	this->catchable = true;
+	this->dashable = true;
+	this->moveable = true;
+	this->windAttackable = true;
+	this->pawAttackable = true;
+	this->throwable = true;
+}
+
 void HeroSprite::windAttack(){
 	if (this->windAttackable){
 		this->stopAllActions();
@@ -648,21 +581,37 @@ void HeroSprite::moveDownLeft(){
 //brakes after moving。虽然暂时没做完，但是一定要做的。这关系到技能流畅度
 void HeroSprite::moveRightBrake(){
 	this->stopAllActions();
-	this->runAction(RepeatForever::create(Animate::create(this->hoveringAnimation)));
+	this->runAction(RepeatForever::create(Animate::create(this->hoveringRightAnimation)));
 }
 void HeroSprite::moveLeftBrake(){
 	this->stopAllActions();
-	this->runAction(RepeatForever::create(Animate::create(this->hoveringAnimation)));
+	this->runAction(RepeatForever::create(Animate::create(this->hoveringLeftAnimation)));
 }
 void HeroSprite::moveDownBrake(){
 	this->stopAllActions();
-	this->runAction(RepeatForever::create(Animate::create(this->hoveringAnimation)));
+	this->runAction(RepeatForever::create(Animate::create(this->hoveringRightAnimation)));
 }
 void HeroSprite::moveUpBrake(){
 	this->stopAllActions();
-	this->runAction(RepeatForever::create(Animate::create(this->hoveringAnimation)));
+	this->runAction(RepeatForever::create(Animate::create(this->hoveringRightAnimation)));
 }
 void HeroSprite::moveBrake(){
 	this->stopAllActions();
-	this->runAction(RepeatForever::create(Animate::create(this->hoveringAnimation)));
+	if (this->facingRight){
+		this->runAction(RepeatForever::create(Animate::create(this->hoveringRightAnimation)));
+	}
+	else if (this->facingLeft){
+		this->runAction(RepeatForever::create(Animate::create(this->hoveringLeftAnimation)));
+
+	}
+}
+
+void HeroSprite::hover(){
+	this->stopAllActions();
+	if (this->facingRight){
+		this->runAction(RepeatForever::create(Animate::create(this->hoveringRightAnimation)));
+	}
+	else if (this->facingLeft){
+		this->runAction(RepeatForever::create(Animate::create(this->hoveringLeftAnimation)));
+	}
 }
