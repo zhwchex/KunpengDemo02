@@ -371,48 +371,7 @@ void HeroSprite::windAttack(){
 	}
 }
 
-//这个move对外开放，主角的普通移动只调用它。为了调试方便，所有细节目前都是public。八方向移动方法此时是public，今后应改为private。
-//在此验证了主角在调用move方法时的可移动性。
-//one more 废话：move是说方向按钮造成的位移，dash是说冲刺技能造成的位移。
-void HeroSprite::move(){
-	if (this->moveable){
-		if (this->directionToMoveRight) {
-			moveRight();
-		}
-		if (this->directionToMoveLeft){
-			moveLeft();
-		}
-		if (this->directionToMoveUp){
-			moveUp();
-		}
-		if (this->directionToMoveDown){
-			moveDown();
-		}
 
-		if (this->directionToMoveUpRight){
-			moveUpRight();
-		}
-		if (this->directionToMoveUpLeft){
-			moveUpLeft();
-		}
-		if (this->directionToMoveDownRight){
-			moveDownRight();
-		}
-		if (this->directionToMoveDownLeft){
-			moveDownLeft();
-		}
-		if (this->directionToMoveUpRight == false &&
-			this->directionToMoveRight == false &&
-			this->directionToMoveDownRight == false &&
-			this->directionToMoveDown == false &&
-			this->directionToMoveDownLeft == false &&
-			this->directionToMoveLeft == false &&
-			this->directionToMoveUpLeft == false &&
-			this->directionToMoveUp == false){
-			moveBrake();
-		}
-	}
-}
 
 
 
@@ -514,6 +473,51 @@ void HeroSprite::dashDownLeft(){
 	this->stopAllActions();
 	this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_AIR_DASHING, Vec2(-this->DISTANCE_AIR_DASHING / 1.414, -this->DISTANCE_AIR_DASHING / 1.414)), MoveBy::create(this->TIME_FOR_AIR_DASHING_BRAKING, Vec2(-this->DISTANCE_AIR_DASHING_BRAKING / 1.414, -this->DISTANCE_AIR_DASHING_BRAKING / 1.414)), nullptr));
 	this->runAction(Animate::create(this->dashingDownLeftAnimation));
+}
+
+
+
+//这个move对外开放，主角的普通移动只调用它。为了调试方便，所有细节目前都是public。八方向移动方法此时是public，今后应改为private。
+//在此验证了主角在调用move方法时的可移动性。
+//one more 废话：move是说方向按钮造成的位移，dash是说冲刺技能造成的位移。
+void HeroSprite::move(){
+	if (this->moveable){
+		if (this->directionToMoveRight) {
+			moveRight();
+		}
+		if (this->directionToMoveLeft){
+			moveLeft();
+		}
+		if (this->directionToMoveUp){
+			moveUp();
+		}
+		if (this->directionToMoveDown){
+			moveDown();
+		}
+
+		if (this->directionToMoveUpRight){
+			moveUpRight();
+		}
+		if (this->directionToMoveUpLeft){
+			moveUpLeft();
+		}
+		if (this->directionToMoveDownRight){
+			moveDownRight();
+		}
+		if (this->directionToMoveDownLeft){
+			moveDownLeft();
+		}
+		if (this->directionToMoveUpRight == false &&
+			this->directionToMoveRight == false &&
+			this->directionToMoveDownRight == false &&
+			this->directionToMoveDown == false &&
+			this->directionToMoveDownLeft == false &&
+			this->directionToMoveLeft == false &&
+			this->directionToMoveUpLeft == false &&
+			this->directionToMoveUp == false){
+			moveBrake();
+		}
+	}
 }
 
 
