@@ -332,6 +332,25 @@ HeroSprite::~HeroSprite()
 }
 
 
+void HeroSprite::button1Hit(){
+	if (true){
+		this->scratch();
+	}
+	else{
+		this->windAttack();
+	}
+}
+void HeroSprite::button1Release(){
+
+}
+void HeroSprite::button2Hit(){
+	this->dash();
+}
+void HeroSprite::button2Release(){
+
+}
+
+
 HeroSprite * HeroSprite::create(const std::string &filename){
 	HeroSprite *mySprite = new HeroSprite();
 	if (mySprite &&mySprite->initWithFile(filename)){
@@ -347,7 +366,7 @@ void HeroSprite::disableAllAbilities(){
 	this->dashable = false;
 	this->moveable = false;
 	this->windAttackable = false;
-	this->pawAttackable = false;
+	this->scratchable = false;
 	this->throwable = false;
 }
 void HeroSprite::enableAllAbilities(){
@@ -355,7 +374,7 @@ void HeroSprite::enableAllAbilities(){
 	this->dashable = true;
 	this->moveable = true;
 	this->windAttackable = true;
-	this->pawAttackable = true;
+	this->scratchable = true;
 	this->throwable = true;
 }
 
@@ -374,6 +393,33 @@ void HeroSprite::windAttack(){
 
 
 
+void HeroSprite::scratch(){
+	if (this->scratchable){
+		if (this->facingRight){
+			this->scratchRight();
+		}
+		else if (this->facingLeft){
+			this->scratchLeft();
+		}
+	}
+}
+
+void HeroSprite::scratchRight(){
+	this->stopAllActions();
+	this->runAction(Animate::create(this->scratchingRightAnimation));
+}
+void HeroSprite::scratchRight2(){
+	this->stopAllActions();
+	this->runAction(Animate::create(this->scratchingRightAnimation2));
+}
+void HeroSprite::scratchLeft(){
+	this->stopAllActions();
+	this->runAction(Animate::create(this->scratchingLeftAnimation));
+}
+void HeroSprite::scratchLeft2(){
+	this->stopAllActions();
+	this->runAction(Animate::create(this->scratchingLeftAnimation2));
+}
 
 
 void HeroSprite::dash(){

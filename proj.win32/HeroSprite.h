@@ -75,7 +75,7 @@ public:
 	//主角正在干嘛。
 	bool moving = false;
 	bool windAttacking = false;
-	bool pawAttacking = false;
+	bool scratching = false;
 	bool pawTryingCatch = false;
 	bool pawHolding = false;
 	bool pawThrowing = false;
@@ -84,7 +84,7 @@ public:
 	//主角当前能干嘛的状态。
 	bool moveable = true;//能自由移动
 	bool windAttackable = true;//翅膀未被占用，能发射风弹
-	bool pawAttackable = true;//爪子未被占用，能撕扯。例：当使用爪子提起物品或敌人时该项设为false，该项为false时即使敌人近身也无法触发近战爪子攻击
+	bool scratchable = true;//爪子未被占用，能撕扯。例：当使用爪子提起物品或敌人时该项设为false，该项为false时即使敌人近身也无法触发近战爪子攻击
 	bool dashable = true;//能否冲刺。
 	bool catchable = true;//爪子能否抓东西。例：剧情安排或正在撕扯时该项为false。
 	bool throwable = true;//能否将爪子上的东西扔出。例：主角不能一心二用。如果当前正在使用翅膀发射风弹，则该项为false，该项为false时调用throw方法将不会触发敌人被扔下的动画，将触发敌人从爪下生还顺毛重新发动攻击的动画。
@@ -102,11 +102,30 @@ public:
 	bool directionToMoveDownRight = false;
 	bool directionToMoveDownLeft = false;
 
+	bool directionToHoldSomething = false;
+
 	int lastDirection = 0;//0↑，1↗，2→，3↘，4↓，5↙，6←，7↖
 
 	bool DirectionToPawhold = false;
 
 	static HeroSprite * create(const std::string & filename);
+
+
+	//关于技能，对外暴露这六个接口即可，别的通通设private就行
+	void button1Hit();
+	void button2Hit();
+	void button3Hit();
+
+	void button1Release();
+	void button2Release();
+	void button3Release();
+	
+
+	void scratch();
+	void scratchRight();
+	void scratchRight2();
+	void scratchLeft();
+	void scratchLeft2();
 
 
 	void disableAllAbilities();
@@ -118,7 +137,6 @@ public:
 	void move();//多个重载。！！**这是一个延时动作**！！
 
 	void moveBrake();
-
 
 	void moveRight();
 	void moveUp();

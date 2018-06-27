@@ -63,12 +63,12 @@ bool Stage1Scene::init(){
 		if (keyCode == EventKeyboard::KeyCode::KEY_J) {
 			this->key_J_down = true;
 			HeroSprite * kp = (HeroSprite*)gameplayLayer->getChildByTag(2);
-			kp->windAttack();
+			kp->button1Hit();
 		}
 		if (keyCode == EventKeyboard::KeyCode::KEY_K) {
 			this->key_K_down = true;
 			HeroSprite * kp = (HeroSprite*)gameplayLayer->getChildByTag(2);
-			kp->dash();
+			kp->button2Hit();
 		}
 		if (keyCode == EventKeyboard::KeyCode::KEY_L) {
 			this->key_L_down = true;
