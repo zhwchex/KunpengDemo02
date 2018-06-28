@@ -24,9 +24,6 @@
     <ClCompile Include="HeroSprite.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="GeneralEnemy.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="Stage1GameplayLayer.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -34,6 +31,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="Stage1UILayer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralUnit.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -50,9 +50,6 @@
     <ClInclude Include="HeroSprite.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="GeneralEnemy.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="Stage1GameplayLayer.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -60,6 +57,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="Stage1UILayer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralUnit.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

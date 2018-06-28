@@ -150,7 +150,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
-    <ClCompile Include="GeneralEnemy.cpp" />
+    <ClCompile Include="GeneralUnit.cpp" />
     <ClCompile Include="HeroSprite.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Stage1GameplayLayer.cpp" />
@@ -160,7 +160,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
-    <ClInclude Include="GeneralEnemy.h" />
+    <ClInclude Include="GeneralUnit.h" />
     <ClInclude Include="HeroSprite.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="Stage1GameplayLayer.h" />

@@ -293,6 +293,62 @@ HeroSprite::HeroSprite()
 	this->scratchingRightAnimation->setRestoreOriginalFrame(true);
 	this->scratchingRightAnimation->retain();
 
+	ValueMap scratchingStartInfo;
+	ValueMap scratchingLoseAllAbilitiesInfo;
+	ValueMap scratchingRecoverScratchabilityInfo;
+	ValueMap scratchingRecoverAllAbilitiesInfo;
+	ValueMap scratchingToHoveringInfo;
+
+	scratchingStartInfo["5"] = Value(5);
+	scratchingLoseAllAbilitiesInfo["6"] = Value(6);
+	scratchingRecoverScratchabilityInfo["7"] = Value(7);
+	scratchingRecoverAllAbilitiesInfo["8"] = Value(8);
+	scratchingToHoveringInfo["9"] = Value(9);
+
+	scratchingRightAnimation->getFrames().at(0)->setUserInfo(scratchingStartInfo);
+	scratchingRightAnimation->getFrames().at(1)->setUserInfo(scratchingLoseAllAbilitiesInfo);
+	scratchingRightAnimation->getFrames().at(2)->setUserInfo(scratchingRecoverScratchabilityInfo);
+	scratchingRightAnimation->getFrames().at(3)->setUserInfo(scratchingRecoverAllAbilitiesInfo);
+	scratchingRightAnimation->getFrames().at(4)->setUserInfo(scratchingToHoveringInfo);
+
+	EventListenerCustom * scratchingFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, scratchingStartInfo, scratchingLoseAllAbilitiesInfo, scratchingRecoverScratchabilityInfo, scratchingRecoverAllAbilitiesInfo, scratchingToHoveringInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == scratchingStartInfo){
+			this->disableAllAbilities();
+		}
+		if (*userData->userInfo == scratchingLoseAllAbilitiesInfo){
+			log("attacking at frame2");
+			if (this->scratchingType == 1){
+				this->scratchingType = 2;
+			}
+			else if(this->scratchingType == 2){
+				this->scratchingType = 1;
+			}
+		}
+		if (*userData->userInfo == scratchingRecoverScratchabilityInfo){
+			this->scratchable = true;
+		}
+		if (*userData->userInfo == scratchingRecoverAllAbilitiesInfo){
+			this->enableAllAbilities();
+			if (this->directionToMoveUpRight ||
+				this->directionToMoveRight ||
+				this->directionToMoveDownRight ||
+				this->directionToMoveDown ||
+				this->directionToMoveDownLeft ||
+				this->directionToMoveLeft ||
+				this->directionToMoveUpLeft ||
+				this->directionToMoveUp){
+				this->move();
+			}
+		
+		}
+		if (*userData->userInfo == scratchingToHoveringInfo){
+			this->hover();
+			this->scratchingType = 1;
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(scratchingFrameEventListener, -1);
+
 	this->scratchingRightAnimation2 = Animation::create();
 	this->scratchingRightAnimation2->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching2_right_00.png");
 	this->scratchingRightAnimation2->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching2_right_01.png");
@@ -302,6 +358,13 @@ HeroSprite::HeroSprite()
 	this->scratchingRightAnimation2->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->scratchingRightAnimation2->setRestoreOriginalFrame(true);
 	this->scratchingRightAnimation2->retain();
+
+	scratchingRightAnimation2->getFrames().at(0)->setUserInfo(scratchingStartInfo);
+	scratchingRightAnimation2->getFrames().at(1)->setUserInfo(scratchingLoseAllAbilitiesInfo);
+	scratchingRightAnimation2->getFrames().at(2)->setUserInfo(scratchingRecoverScratchabilityInfo);
+	scratchingRightAnimation2->getFrames().at(3)->setUserInfo(scratchingRecoverAllAbilitiesInfo);
+	scratchingRightAnimation2->getFrames().at(4)->setUserInfo(scratchingToHoveringInfo);
+
 
 	this->scratchingLeftAnimation = Animation::create();
 	this->scratchingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching_left_00.png");
@@ -313,6 +376,12 @@ HeroSprite::HeroSprite()
 	this->scratchingLeftAnimation->setRestoreOriginalFrame(true);
 	this->scratchingLeftAnimation->retain();
 
+	scratchingLeftAnimation->getFrames().at(0)->setUserInfo(scratchingStartInfo);
+	scratchingLeftAnimation->getFrames().at(1)->setUserInfo(scratchingLoseAllAbilitiesInfo);
+	scratchingLeftAnimation->getFrames().at(2)->setUserInfo(scratchingRecoverScratchabilityInfo);
+	scratchingLeftAnimation->getFrames().at(3)->setUserInfo(scratchingRecoverAllAbilitiesInfo);
+	scratchingLeftAnimation->getFrames().at(4)->setUserInfo(scratchingToHoveringInfo);
+
 	this->scratchingLeftAnimation2 = Animation::create();
 	this->scratchingLeftAnimation2->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching2_left_00.png");
 	this->scratchingLeftAnimation2->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching2_left_01.png");
@@ -323,7 +392,11 @@ HeroSprite::HeroSprite()
 	this->scratchingLeftAnimation2->setRestoreOriginalFrame(true);
 	this->scratchingLeftAnimation2->retain();
 
-
+	scratchingLeftAnimation2->getFrames().at(0)->setUserInfo(scratchingStartInfo);
+	scratchingLeftAnimation2->getFrames().at(1)->setUserInfo(scratchingLoseAllAbilitiesInfo);
+	scratchingLeftAnimation2->getFrames().at(2)->setUserInfo(scratchingRecoverScratchabilityInfo);
+	scratchingLeftAnimation2->getFrames().at(3)->setUserInfo(scratchingRecoverAllAbilitiesInfo);
+	scratchingLeftAnimation2->getFrames().at(4)->setUserInfo(scratchingToHoveringInfo);
 }
 
 
@@ -395,11 +468,23 @@ void HeroSprite::windAttack(){
 
 void HeroSprite::scratch(){
 	if (this->scratchable){
-		if (this->facingRight){
-			this->scratchRight();
+		if (this->scratchingType == 1){
+			if (this->facingRight){
+				this->scratchRight();
+			}
+			else if (this->facingLeft){
+				this->scratchLeft();
+			}
+			//this->scratchingType = 2;
 		}
-		else if (this->facingLeft){
-			this->scratchLeft();
+		else{
+			if (this->facingRight){
+				this->scratchRight2();
+			}
+			else if (this->facingLeft){
+				this->scratchLeft2();
+			}
+			//this->scratchingType = 1;
 		}
 	}
 }
@@ -499,6 +584,9 @@ void HeroSprite::dashRight(){
 	this->stopAllActions();
 	this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_AIR_DASHING, Vec2(this->DISTANCE_AIR_DASHING, 0)), MoveBy::create(this->TIME_FOR_AIR_DASHING_BRAKING, Vec2(this->DISTANCE_AIR_DASHING_BRAKING, 0)), nullptr));
 	this->runAction(Animate::create(this->dashingRightAnimation));
+	//FiniteTimeAction * moveAction = Sequence::create(MoveBy::create(this->TIME_FOR_AIR_DASHING, Vec2(this->DISTANCE_AIR_DASHING, 0)), MoveBy::create(this->TIME_FOR_AIR_DASHING_BRAKING, Vec2(this->DISTANCE_AIR_DASHING_BRAKING, 0)), nullptr);
+	//FiniteTimeAction * animationAction = Animate::create(this->dashingRightAnimation);
+	//this->runAction(Spawn::create(moveAction, animationAction));
 }
 void HeroSprite::dashUpRight(){
 	this->stopAllActions();

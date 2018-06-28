@@ -16,6 +16,8 @@ public:
 	float TIME_FOR_AIR_DASHING = 0.3f;
 	float TIME_FOR_AIR_DASHING_BRAKING = 0.2f;
 
+	int scratchingType = 1;
+
 	//ÐüÍ£¶¯»­
 	Animation * hoveringRightAnimation;
 	Animation * hoveringLeftAnimation;
