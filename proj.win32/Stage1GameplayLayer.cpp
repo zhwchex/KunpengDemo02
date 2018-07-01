@@ -32,7 +32,15 @@ void Stage1GameplayLayer::onEnter(){
 	//Sprite * backgroundSprite = Sprite::create("backgrounds/sky_and_water_small.jpg");
 	this->addChild(this->background);
 	//HeroSprite * kp = HeroSprite::create("characters/kunpeng/peng.jpg");
+
+	GeneralUnit * enemy1ForTest = GeneralUnit::create("characters/general_unit/general_unit.jpg");
+	enemy1ForTest->camp = 2;
+	enemy1ForTest->setPosition(300, 0);
+	enemyList.pushBack(enemy1ForTest);
 	
+	this->addChild(enemy1ForTest);
+
+
 	this->kunpeng->setTag(2);
 	this->addChild(this->kunpeng);
 	Layer::onEnter();

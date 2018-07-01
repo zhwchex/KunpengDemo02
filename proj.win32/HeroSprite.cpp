@@ -1,8 +1,20 @@
 #include "HeroSprite.h"
-
+#include "Stage1GameplayLayer.h"//Nastiest design ever!
 
 HeroSprite::HeroSprite()
 {
+	this->moveRightWithoutAnimationAction = RepeatForever::create(MoveBy::create(1, Vec2(this->SPEED_DURING_ATTACKING_FLYING, 0)));
+	this->moveLeftWithoutAnimationAction = RepeatForever::create(MoveBy::create(1, Vec2(-this->SPEED_DURING_ATTACKING_FLYING, 0)));
+	this->moveUpWithoutAnimationAction = RepeatForever::create(MoveBy::create(1, Vec2(0,this->SPEED_DURING_ATTACKING_FLYING)));
+	this->moveDownWithoutAnimationAction = RepeatForever::create(MoveBy::create(1, Vec2(0,-this->SPEED_DURING_ATTACKING_FLYING)));
+	this->moveUpRightWithoutAnimationAction = RepeatForever::create(MoveBy::create(1, Vec2(this->SPEED_DURING_ATTACKING_FLYING/1.414, this->SPEED_DURING_ATTACKING_FLYING/1.414)));
+	this->moveDownRightWithoutAnimationAction = RepeatForever::create(MoveBy::create(1, Vec2(this->SPEED_DURING_ATTACKING_FLYING / 1.414, -this->SPEED_DURING_ATTACKING_FLYING / 1.414)));
+	this->moveUpLeftWithoutAnimationAction = RepeatForever::create(MoveBy::create(1, Vec2(-this->SPEED_DURING_ATTACKING_FLYING / 1.414, this->SPEED_DURING_ATTACKING_FLYING / 1.414)));
+	this->moveDownLeftWithoutAnimationAction = RepeatForever::create(MoveBy::create(1, Vec2(-this->SPEED_DURING_ATTACKING_FLYING / 1.414, -this->SPEED_DURING_ATTACKING_FLYING / 1.414)));
+	
+	this->moveRightWithoutAnimationAction->retain();
+
+
 	this->hoveringRightAnimation = Animation::create();
 	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_right_00.png");
 	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_right_01.png");
@@ -23,7 +35,7 @@ HeroSprite::HeroSprite()
 
 
 
-	//以下是在第3帧和第1帧上加事件的例子，其中回调函数以lambda函数的形式给出
+	//以下是在第1帧和第3帧上加事件的例子，其中回调函数以lambda函数的形式给出
 	ValueMap hoveringAnimationFrame01info;
 	ValueMap hoveringAnimationFrame03info;
 	hoveringAnimationFrame01info["1"] = Value(1);//除了让该info指向一个新地址外没有别的用处
@@ -136,14 +148,91 @@ HeroSprite::HeroSprite()
 	this->movingUpLeftAnimation->setRestoreOriginalFrame(true);
 	this->movingUpLeftAnimation->retain();
 
-	this->blowingWindAnimation = Animation::create();
-	this->blowingWindAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_windattacking_00.jpg");
-	this->blowingWindAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_windattacking_01.jpg");
-	this->blowingWindAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_windattacking_02.jpg");
-	this->blowingWindAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_windattacking_03.jpg");
-	this->blowingWindAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
-	this->blowingWindAnimation->setRestoreOriginalFrame(true);
-	this->blowingWindAnimation->retain();
+	this->blowingWindRightAnimation = Animation::create();
+	this->blowingWindRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_windattacking_right_00.jpg");
+	this->blowingWindRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_windattacking_right_01.jpg");
+	this->blowingWindRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_windattacking_right_02.jpg");
+	this->blowingWindRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_windattacking_right_03.jpg");
+	this->blowingWindRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_windattacking_right_03.jpg");
+	this->blowingWindRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->blowingWindRightAnimation->setRestoreOriginalFrame(true);
+	this->blowingWindRightAnimation->retain();
+
+	ValueMap blowingStartInfo;
+	ValueMap blowingLaunchingWindBulletInfo;
+	ValueMap blowingRecoverAllAbilitiesInfo;
+	ValueMap blowingEndInfo;
+
+	blowingStartInfo["10"] = Value(10);
+	blowingLaunchingWindBulletInfo["11"] = Value(11);
+	blowingRecoverAllAbilitiesInfo["12"] = Value(12);
+	blowingEndInfo["13"] = Value(13);
+
+	this->blowingWindRightAnimation->getFrames().at(0)->setUserInfo(blowingStartInfo);
+	this->blowingWindRightAnimation->getFrames().at(1)->setUserInfo(blowingLaunchingWindBulletInfo);
+	this->blowingWindRightAnimation->getFrames().at(3)->setUserInfo(blowingRecoverAllAbilitiesInfo);
+	this->blowingWindRightAnimation->getFrames().at(4)->setUserInfo(blowingEndInfo);
+
+	EventListenerCustom * blowingWindAnimationFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, blowingStartInfo, blowingLaunchingWindBulletInfo, blowingRecoverAllAbilitiesInfo, blowingEndInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == blowingStartInfo){
+			log("Hitting first frame of blowing. ");
+			this->disableAllAbilities();
+		}
+		if (*userData->userInfo == blowingLaunchingWindBulletInfo){
+			if (this->facingRight){
+				//this->setPositionX(this->getPositionX() - 30);
+				this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(-10, 0)), MoveBy::create(0.2f, Vec2(-10, 0)), nullptr));
+				Sprite * windBullet = Sprite::create();
+				windBullet->setPosition(this->getPosition());
+				this->getParent()->addChild(windBullet);
+				windBullet->runAction(Spawn::create(MoveBy::create(0.4f, Vec2(300, 0)), Repeat::create(Animate::create(this->windBulletFlyingAnimation), 2), nullptr));
+			}
+			else if (this->facingLeft){
+				//this->setPositionX(this->getPositionX()+ 30);
+				this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(10, 0)), MoveBy::create(0.2f, Vec2(10, 0)), nullptr));
+				Sprite * windBullet = Sprite::create();
+				windBullet->setPosition(this->getPosition());
+				this->getParent()->addChild(windBullet);
+				windBullet->runAction(Spawn::create(MoveBy::create(0.4f, Vec2(-300, 0)), Repeat::create(Animate::create(this->windBulletFlyingAnimation), 2), nullptr));
+			}
+			this->windAttackable = true;
+		}
+		if (*userData->userInfo == blowingRecoverAllAbilitiesInfo){
+			this->enableAllAbilities();
+			if (this->directionToMoveUpRight ||
+				this->directionToMoveRight ||
+				this->directionToMoveDownRight ||
+				this->directionToMoveDown ||
+				this->directionToMoveDownLeft ||
+				this->directionToMoveLeft ||
+				this->directionToMoveUpLeft ||
+				this->directionToMoveUp){
+				this->move();
+			}
+		}
+		if (*userData->userInfo == blowingEndInfo){
+			log("Hitting last frame of blowing. Hovering.");
+			this->hover();
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(blowingWindAnimationFrameEventListener, -1);
+
+	this->blowingWindLeftAnimation = Animation::create();
+	this->blowingWindLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_windattacking_left_00.jpg");
+	this->blowingWindLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_windattacking_left_01.jpg");
+	this->blowingWindLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_windattacking_left_02.jpg");
+	this->blowingWindLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_windattacking_left_03.jpg");
+	this->blowingWindLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_windattacking_left_03.jpg");
+	this->blowingWindLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->blowingWindLeftAnimation->setRestoreOriginalFrame(true);
+	this->blowingWindLeftAnimation->retain();
+
+
+	this->blowingWindLeftAnimation->getFrames().at(0)->setUserInfo(blowingStartInfo);
+	this->blowingWindLeftAnimation->getFrames().at(1)->setUserInfo(blowingLaunchingWindBulletInfo);
+	this->blowingWindLeftAnimation->getFrames().at(3)->setUserInfo(blowingRecoverAllAbilitiesInfo);
+	this->blowingWindLeftAnimation->getFrames().at(4)->setUserInfo(blowingEndInfo);
 
 
 	this->windBulletFlyingAnimation = Animation::create();
@@ -315,6 +404,30 @@ HeroSprite::HeroSprite()
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == scratchingStartInfo){
 			this->disableAllAbilities();
+			if (this->directionToMoveRight ){
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(5, 0)));
+			}
+			else if (this->directionToMoveLeft){
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(-5, 0)));
+			}
+			else if (this->directionToMoveUp){
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 5)));
+			}
+			else if (this->directionToMoveDown){
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, -5)));
+			}
+			else if (this->directionToMoveUpRight){
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(3.5, 3.5)));
+			}
+			else if (this->directionToMoveUpLeft){
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(-3.5, 3.5)));
+			}
+			else if (this->directionToMoveDownRight){
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(3.5, -3.5)));
+			}
+			else if (this->directionToMoveDownLeft){
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(-3.5, -3.5)));
+			}
 		}
 		if (*userData->userInfo == scratchingLoseAllAbilitiesInfo){
 			log("attacking at frame2");
@@ -330,6 +443,7 @@ HeroSprite::HeroSprite()
 		}
 		if (*userData->userInfo == scratchingRecoverAllAbilitiesInfo){
 			this->enableAllAbilities();
+			this->moveableWithoutAnimation = false;
 			if (this->directionToMoveUpRight ||
 				this->directionToMoveRight ||
 				this->directionToMoveDownRight ||
@@ -406,7 +520,35 @@ HeroSprite::~HeroSprite()
 
 
 void HeroSprite::button1Hit(){
-	if (true){
+	Vector<GeneralUnit *> enemyList1 = ((Stage1GameplayLayer *)this->getParent())->enemyList;
+	bool enemyWithinScratch = false;
+	for (GeneralUnit * enemy1 : enemyList1){
+		int enemy_x = enemy1->getPositionX();
+		int enemy_y = enemy1->getPositionY();
+		if (enemy_y - this->getPositionY() < 50 && enemy_y - this->getPositionY() > -50){
+			if (this->facingRight){
+				if (enemy_x - this->getPositionX() < 100 && enemy_x - this->getPositionX() > 0){
+					enemyWithinScratch = true;
+					break;
+				}
+			}
+			else if (this->facingLeft){
+				if (enemy_x - this->getPositionX() > -100 && enemy_x - this->getPositionX() < 0){
+					enemyWithinScratch = true;
+					break;
+				}
+			}
+			else{
+				continue;
+			}
+		}
+		else{
+			continue;
+		}
+
+
+	}
+	if (enemyWithinScratch){
 		this->scratch();
 	}
 	else{
@@ -453,13 +595,20 @@ void HeroSprite::enableAllAbilities(){
 
 void HeroSprite::windAttack(){
 	if (this->windAttackable){
-		this->stopAllActions();
-		this->move();
-		this->runAction(Animate::create(this->blowingWindAnimation));
+		if (this->facingRight){
+			this->stopAllActions();
+			this->runAction(Animate::create(this->blowingWindRightAnimation));
+		}
+		else if (this->facingLeft){
+			this->stopAllActions();
+			this->runAction(Animate::create(this->blowingWindLeftAnimation));
+		}
+		/*
 		Sprite * windBullet = Sprite::create();
 		windBullet->setPosition(this->getPosition());
 		this->getParent()->addChild(windBullet);
 		windBullet->runAction(Spawn::create(MoveBy::create(0.4f, Vec2(300, 0)), Repeat::create(Animate::create(this->windBulletFlyingAnimation), 2), nullptr));
+		*/
 	}
 }
 
@@ -652,6 +801,44 @@ void HeroSprite::move(){
 			moveBrake();
 		}
 	}
+	/*
+	else if (this->moveableWithoutAnimation){
+		if (this->directionToMoveRight) {
+			this->moveRightWithoutAnimation();
+		}
+		if (this->directionToMoveLeft){
+			this->moveLeftWithoutAnimation();
+		}
+		if (this->directionToMoveUp){
+			this->moveUpWithoutAnimation();
+		}
+		if (this->directionToMoveDown){
+			this->moveDownWithoutAnimation();
+		}
+		if (this->directionToMoveUpRight){
+			this->moveUpRightWithoutAnimation();
+		}
+		if (this->directionToMoveUpLeft){
+			this->moveUpLeftWithoutAnimation();
+		}
+		if (this->directionToMoveDownRight){
+			this->moveDownRightWithoutAnimation();
+		}
+		if (this->directionToMoveDownLeft){
+			this->moveDownLeftWithoutAnimation();
+		}
+		if (this->directionToMoveUpRight == false &&
+			this->directionToMoveRight == false &&
+			this->directionToMoveDownRight == false &&
+			this->directionToMoveDown == false &&
+			this->directionToMoveDownLeft == false &&
+			this->directionToMoveLeft == false &&
+			this->directionToMoveUpLeft == false &&
+			this->directionToMoveUp == false){
+			moveBrake();
+		}
+	}
+	*/
 }
 
 
@@ -714,6 +901,58 @@ void HeroSprite::moveDownLeft(){
 	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second / 1.4142, -this->speed_flying_pixel_per_second / 1.4142))));
 	this->runAction(RepeatForever::create(Animate::create(this->movingDownLeftAnimation)));
 }
+
+void HeroSprite::moveRightWithoutAnimation(){
+	this->moveWithoutAnimationBrake();
+	//this->runAction(this->moveRightWithoutAnimation);
+}
+void HeroSprite::moveUpWithoutAnimation(){
+	this->moveWithoutAnimationBrake();
+	//this->runAction(this->moveUpWithoutAnimation);
+	//this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, this->SPEED_DURING_ATTACKING_FLYING))));
+}
+void HeroSprite::moveDownWithoutAnimation(){
+	this->moveWithoutAnimationBrake();
+	//this->runAction(this->moveDownWithoutAnimation);
+	//this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, -this->SPEED_DURING_ATTACKING_FLYING))));
+}
+void HeroSprite::moveLeftWithoutAnimation(){
+	this->moveWithoutAnimationBrake();
+	//this->runAction(this->moveLeftWithoutAnimation);
+	//this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->SPEED_DURING_ATTACKING_FLYING, 0))));
+}
+void HeroSprite::moveUpRightWithoutAnimation(){
+	this->moveWithoutAnimationBrake();
+	//this->runAction(this->moveUpRightWithoutAnimation);
+	//this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->SPEED_DURING_ATTACKING_FLYING / 1.4142, this->SPEED_DURING_ATTACKING_FLYING / 1.4142))));
+}
+void HeroSprite::moveUpLeftWithoutAnimation(){
+	this->moveWithoutAnimationBrake();
+	//this->runAction(this->moveUpLeftWithoutAnimation);
+	//this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->SPEED_DURING_ATTACKING_FLYING / 1.4142, this->SPEED_DURING_ATTACKING_FLYING / 1.4142))));
+}
+void HeroSprite::moveDownRightWithoutAnimation(){
+	this->moveWithoutAnimationBrake();
+	//this->runAction(this->moveDownRightWithoutAnimation);
+	//this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->SPEED_DURING_ATTACKING_FLYING / 1.4142, -this->SPEED_DURING_ATTACKING_FLYING / 1.4142))));
+}
+void HeroSprite::moveDownLeftWithoutAnimation(){
+	this->moveWithoutAnimationBrake();
+	//this->runAction(this->moveDownLeftWithoutAnimation);
+	//this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->SPEED_DURING_ATTACKING_FLYING / 1.4142, -this->SPEED_DURING_ATTACKING_FLYING / 1.4142))));
+}
+
+void HeroSprite::moveWithoutAnimationBrake(){
+	//this->stopAction(this->moveRightWithoutAnimation);
+	//this->stopAction(this->moveLeftWithoutAnimation);
+	//this->stopAction(this->moveUpWithoutAnimation);
+	//this->stopAction(this->moveDownWithoutAnimation);
+	//this->stopAction(this->moveUpRightWithoutAnimation);
+	//this->stopAction(this->moveDownRightWithoutAnimation);
+	//this->stopAction(this->moveUpLeftWithoutAnimation);
+	//this->stopAction(this->moveDownLeftWithoutAnimation);
+}
+
 
 
 //brakes after moving。虽然暂时没做完，但是一定要做的。这关系到技能流畅度

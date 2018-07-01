@@ -1,5 +1,8 @@
 #pragma once
 #include "cocos2d.h"
+#include "GeneralUnit.h"
+//#include "Stage1GameplayLayer.h"
+
 USING_NS_CC;
 class HeroSprite :	public Sprite
 {
@@ -10,6 +13,8 @@ public:
 
 	int speed_flying_pixel_per_second = 266;
 	int speed_swimming_pixel_per_second = 200;
+
+	int SPEED_DURING_ATTACKING_FLYING = 133;
 
 	int DISTANCE_AIR_DASHING = 200;
 	int DISTANCE_AIR_DASHING_BRAKING = 20;
@@ -46,7 +51,8 @@ public:
 	Animation * dashingUpLeftAnimation;
 
 	//技能动画
-	Animation * blowingWindAnimation;
+	Animation * blowingWindRightAnimation;
+	Animation * blowingWindLeftAnimation;
 	Animation * scratchingRightAnimation;
 	Animation * scratchingRightAnimation2;
 	Animation * scratchingLeftAnimation;
@@ -61,6 +67,15 @@ public:
 	Animation * throwingBossAnimation;//对Boss使用投技的动画
 
 	Animation * windBulletFlyingAnimation;
+
+	RepeatForever * moveRightWithoutAnimationAction;
+	RepeatForever * moveLeftWithoutAnimationAction;
+	RepeatForever * moveUpWithoutAnimationAction;
+	RepeatForever * moveDownWithoutAnimationAction;
+	RepeatForever * moveUpRightWithoutAnimationAction;
+	RepeatForever * moveDownRightWithoutAnimationAction;
+	RepeatForever * moveUpLeftWithoutAnimationAction;
+	RepeatForever * moveDownLeftWithoutAnimationAction;
 
 
 	//主角不是鸟就是鱼，没有第三个可能性
@@ -84,6 +99,7 @@ public:
 	bool pawThrowingBoss = false;
 
 	//主角当前能干嘛的状态。
+	bool moveableWithoutAnimation = false;
 	bool moveable = true;//能自由移动
 	bool windAttackable = true;//翅膀未被占用，能发射风弹
 	bool scratchable = true;//爪子未被占用，能撕扯。例：当使用爪子提起物品或敌人时该项设为false，该项为false时即使敌人近身也无法触发近战爪子攻击
@@ -138,6 +154,8 @@ public:
 
 	void move();//多个重载。！！**这是一个延时动作**！！
 
+	void moveWithoutAnimationBrake();
+
 	void moveBrake();
 
 	void moveRight();
@@ -148,6 +166,15 @@ public:
 	void moveUpLeft();
 	void moveDownRight();
 	void moveDownLeft();
+
+	void moveRightWithoutAnimation();
+	void moveUpWithoutAnimation();
+	void moveDownWithoutAnimation();
+	void moveLeftWithoutAnimation();
+	void moveUpRightWithoutAnimation();
+	void moveUpLeftWithoutAnimation();
+	void moveDownRightWithoutAnimation();
+	void moveDownLeftWithoutAnimation();
 
 
 	void moveRightBrake();
