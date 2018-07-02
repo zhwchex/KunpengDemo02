@@ -1,12 +1,15 @@
 #include "Stage1GameplayLayer.h"
 #include "HeroSprite.h"
 #include "Stage1Scene.h"
+#include "bird_yyh.h"
+#include "Bullet.h"
 
 Stage1GameplayLayer::Stage1GameplayLayer()
 {
 	this->kunpeng = HeroSprite::create("characters/kunpeng/kunpeng.jpg");
 	this->background = Sprite::create("backgrounds/sky_and_water_small.jpg");
 	this->background->setAnchorPoint(Vec2(0,0.5));
+
 }
 
 
@@ -29,6 +32,7 @@ Stage1GameplayLayer * Stage1GameplayLayer::create(){
 }
 
 void Stage1GameplayLayer::onEnter(){
+	
 	//Sprite * backgroundSprite = Sprite::create("backgrounds/sky_and_water_small.jpg");
 	this->addChild(this->background);
 	//HeroSprite * kp = HeroSprite::create("characters/kunpeng/peng.jpg");
@@ -37,12 +41,20 @@ void Stage1GameplayLayer::onEnter(){
 	enemy1ForTest->camp = 2;
 	enemy1ForTest->setPosition(300, 0);
 	enemyList.pushBack(enemy1ForTest);
-	
 	this->addChild(enemy1ForTest);
+
+	Bird_yyh* bird1 = Bird_yyh::create("characters/Bird_yyh/bird1.jpg");
+	bird1->setPosition(300, 200);
+	this->addChild(bird1);
+	Bullet* bullet = Bullet::create(bird1);
+	this->addChild(bullet, 1, "bu");
+	bird1->wanderAbout();
+	enemyList.pushBack(bird1);
 
 
 	this->kunpeng->setTag(2);
 	this->addChild(this->kunpeng);
+	
 	Layer::onEnter();
 }
 

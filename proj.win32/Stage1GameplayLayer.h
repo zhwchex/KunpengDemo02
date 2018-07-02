@@ -17,8 +17,7 @@ public:
 	Vector<GeneralUnit * > enemyList = Vector<GeneralUnit *>();
 
 	void onEnter();
-
-
+	
 	void updateLayerPositionToMaintainHeroInCamera(float positionRatioLeft, float positionRatioRight, float screenScrollingSpeedRatio);
 	void lockHeroWithinCamera();
 	void lockHeroWithinLandscape();

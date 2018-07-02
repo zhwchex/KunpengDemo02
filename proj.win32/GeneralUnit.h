@@ -13,10 +13,17 @@ public:
 	int camp;
 
 
-	//这三个接口是需要暴露出来的
+	//这4个接口是需要暴露出来的
 	void wanderAbout();//AI由你们写。我每帧都调用这个方法
-	void getHurt();//由我来调用
-	void die();//由我来调用
+	
+	void getHurtByWind(int damage);//由我来调用
+	void getHurtByPaw(int damage);
+	void getHurtByCrush(int damage);
+
+	void getHurtByWater(int damage);
+	void getHurtByFin(int damage);
+
+	void die();
 
 	static GeneralUnit * create(const std::string & filename);
 
