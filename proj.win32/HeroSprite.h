@@ -16,6 +16,8 @@ public:
 
 	int SPEED_DURING_ATTACKING_FLYING = 133;
 
+	int DISTANCE_DURING_SCRATCHING = 20;
+
 	int DISTANCE_AIR_DASHING = 200;
 	int DISTANCE_AIR_DASHING_BRAKING = 20;
 	float TIME_FOR_AIR_DASHING = 0.3f;
@@ -67,6 +69,12 @@ public:
 	Animation * throwingBossAnimation;//对Boss使用投技的动画
 
 	Animation * windBulletFlyingAnimation;
+
+
+
+
+
+	Animation * gettingHurtGeneralAnimation;
 
 	RepeatForever * moveRightWithoutAnimationAction;
 	RepeatForever * moveLeftWithoutAnimationAction;
@@ -207,6 +215,7 @@ public:
 	void pawThrowBoss();//多个重载
 
 	void getHurt();//多个重载
+	void getHurtGeneral();
 	void getHurtByThunder();
 	void getHurtByFire();
 	void getHurtByWater();

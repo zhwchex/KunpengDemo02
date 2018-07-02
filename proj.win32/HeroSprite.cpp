@@ -405,28 +405,28 @@ HeroSprite::HeroSprite()
 		if (*userData->userInfo == scratchingStartInfo){
 			this->disableAllAbilities();
 			if (this->directionToMoveRight ){
-				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(5, 0)));
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL*2, Vec2(this->DISTANCE_DURING_SCRATCHING, 0)));
 			}
 			else if (this->directionToMoveLeft){
-				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(-5, 0)));
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(-this->DISTANCE_DURING_SCRATCHING, 0)));
 			}
 			else if (this->directionToMoveUp){
-				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 5)));
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(0, this->DISTANCE_DURING_SCRATCHING)));
 			}
 			else if (this->directionToMoveDown){
-				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, -5)));
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(0, -this->DISTANCE_DURING_SCRATCHING)));
 			}
 			else if (this->directionToMoveUpRight){
-				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(3.5, 3.5)));
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(this->DISTANCE_DURING_SCRATCHING / 1.414, this->DISTANCE_DURING_SCRATCHING / 1.414)));
 			}
 			else if (this->directionToMoveUpLeft){
-				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(-3.5, 3.5)));
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(-this->DISTANCE_DURING_SCRATCHING / 1.414, this->DISTANCE_DURING_SCRATCHING / 1.414)));
 			}
 			else if (this->directionToMoveDownRight){
-				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(3.5, -3.5)));
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(this->DISTANCE_DURING_SCRATCHING / 1.414, -this->DISTANCE_DURING_SCRATCHING / 1.414)));
 			}
 			else if (this->directionToMoveDownLeft){
-				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(-3.5, -3.5)));
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(-this->DISTANCE_DURING_SCRATCHING / 1.414, -this->DISTANCE_DURING_SCRATCHING / 1.414)));
 			}
 		}
 		if (*userData->userInfo == scratchingLoseAllAbilitiesInfo){
@@ -511,6 +511,54 @@ HeroSprite::HeroSprite()
 	scratchingLeftAnimation2->getFrames().at(2)->setUserInfo(scratchingRecoverScratchabilityInfo);
 	scratchingLeftAnimation2->getFrames().at(3)->setUserInfo(scratchingRecoverAllAbilitiesInfo);
 	scratchingLeftAnimation2->getFrames().at(4)->setUserInfo(scratchingToHoveringInfo);
+
+	
+	this->gettingHurtGeneralAnimation = Animation::create();
+	this->gettingHurtGeneralAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_getting_hurt_general_00.png");
+	this->gettingHurtGeneralAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_getting_hurt_general_01.png");
+	this->gettingHurtGeneralAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_getting_hurt_general_02.png");
+	this->gettingHurtGeneralAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_getting_hurt_general_03.png");
+	this->gettingHurtGeneralAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->gettingHurtGeneralAnimation->setRestoreOriginalFrame(true);
+	this->gettingHurtGeneralAnimation->retain();
+
+	ValueMap gettingHurtGeneralStartInfo;
+	ValueMap gettingHurtGeneralEndInfo;
+
+	gettingHurtGeneralStartInfo["14"] = Value(10);
+	gettingHurtGeneralEndInfo["15"] = Value(11);
+
+
+	this->gettingHurtGeneralAnimation->getFrames().at(0)->setUserInfo(gettingHurtGeneralStartInfo);
+	this->gettingHurtGeneralAnimation->getFrames().at(3)->setUserInfo(gettingHurtGeneralEndInfo);
+
+	EventListenerCustom * gettingHurtGeneralFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, gettingHurtGeneralStartInfo, gettingHurtGeneralEndInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == gettingHurtGeneralStartInfo){
+			log("get hurt");
+			this->disableAllAbilities();
+		}
+		if (*userData->userInfo == gettingHurtGeneralEndInfo){
+			log("recovering from getting hurt");
+			this->enableAllAbilities();
+			this->hover();
+			if (this->directionToMoveUpRight ||
+				this->directionToMoveRight ||
+				this->directionToMoveDownRight ||
+				this->directionToMoveDown ||
+				this->directionToMoveDownLeft ||
+				this->directionToMoveLeft ||
+				this->directionToMoveUpLeft ||
+				this->directionToMoveUp){
+				this->move();
+			}
+		}
+	});
+
+	_eventDispatcher->addEventListenerWithFixedPriority(gettingHurtGeneralFrameEventListener, -1);
+
+
+
 }
 
 
@@ -562,9 +610,16 @@ void HeroSprite::button2Hit(){
 	this->dash();
 }
 void HeroSprite::button2Release(){
-
+	//do nothing
 }
 
+void HeroSprite::button3Hit(){
+	
+	this->getHurtGeneral();
+}
+void HeroSprite::button3Release(){
+
+}
 
 HeroSprite * HeroSprite::create(const std::string &filename){
 	HeroSprite *mySprite = new HeroSprite();
@@ -574,6 +629,11 @@ HeroSprite * HeroSprite::create(const std::string &filename){
 	}
 	CC_SAFE_DELETE(mySprite);
 	return nullptr;
+}
+
+void HeroSprite::getHurtGeneral(){
+	this->stopAllActions();
+	this->runAction(Animate::create(this->gettingHurtGeneralAnimation));
 }
 
 void HeroSprite::disableAllAbilities(){

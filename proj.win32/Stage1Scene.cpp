@@ -72,6 +72,8 @@ bool Stage1Scene::init(){
 		}
 		if (keyCode == EventKeyboard::KeyCode::KEY_L) {
 			this->key_L_down = true;
+			HeroSprite * kp = (HeroSprite*)gameplayLayer->getChildByTag(2);
+			kp->button3Hit();
 		}
 	};
 	kbListener1->onKeyReleased = [this,gameplayLayer](EventKeyboard::KeyCode keyCode, Event * event){
