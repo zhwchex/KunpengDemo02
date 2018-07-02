@@ -8,6 +8,9 @@ class HeroSprite :	public Sprite
 {
 
 public:
+	int health = 100;
+
+	int camp = 1;
 
 	float TIME_FOR_ANIMATION_FRAME_INTERVAL = 0.2f;
 
