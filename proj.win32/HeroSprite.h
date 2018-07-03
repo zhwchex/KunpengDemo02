@@ -1,7 +1,12 @@
+//由于本角色过于庞大，开发旷日持久，昨天的思维和今天的思维不在一条线上，因此出现了这里用鸟那里用鹏的措辞不一致的现象，和这里用鱼那里用鲲的措辞不一致的情况。事实上我口中的鸟=鹏，鱼=鲲，bird=peng，fish=kun。
+//郑重声明：#define 鸟 鹏
+//郑重声明：#define 鱼 鲲
+//郑重声明：#define bird peng
+//郑重声明：#define fish kun
+
 #pragma once
 #include "cocos2d.h"
 #include "GeneralUnit.h"
-//#include "Stage1GameplayLayer.h"
 
 USING_NS_CC;
 class HeroSprite :	public Sprite
@@ -15,7 +20,7 @@ public:
 	float TIME_FOR_ANIMATION_FRAME_INTERVAL = 0.2f;
 
 	int speed_flying_pixel_per_second = 266;
-	int speed_swimming_pixel_per_second = 200;
+	int SPEED_SWIMMING_PIXEL_PER_SECOND = 200;
 
 	int SPEED_DURING_ATTACKING_FLYING = 133;
 
@@ -28,12 +33,12 @@ public:
 
 	int scratchingType = 1;
 
-	//悬停动画
+	//鸟悬停动画
 	Animation * hoveringRightAnimation;
 	Animation * hoveringLeftAnimation;
 
-	//普通移动的动画
-	Animation * movingUpAnimation;	
+	//鸟普通移动的动画
+	Animation * movingUpAnimation;
 	Animation * movingUpRightAnimation;
 	Animation * movingRightAnimation;
 	Animation * movingDownRightAnimation;
@@ -42,10 +47,20 @@ public:
 	Animation * movingLeftAnimation;
 	Animation * movingUpLeftAnimation;
 
+	//鱼悬停的动画
+	Animation * hoveringRightAnimation_kun;
+	Animation * hoveringLeftAnimation_kun;
+
+	//鱼普通移动的动画
+	Animation * movingUpRightAnimation_kun;
+	Animation * movingRightAnimation_kun;
+	Animation * movingDownRightAnimation_kun;
+	Animation * movingDownLeftAnimation_kun;
+	Animation * movingLeftAnimation_kun;
+	Animation * movingUpLeftAnimation_kun;
 
 
-
-	//冲刺动画
+	//鸟冲刺动画
 	Animation * dashingUpAnimation;
 	Animation * dashingUpRightAnimation;
 	Animation * dashingRightAnimation;
@@ -54,6 +69,16 @@ public:
 	Animation * dashingDownLeftAnimation;
 	Animation * dashingLeftAnimation;
 	Animation * dashingUpLeftAnimation;
+
+	//鱼冲刺动画
+	Animation * dashingUpAnimation_kun;
+	Animation * dashingUpRightAnimation_kun;
+	Animation * dashingRightAnimation_kun;
+	Animation * dashingDownRightAnimation_kun;
+	Animation * dashingDownAnimation_kun;
+	Animation * dashingDownLeftAnimation_kun;
+	Animation * dashingLeftAnimation_kun;
+	Animation * dashingUpLeftAnimation_kun;
 
 	//技能动画
 	Animation * blowingWindRightAnimation;
@@ -76,6 +101,10 @@ public:
 
 
 
+	Animation * TransformingFromBirdToFishAnimation;
+	Animation * TransformingFromFishToBirdAnimation;
+
+
 
 	Animation * gettingHurtGeneralAnimation;
 
@@ -93,12 +122,14 @@ public:
 	bool isBird = true;
 	bool isFish = false;
 
+	
+
 	//主角的运动状态，这些状态与技能施放有关。例如，只有在飞行时才能施放风弹
 	bool facingRight = true;
 	bool facingLeft = false;
-	bool flying = true;
+	bool inTheAir = true;
 	//bool walking = false;//放弃主角降落在地面并欢快奔跑的构想
-	bool swimming = false;
+	bool inTheWater = false;
 
 	//主角正在干嘛。
 	bool moving = false;
@@ -117,6 +148,12 @@ public:
 	bool dashable = true;//能否冲刺。
 	bool catchable = true;//爪子能否抓东西。例：剧情安排或正在撕扯时该项为false。
 	bool throwable = true;//能否将爪子上的东西扔出。例：主角不能一心二用。如果当前正在使用翅膀发射风弹，则该项为false，该项为false时调用throw方法将不会触发敌人被扔下的动画，将触发敌人从爪下生还顺毛重新发动攻击的动画。
+
+
+	//逻辑上讲，这两者不能同时为真。
+	bool transformable_BirdToFish = true;
+	bool transformable_FishToBird = true;//为方便测试，暂时将两者均设为真。
+
 
 	bool invincible = false;//是否无敌。为了让玩家有清场能力，将新的生命设置三秒无敌；为了让玩家爽到，将投boss时的主角设置为无敌。
 
@@ -162,12 +199,17 @@ public:
 
 
 	void hover();
+	void hover_kun();
+
+	void transformFromBirdToFish();
+	void transformFromFishToBird();
 
 	void move();//多个重载。！！**这是一个延时动作**！！
 
 	void moveWithoutAnimationBrake();
 
 	void moveBrake();
+	void moveBrake_kun();
 
 	void moveRight();
 	void moveUp();
@@ -177,6 +219,15 @@ public:
 	void moveUpLeft();
 	void moveDownRight();
 	void moveDownLeft();
+
+	void moveRight_kun();
+	void moveUp_kun();
+	void moveDown_kun();
+	void moveLeft_kun();
+	void moveUpRight_kun();
+	void moveUpLeft_kun();
+	void moveDownRight_kun();
+	void moveDownLeft_kun();
 
 	void moveRightWithoutAnimation();
 	void moveUpWithoutAnimation();
@@ -210,6 +261,17 @@ public:
 	void dashDownRight();
 	void dashDownLeft();
 
+	void dash_kun();
+	void dashRight_kun();
+	void dashUp_kun();
+	void dashDown_kun();
+	void dashLeft_kun();
+	void dashUpRight_kun();
+	void dashUpLeft_kun();
+	void dashDownRight_kun();
+	void dashDownLeft_kun();
+
+
 	void windAttack();//多个重载
 	void pawAttack();
 	void pawHold();//！！**这是一个延时动作**！！
@@ -219,12 +281,12 @@ public:
 
 	void getHurt();//多个重载
 	void getHurtGeneral();
-	void getHurtByThunder();
-	void getHurtByFire();
-	void getHurtByWater();
-	void getHurtByHammer();//被锤，被吹飞
+	void getHurtByThunder();//被雷电击中，骨架闪烁+原地震颤
+	void getHurtByFire();//被火球击中，羽毛烧焦闪烁+后退
+	void getHurtByWater();//被水流击中，变落汤鸡+下落
+	void getHurtByHammer();//被锤，被吹飞，扑闪翅膀挣扎一番恢复稳定
 	void getHurtByHammer(double direction);//吹飞方向为direction。0代表往上吹飞，90代表往右吹飞，180代表往下吹飞，270代表往左吹飞。
-	void getHurtByWind();
+	void getHurtByWind();//被吹风击中，羽毛变凌乱
 
 	HeroSprite();
 	~HeroSprite();

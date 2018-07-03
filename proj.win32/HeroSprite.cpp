@@ -14,7 +14,7 @@ HeroSprite::HeroSprite()
 	
 	this->moveRightWithoutAnimationAction->retain();
 
-
+	// bird's hovering animation
 	this->hoveringRightAnimation = Animation::create();
 	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_right_00.png");
 	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_right_01.png");
@@ -559,6 +559,116 @@ HeroSprite::HeroSprite()
 
 
 
+
+
+
+	//鸟变鱼的动画
+	this->TransformingFromBirdToFishAnimation = Animation::create();
+	this->TransformingFromBirdToFishAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_transforming_to_kun_00.png");
+	this->TransformingFromBirdToFishAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_transforming_to_kun_01.png");
+	this->TransformingFromBirdToFishAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_transforming_to_kun_02.png");
+	this->TransformingFromBirdToFishAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_transforming_to_kun_03.png");
+	this->TransformingFromBirdToFishAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->TransformingFromBirdToFishAnimation->setRestoreOriginalFrame(true);
+	this->TransformingFromBirdToFishAnimation->retain();
+
+
+
+	//鱼变鸟的动画
+	this->TransformingFromFishToBirdAnimation = Animation::create();
+	this->TransformingFromFishToBirdAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_transforming_to_peng_00.png");
+	this->TransformingFromFishToBirdAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_transforming_to_peng_01.png");
+	this->TransformingFromFishToBirdAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_transforming_to_peng_02.png");
+	this->TransformingFromFishToBirdAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_transforming_to_peng_03.png");
+	this->TransformingFromFishToBirdAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->TransformingFromFishToBirdAnimation->setRestoreOriginalFrame(true);
+	this->TransformingFromFishToBirdAnimation->retain();
+
+
+
+
+
+	//Fish's hovering animation
+	this->hoveringRightAnimation_kun = Animation::create();
+	this->hoveringRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_facing_right_00.png");
+	this->hoveringRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_facing_right_01.png");
+	this->hoveringRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_facing_right_02.png");
+	this->hoveringRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_facing_right_03.png");
+	this->hoveringRightAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->hoveringRightAnimation_kun->setRestoreOriginalFrame(true);
+	this->hoveringRightAnimation_kun->retain();
+
+	this->hoveringLeftAnimation_kun = Animation::create();
+	this->hoveringLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_facing_left_00.png");
+	this->hoveringLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_facing_left_01.png");
+	this->hoveringLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_facing_left_02.png");
+	this->hoveringLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_facing_left_03.png");
+	this->hoveringLeftAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->hoveringLeftAnimation_kun->setRestoreOriginalFrame(true);
+	this->hoveringLeftAnimation_kun->retain();
+
+	//鱼的普通移动动画
+	this->movingRightAnimation_kun = Animation::create();
+	this->movingRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_right_00.png");
+	this->movingRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_right_01.png");
+	this->movingRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_right_02.png");
+	this->movingRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_right_03.png");
+	this->movingRightAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->movingRightAnimation_kun->setRestoreOriginalFrame(true);
+	this->movingRightAnimation_kun->retain();
+
+	this->movingUpRightAnimation_kun = Animation::create();
+	this->movingUpRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_upright_00.png");
+	this->movingUpRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_upright_01.png");
+	this->movingUpRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_upright_02.png");
+	this->movingUpRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_upright_03.png");
+	this->movingUpRightAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->movingUpRightAnimation_kun->setRestoreOriginalFrame(true);
+	this->movingUpRightAnimation_kun->retain();
+
+	this->movingDownRightAnimation_kun = Animation::create();
+	this->movingDownRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_downright_00.png");
+	this->movingDownRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_downright_01.png");
+	this->movingDownRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_downright_02.png");
+	this->movingDownRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_downright_03.png");
+	this->movingDownRightAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->movingDownRightAnimation_kun->setRestoreOriginalFrame(true);
+	this->movingDownRightAnimation_kun->retain();
+
+	this->movingLeftAnimation_kun = Animation::create();
+	this->movingLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_left_00.png");
+	this->movingLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_left_01.png");
+	this->movingLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_left_02.png");
+	this->movingLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_left_03.png");
+	this->movingLeftAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->movingLeftAnimation_kun->setRestoreOriginalFrame(true);
+	this->movingLeftAnimation_kun->retain();
+
+	this->movingUpLeftAnimation_kun = Animation::create();
+	this->movingUpLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_upleft_00.png");
+	this->movingUpLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_upleft_01.png");
+	this->movingUpLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_upleft_02.png");
+	this->movingUpLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_upleft_03.png");
+	this->movingUpLeftAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->movingUpLeftAnimation_kun->setRestoreOriginalFrame(true);
+	this->movingUpLeftAnimation_kun->retain();
+
+	this->movingDownLeftAnimation_kun = Animation::create();
+	this->movingDownLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_downleft_00.png");
+	this->movingDownLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_downleft_01.png");
+	this->movingDownLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_downleft_02.png");
+	this->movingDownLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_downleft_03.png");
+	this->movingDownLeftAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->movingDownLeftAnimation_kun->setRestoreOriginalFrame(true);
+	this->movingDownLeftAnimation_kun->retain();
+
+
+
+
+
+
+
+
 }
 
 
@@ -615,7 +725,13 @@ void HeroSprite::button2Release(){
 
 void HeroSprite::button3Hit(){
 	
-	this->getHurtGeneral();
+	//this->getHurtGeneral();//测试过。没问题
+	if (this->isFish){
+		this->transformFromFishToBird();
+	}
+	else if (this->isBird){
+		this->transformFromBirdToFish();
+	}
 }
 void HeroSprite::button3Release(){
 
@@ -674,7 +790,7 @@ void HeroSprite::windAttack(){
 
 
 
-
+//鸟的抓挠动作（敌人太近时就从法爷转战士）
 void HeroSprite::scratch(){
 	if (this->scratchable){
 		if (this->scratchingType == 1){
@@ -763,7 +879,7 @@ void HeroSprite::dash(){
 }
 
 
-//dashing in 8 directions.
+//bird dashing in 8 directions.
 void HeroSprite::dashUp(){
 	this->stopAllActions();
 	this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_AIR_DASHING, Vec2(0, this->DISTANCE_AIR_DASHING)), MoveBy::create(this->TIME_FOR_AIR_DASHING_BRAKING, Vec2(0, this->DISTANCE_AIR_DASHING_BRAKING)), nullptr));
@@ -820,35 +936,91 @@ void HeroSprite::dashDownLeft(){
 
 
 
+
+
+
+void HeroSprite::transformFromBirdToFish(){
+	this->stopAllActions();
+	this->isBird = false;
+	this->isFish = true;
+	this->runAction(Sequence::create(MoveBy::create(0.1f,Vec2(0,-100)),MoveBy::create(0.2f, Vec2(0,-50)) , nullptr));
+	this->runAction(Animate::create(this->TransformingFromBirdToFishAnimation));
+}
+void HeroSprite::transformFromFishToBird(){
+	this->stopAllActions();
+	this->isFish = false;
+	this->isBird = true;
+	this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, 100)), MoveBy::create(0.2f, Vec2(0, 50)), nullptr));
+	this->runAction(Animate::create(this->TransformingFromFishToBirdAnimation));
+}
+
+
 //这个move对外开放，主角的普通移动只调用它。为了调试方便，所有细节目前都是public。八方向移动方法此时是public，今后应改为private。
 //在此验证了主角在调用move方法时的可移动性。
 //one more 废话：move是说方向按钮造成的位移，dash是说冲刺技能造成的位移。
 void HeroSprite::move(){
 	if (this->moveable){
+		if (this->isBird){
+			if (this->directionToMoveRight) {
+				moveRight();
+			}
+			if (this->directionToMoveLeft){
+				moveLeft();
+			}
+			if (this->directionToMoveUp){
+				moveUp();
+			}
+			if (this->directionToMoveDown){
+				moveDown();
+			}
+			if (this->directionToMoveUpRight){
+				moveUpRight();
+			}
+			if (this->directionToMoveUpLeft){
+				moveUpLeft();
+			}
+			if (this->directionToMoveDownRight){
+				moveDownRight();
+			}
+			if (this->directionToMoveDownLeft){
+				moveDownLeft();
+			}
+			if (this->directionToMoveUpRight == false &&
+				this->directionToMoveRight == false &&
+				this->directionToMoveDownRight == false &&
+				this->directionToMoveDown == false &&
+				this->directionToMoveDownLeft == false &&
+				this->directionToMoveLeft == false &&
+				this->directionToMoveUpLeft == false &&
+				this->directionToMoveUp == false){
+				moveBrake();
+			}
+		}
+	}
+	else if (this->isFish){
 		if (this->directionToMoveRight) {
-			moveRight();
+			moveRight_kun();
 		}
 		if (this->directionToMoveLeft){
-			moveLeft();
+			moveLeft_kun();
 		}
 		if (this->directionToMoveUp){
-			moveUp();
+			moveUp_kun();
 		}
 		if (this->directionToMoveDown){
-			moveDown();
+			moveDown_kun();
 		}
-
 		if (this->directionToMoveUpRight){
-			moveUpRight();
+			moveUpRight_kun();
 		}
 		if (this->directionToMoveUpLeft){
-			moveUpLeft();
+			moveUpLeft_kun();
 		}
 		if (this->directionToMoveDownRight){
-			moveDownRight();
+			moveDownRight_kun();
 		}
 		if (this->directionToMoveDownLeft){
-			moveDownLeft();
+			moveDownLeft_kun();
 		}
 		if (this->directionToMoveUpRight == false &&
 			this->directionToMoveRight == false &&
@@ -858,51 +1030,14 @@ void HeroSprite::move(){
 			this->directionToMoveLeft == false &&
 			this->directionToMoveUpLeft == false &&
 			this->directionToMoveUp == false){
-			moveBrake();
+			moveBrake_kun();
 		}
 	}
-	/*
-	else if (this->moveableWithoutAnimation){
-		if (this->directionToMoveRight) {
-			this->moveRightWithoutAnimation();
-		}
-		if (this->directionToMoveLeft){
-			this->moveLeftWithoutAnimation();
-		}
-		if (this->directionToMoveUp){
-			this->moveUpWithoutAnimation();
-		}
-		if (this->directionToMoveDown){
-			this->moveDownWithoutAnimation();
-		}
-		if (this->directionToMoveUpRight){
-			this->moveUpRightWithoutAnimation();
-		}
-		if (this->directionToMoveUpLeft){
-			this->moveUpLeftWithoutAnimation();
-		}
-		if (this->directionToMoveDownRight){
-			this->moveDownRightWithoutAnimation();
-		}
-		if (this->directionToMoveDownLeft){
-			this->moveDownLeftWithoutAnimation();
-		}
-		if (this->directionToMoveUpRight == false &&
-			this->directionToMoveRight == false &&
-			this->directionToMoveDownRight == false &&
-			this->directionToMoveDown == false &&
-			this->directionToMoveDownLeft == false &&
-			this->directionToMoveLeft == false &&
-			this->directionToMoveUpLeft == false &&
-			this->directionToMoveUp == false){
-			moveBrake();
-		}
-	}
-	*/
+	
 }
 
 
-//moving in 8 directions
+//鸟的移动。
 //仅仅将向右移动和播放移动动画一起run一下，没做是否可移动的验证。剩下的七个动画亦然。以后要加入扑打翅膀的声音
 void HeroSprite::moveRight(){
 	this->facingRight = true;
@@ -960,6 +1095,71 @@ void HeroSprite::moveDownLeft(){
 	this->stopAllActions();
 	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second / 1.4142, -this->speed_flying_pixel_per_second / 1.4142))));
 	this->runAction(RepeatForever::create(Animate::create(this->movingDownLeftAnimation)));
+}
+
+
+//鲲的普通移动。这里没做判断。
+void HeroSprite::moveRight_kun(){
+	this->facingRight = true;
+	this->facingLeft = false;
+	this->stopAllActions();
+	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->SPEED_SWIMMING_PIXEL_PER_SECOND, 0))));
+	this->runAction(RepeatForever::create(Animate::create(this->movingRightAnimation_kun)));
+}
+void HeroSprite::moveUp_kun(){
+	this->stopAllActions();
+	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, this->SPEED_SWIMMING_PIXEL_PER_SECOND))));
+	if (this->facingLeft){
+		this->runAction(RepeatForever::create(Animate::create(this->movingUpLeftAnimation_kun)));
+	}
+	else{
+		this->runAction(RepeatForever::create(Animate::create(this->movingUpRightAnimation_kun)));
+	}
+}
+void HeroSprite::moveDown_kun(){
+	this->stopAllActions();
+	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, -this->SPEED_SWIMMING_PIXEL_PER_SECOND))));
+	if (this->facingLeft){
+		this->runAction(RepeatForever::create(Animate::create(this->movingDownLeftAnimation_kun)));
+	}
+	else{
+		this->runAction(RepeatForever::create(Animate::create(this->movingDownRightAnimation_kun)));
+	}
+}
+void HeroSprite::moveLeft_kun(){
+	this->facingRight = false;
+	this->facingLeft = true;
+	this->stopAllActions();
+	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->SPEED_SWIMMING_PIXEL_PER_SECOND, 0))));
+	this->runAction(RepeatForever::create(Animate::create(this->movingLeftAnimation_kun)));
+}
+void HeroSprite::moveUpRight_kun(){
+	this->facingRight = true;
+	this->facingLeft = false;
+	this->stopAllActions();
+	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->SPEED_SWIMMING_PIXEL_PER_SECOND / 1.414, this->SPEED_SWIMMING_PIXEL_PER_SECOND / 1.414))));
+	this->runAction(RepeatForever::create(Animate::create(this->movingUpRightAnimation_kun)));
+}
+void HeroSprite::moveUpLeft_kun(){
+	this->facingRight = false;
+	this->facingLeft = true;
+	this->stopAllActions();
+	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->SPEED_SWIMMING_PIXEL_PER_SECOND / 1.414, this->SPEED_SWIMMING_PIXEL_PER_SECOND / 1.414))));
+	this->runAction(RepeatForever::create(Animate::create(this->movingUpLeftAnimation_kun)));
+}
+void HeroSprite::moveDownRight_kun(){
+	this->facingRight = true;
+	this->facingLeft = false;
+	this->stopAllActions();
+	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->SPEED_SWIMMING_PIXEL_PER_SECOND / 1.414, -this->SPEED_SWIMMING_PIXEL_PER_SECOND / 1.414))));
+	this->runAction(RepeatForever::create(Animate::create(this->movingDownRightAnimation_kun)));
+}
+void HeroSprite::moveDownLeft_kun(){
+	this->facingRight = false;
+	this->facingLeft = true;
+	this->stopAllActions();
+	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->SPEED_SWIMMING_PIXEL_PER_SECOND / 1.414, -this->SPEED_SWIMMING_PIXEL_PER_SECOND / 1.414))));
+	this->runAction(RepeatForever::create(Animate::create(this->movingDownLeftAnimation_kun)));
 }
 
 void HeroSprite::moveRightWithoutAnimation(){
@@ -1043,6 +1243,17 @@ void HeroSprite::moveBrake(){
 	}
 }
 
+void HeroSprite::moveBrake_kun(){
+	this->stopAllActions();
+	if (this->facingRight){
+		this->runAction(RepeatForever::create(Animate::create(this->hoveringRightAnimation_kun)));
+	}
+	else if (this->facingLeft){
+		this->runAction(RepeatForever::create(Animate::create(this->hoveringLeftAnimation_kun)));
+
+	}
+}
+
 void HeroSprite::hover(){
 	this->stopAllActions();
 	if (this->facingRight){
@@ -1050,5 +1261,15 @@ void HeroSprite::hover(){
 	}
 	else if (this->facingLeft){
 		this->runAction(RepeatForever::create(Animate::create(this->hoveringLeftAnimation)));
+	}
+}
+
+void HeroSprite::hover_kun(){
+	this->stopAllActions();
+	if (this->facingRight){
+		this->runAction(RepeatForever::create(Animate::create(this->hoveringRightAnimation_kun)));
+	}
+	else if (this->facingLeft){
+		this->runAction(RepeatForever::create(Animate::create(this->hoveringLeftAnimation_kun)));
 	}
 }
