@@ -205,6 +205,7 @@ public:
 	void transformFromFishToBird();
 
 	void move();//多个重载。！！**这是一个延时动作**！！
+	void move_kun();
 
 	void moveWithoutAnimationBrake();
 

@@ -535,11 +535,11 @@ HeroSprite::HeroSprite()
 	EventListenerCustom * gettingHurtGeneralFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, gettingHurtGeneralStartInfo, gettingHurtGeneralEndInfo](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == gettingHurtGeneralStartInfo){
-			log("get hurt");
+			//log("get hurt");
 			this->disableAllAbilities();
 		}
 		if (*userData->userInfo == gettingHurtGeneralEndInfo){
-			log("recovering from getting hurt");
+			//log("recovering from getting hurt");
 			this->enableAllAbilities();
 			this->hover();
 			if (this->directionToMoveUpRight ||
@@ -572,7 +572,62 @@ HeroSprite::HeroSprite()
 	this->TransformingFromBirdToFishAnimation->setRestoreOriginalFrame(true);
 	this->TransformingFromBirdToFishAnimation->retain();
 
+	ValueMap transformingStartInfo;
+	ValueMap transformingEndInfo;
+	ValueMap transformingRecoverAllAbilitiesInfo;
+	
+	transformingStartInfo["16"] = Value(16);
+	transformingRecoverAllAbilitiesInfo["17"] = Value(17);
+	transformingEndInfo["18"] = Value(18);
 
+	this->TransformingFromBirdToFishAnimation->getFrames().at(0)->setUserInfo(transformingStartInfo);
+	this->TransformingFromBirdToFishAnimation->getFrames().at(2)->setUserInfo(transformingRecoverAllAbilitiesInfo);
+	this->TransformingFromBirdToFishAnimation->getFrames().at(3)->setUserInfo(transformingEndInfo);
+
+	EventListenerCustom * transformingAnimationFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, transformingStartInfo, transformingRecoverAllAbilitiesInfo, transformingEndInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == transformingStartInfo){
+			this->disableAllAbilities();
+		}
+		if (*userData->userInfo == transformingRecoverAllAbilitiesInfo){
+			this->enableAllAbilities();
+			if (this->isBird){
+				this->isBird = false;
+				this->isFish = true;
+				this->transformable_BirdToFish = false;
+			}
+			else if (this->isFish){
+				this->isFish = false;
+				this->isBird = true;
+				this->transformable_FishToBird = false;
+			}
+			if (this->directionToMoveUpRight ||
+				this->directionToMoveRight ||
+				this->directionToMoveDownRight ||
+				this->directionToMoveDown ||
+				this->directionToMoveDownLeft ||
+				this->directionToMoveLeft ||
+				this->directionToMoveUpLeft ||
+				this->directionToMoveUp){
+				this->move();
+			}
+
+
+		}
+		if (*userData->userInfo == transformingEndInfo){
+			if (this->isBird){
+				this->hover();
+			}
+			else if (this->isFish){
+				this->hover_kun();
+			}
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(transformingAnimationFrameEventListener, -1);
+
+
+
+	//==============================鱼和鸟的分界线=============================
 
 	//鱼变鸟的动画
 	this->TransformingFromFishToBirdAnimation = Animation::create();
@@ -584,7 +639,9 @@ HeroSprite::HeroSprite()
 	this->TransformingFromFishToBirdAnimation->setRestoreOriginalFrame(true);
 	this->TransformingFromFishToBirdAnimation->retain();
 
-
+	this->TransformingFromFishToBirdAnimation->getFrames().at(0)->setUserInfo(transformingStartInfo);
+	this->TransformingFromFishToBirdAnimation->getFrames().at(2)->setUserInfo(transformingRecoverAllAbilitiesInfo);
+	this->TransformingFromFishToBirdAnimation->getFrames().at(3)->setUserInfo(transformingEndInfo);
 
 
 
@@ -759,6 +816,8 @@ void HeroSprite::disableAllAbilities(){
 	this->windAttackable = false;
 	this->scratchable = false;
 	this->throwable = false;
+	this->transformable_BirdToFish = false;
+	this->transformable_FishToBird = false;
 }
 void HeroSprite::enableAllAbilities(){
 	this->catchable = true;
@@ -767,6 +826,8 @@ void HeroSprite::enableAllAbilities(){
 	this->windAttackable = true;
 	this->scratchable = true;
 	this->throwable = true;
+	this->transformable_BirdToFish = true;
+	this->transformable_FishToBird = true;
 }
 
 void HeroSprite::windAttack(){
@@ -831,7 +892,7 @@ void HeroSprite::scratchLeft2(){
 	this->runAction(Animate::create(this->scratchingLeftAnimation2));
 }
 
-
+// bird dash
 void HeroSprite::dash(){
 	if (this->dashable){
 		if (this->directionToMoveRight){
@@ -934,22 +995,48 @@ void HeroSprite::dashDownLeft(){
 	this->runAction(Animate::create(this->dashingDownLeftAnimation));
 }
 
+void HeroSprite::dash_kun(){
 
+}
+void HeroSprite::dashRight_kun(){
+
+}
+void HeroSprite::dashUp_kun(){
+
+}
+void HeroSprite::dashDown_kun(){
+
+}
+void HeroSprite::dashLeft_kun(){
+
+}
+void HeroSprite::dashUpRight_kun(){
+
+}
+void HeroSprite::dashUpLeft_kun(){
+
+}
+void HeroSprite::dashDownRight_kun(){
+
+}
+void HeroSprite::dashDownLeft_kun(){
+
+}
 
 
 
 
 void HeroSprite::transformFromBirdToFish(){
 	this->stopAllActions();
-	this->isBird = false;
-	this->isFish = true;
+	//this->isBird = false;
+	//this->isFish = true;
 	this->runAction(Sequence::create(MoveBy::create(0.1f,Vec2(0,-100)),MoveBy::create(0.2f, Vec2(0,-50)) , nullptr));
 	this->runAction(Animate::create(this->TransformingFromBirdToFishAnimation));
 }
 void HeroSprite::transformFromFishToBird(){
 	this->stopAllActions();
-	this->isFish = false;
-	this->isBird = true;
+	//this->isFish = false;
+	//this->isBird = true;
 	this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, 100)), MoveBy::create(0.2f, Vec2(0, 50)), nullptr));
 	this->runAction(Animate::create(this->TransformingFromFishToBirdAnimation));
 }
@@ -1097,6 +1184,14 @@ void HeroSprite::moveDownLeft(){
 	this->runAction(RepeatForever::create(Animate::create(this->movingDownLeftAnimation)));
 }
 
+
+void HeroSprite::move_kun(){
+	this->facingRight = true;
+	this->facingLeft = false;
+	this->stopAllActions();
+	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->SPEED_SWIMMING_PIXEL_PER_SECOND, 0))));
+	this->runAction(RepeatForever::create(Animate::create(this->movingRightAnimation_kun)));
+}
 
 //鲲的普通移动。这里没做判断。
 void HeroSprite::moveRight_kun(){
