@@ -1252,10 +1252,10 @@ void HeroSprite::dashDown_kun(){
 	this->stopAllActions();
 	this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_WATER_DASHING, Vec2(0, -this->DISTANCE_WATER_DASHING)), MoveBy::create(this->TIME_FOR_WATER_DASHING_BRAKING, Vec2(0, -this->DISTANCE_WATER_DASHING_BRAKING)), nullptr));
 	if (this->facingRight){
-		this->runAction(Animate::create(this->dashingUpRightAnimation_kun));
+		this->runAction(Animate::create(this->dashingDownRightAnimation_kun));
 	}
 	else {
-		this->runAction(Animate::create(this->dashingUpLeftAnimation_kun));
+		this->runAction(Animate::create(this->dashingDownLeftAnimation_kun));
 	}
 }
 void HeroSprite::dashLeft_kun(){

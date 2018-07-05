@@ -18,8 +18,8 @@ public:
 
 	void onEnter();
 	
-	float positionRatioLeft;
-	float positionRatioRight;
+	float positionRatioLeft = 0.1f;
+	float positionRatioRight = 0.3f;
 	float positionRatioUp = 0.1f;
 	float positionRatioDown = 0.3f;
 	float screenScrollingSpeedRatio = 0.1f;
