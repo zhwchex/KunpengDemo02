@@ -76,6 +76,23 @@ void Stage1GameplayLayer::updateLayerPositionToMaintainHeroInCamera(float positi
 
 }
 
+void Stage1GameplayLayer::updateLayerPositionToMaintainHeroInCamera(){
+	Stage1Scene * scene = (Stage1Scene *)this->getParent();
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	int heroPositionInCameraX = this->getPositionX() + this->kunpeng->getPositionX();
+	if (heroPositionInCameraX > visibleSize.width * this->positionRatioRight){
+		int difference = heroPositionInCameraX - visibleSize.width * this->positionRatioRight;
+		this->setPositionX(this->getPositionX() - this->screenScrollingSpeedRatio * difference);
+	}
+
+	if (heroPositionInCameraX < visibleSize.width * this->positionRatioLeft){
+		int difference = heroPositionInCameraX - visibleSize.width * this->positionRatioLeft;
+		this->setPositionX(this->getPositionX() - this->screenScrollingSpeedRatio * difference);
+	}
+
+}
+
+
 //需要主角不超出镜头范围的时候，调用它。如果主角在视野外，则将主角挪到镜头内。
 void Stage1GameplayLayer::lockHeroWithinCamera(){
 	Stage1Scene * scene = (Stage1Scene *)this->getParent();

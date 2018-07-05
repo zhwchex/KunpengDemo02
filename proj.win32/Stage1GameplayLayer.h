@@ -18,7 +18,14 @@ public:
 
 	void onEnter();
 	
+	float positionRatioLeft;
+	float positionRatioRight;
+	float positionRatioUp = 0.1f;
+	float positionRatioDown = 0.3f;
+	float screenScrollingSpeedRatio = 0.1f;
+
 	void updateLayerPositionToMaintainHeroInCamera(float positionRatioLeft, float positionRatioRight, float screenScrollingSpeedRatio);
+	void updateLayerPositionToMaintainHeroInCamera();
 	void lockHeroWithinCamera();
 	void lockHeroWithinLandscape();
 

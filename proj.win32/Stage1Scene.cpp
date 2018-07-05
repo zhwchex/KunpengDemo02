@@ -207,12 +207,12 @@ void Stage1Scene::updateHeroDirectionAndSetHimMoving(){
 		kp->directionToMoveDownRight = false;
 		kp->directionToMoveDownLeft = false;
 	}
-	kp->move();
+	kp->move_forBothShapes();
 }
 
 void Stage1Scene::myUpdate(float dt){
 	Stage1GameplayLayer * gameplayLayer = (Stage1GameplayLayer*)this->getChildByTag(1);
-	gameplayLayer->updateLayerPositionToMaintainHeroInCamera(0.1f,0.3f,0.1f);
+	gameplayLayer->updateLayerPositionToMaintainHeroInCamera(0.1,0.3,0.1);
 	gameplayLayer->lockHeroWithinCamera();
 	gameplayLayer->lockHeroWithinLandscape();
 }

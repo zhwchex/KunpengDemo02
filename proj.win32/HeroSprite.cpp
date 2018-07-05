@@ -572,35 +572,31 @@ HeroSprite::HeroSprite()
 	this->TransformingFromBirdToFishAnimation->setRestoreOriginalFrame(true);
 	this->TransformingFromBirdToFishAnimation->retain();
 
-	ValueMap transformingStartInfo;
-	ValueMap transformingEndInfo;
-	ValueMap transformingRecoverAllAbilitiesInfo;
+	ValueMap transformingBTFStartInfo;
+	ValueMap transformingBTFRecoverAllAbilitiesInfo;
+	ValueMap transformingBTFEndInfo;
 	
-	transformingStartInfo["16"] = Value(16);
-	transformingRecoverAllAbilitiesInfo["17"] = Value(17);
-	transformingEndInfo["18"] = Value(18);
+	transformingBTFStartInfo["16"] = Value(16);
+	transformingBTFRecoverAllAbilitiesInfo["17"] = Value(17);
+	transformingBTFEndInfo["18"] = Value(18);
 
-	this->TransformingFromBirdToFishAnimation->getFrames().at(0)->setUserInfo(transformingStartInfo);
-	this->TransformingFromBirdToFishAnimation->getFrames().at(2)->setUserInfo(transformingRecoverAllAbilitiesInfo);
-	this->TransformingFromBirdToFishAnimation->getFrames().at(3)->setUserInfo(transformingEndInfo);
+	this->TransformingFromBirdToFishAnimation->getFrames().at(0)->setUserInfo(transformingBTFStartInfo);
+	this->TransformingFromBirdToFishAnimation->getFrames().at(2)->setUserInfo(transformingBTFRecoverAllAbilitiesInfo);
+	this->TransformingFromBirdToFishAnimation->getFrames().at(3)->setUserInfo(transformingBTFEndInfo);
 
-	EventListenerCustom * transformingAnimationFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, transformingStartInfo, transformingRecoverAllAbilitiesInfo, transformingEndInfo](EventCustom * event){
+	EventListenerCustom * transformingFromBirdToFishAnimationFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, transformingBTFStartInfo, transformingBTFRecoverAllAbilitiesInfo, transformingBTFEndInfo](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
-		if (*userData->userInfo == transformingStartInfo){
+		if (*userData->userInfo == transformingBTFStartInfo){
 			this->disableAllAbilities();
 		}
-		if (*userData->userInfo == transformingRecoverAllAbilitiesInfo){
+		if (*userData->userInfo == transformingBTFRecoverAllAbilitiesInfo){
 			this->enableAllAbilities();
-			if (this->isBird){
-				this->isBird = false;
-				this->isFish = true;
-				this->transformable_BirdToFish = false;
-			}
-			else if (this->isFish){
-				this->isFish = false;
-				this->isBird = true;
-				this->transformable_FishToBird = false;
-			}
+			
+			this->isBird = false;
+			this->isFish = true;
+			this->transformable_BirdToFish = false;
+			
+			
 			if (this->directionToMoveUpRight ||
 				this->directionToMoveRight ||
 				this->directionToMoveDownRight ||
@@ -609,12 +605,12 @@ HeroSprite::HeroSprite()
 				this->directionToMoveLeft ||
 				this->directionToMoveUpLeft ||
 				this->directionToMoveUp){
-				this->move();
+				this->move_forBothShapes();
 			}
 
 
 		}
-		if (*userData->userInfo == transformingEndInfo){
+		if (*userData->userInfo == transformingBTFEndInfo){
 			if (this->isBird){
 				this->hover();
 			}
@@ -623,7 +619,7 @@ HeroSprite::HeroSprite()
 			}
 		}
 	});
-	_eventDispatcher->addEventListenerWithFixedPriority(transformingAnimationFrameEventListener, -1);
+	_eventDispatcher->addEventListenerWithFixedPriority(transformingFromBirdToFishAnimationFrameEventListener, -1);
 
 
 
@@ -639,10 +635,52 @@ HeroSprite::HeroSprite()
 	this->TransformingFromFishToBirdAnimation->setRestoreOriginalFrame(true);
 	this->TransformingFromFishToBirdAnimation->retain();
 
-	this->TransformingFromFishToBirdAnimation->getFrames().at(0)->setUserInfo(transformingStartInfo);
-	this->TransformingFromFishToBirdAnimation->getFrames().at(2)->setUserInfo(transformingRecoverAllAbilitiesInfo);
-	this->TransformingFromFishToBirdAnimation->getFrames().at(3)->setUserInfo(transformingEndInfo);
+	ValueMap transformingFTBStartInfo;
+	ValueMap transformingFTBRecoverAllAbilitiesInfo;
+	ValueMap transformingFTBEndInfo;
 
+	transformingFTBStartInfo["35"] = Value(35);
+	transformingFTBRecoverAllAbilitiesInfo["36"] = Value(36);
+	transformingFTBEndInfo["37"] = Value(37);
+
+	this->TransformingFromFishToBirdAnimation->getFrames().at(0)->setUserInfo(transformingFTBStartInfo);
+	this->TransformingFromFishToBirdAnimation->getFrames().at(2)->setUserInfo(transformingFTBRecoverAllAbilitiesInfo);
+	this->TransformingFromFishToBirdAnimation->getFrames().at(3)->setUserInfo(transformingFTBEndInfo);
+
+
+	EventListenerCustom * transformingFromFishToBirdAnimationFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, transformingFTBStartInfo, transformingFTBRecoverAllAbilitiesInfo, transformingFTBEndInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == transformingFTBStartInfo){
+			this->disableAllAbilities();
+		}
+		if (*userData->userInfo == transformingFTBRecoverAllAbilitiesInfo){
+			this->enableAllAbilities();
+
+			this->isBird = true;
+			this->isFish = false;
+			this->transformable_FishToBird = false;
+
+
+			if (this->directionToMoveUpRight ||
+				this->directionToMoveRight ||
+				this->directionToMoveDownRight ||
+				this->directionToMoveDown ||
+				this->directionToMoveDownLeft ||
+				this->directionToMoveLeft ||
+				this->directionToMoveUpLeft ||
+				this->directionToMoveUp){
+				this->move_forBothShapes();
+			}
+
+
+		}
+		if (*userData->userInfo == transformingFTBEndInfo){
+			this->hover();
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(transformingFromFishToBirdAnimationFrameEventListener, -1);
+
+	
 
 
 	//Fish's hovering animation
@@ -655,6 +693,27 @@ HeroSprite::HeroSprite()
 	this->hoveringRightAnimation_kun->setRestoreOriginalFrame(true);
 	this->hoveringRightAnimation_kun->retain();
 
+	ValueMap hoveringAnimationFrame01Info_kun;
+	ValueMap hoveringAnimationFrame03Info_kun;
+	hoveringAnimationFrame01Info_kun["33"] = Value(33);//除了让该info指向一个新地址外没有别的用处
+	hoveringAnimationFrame03Info_kun["34"] = Value(34);//除了让该info指向一个新地址外没有别的用处
+
+	hoveringRightAnimation_kun->getFrames().at(1)->setUserInfo(hoveringAnimationFrame01Info_kun);
+	hoveringRightAnimation_kun->getFrames().at(3)->setUserInfo(hoveringAnimationFrame03Info_kun);
+
+
+	EventListenerCustom * hoveringKunAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, hoveringAnimationFrame01Info_kun, hoveringAnimationFrame03Info_kun](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == hoveringAnimationFrame01Info_kun){
+			this->setPositionY(this->getPositionY() + 3);
+		}
+		if (*userData->userInfo == hoveringAnimationFrame03Info_kun){
+			this->setPositionY(this->getPositionY() - 3);
+		}
+	});
+
+	_eventDispatcher->addEventListenerWithFixedPriority(hoveringKunAnimationFrameEventListener, -1);
+
 	this->hoveringLeftAnimation_kun = Animation::create();
 	this->hoveringLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_facing_left_00.png");
 	this->hoveringLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_facing_left_01.png");
@@ -664,7 +723,10 @@ HeroSprite::HeroSprite()
 	this->hoveringLeftAnimation_kun->setRestoreOriginalFrame(true);
 	this->hoveringLeftAnimation_kun->retain();
 
-	//鱼的普通移动动画
+	this->hoveringLeftAnimation_kun->getFrames().at(1)->setUserInfo(hoveringAnimationFrame01Info_kun);
+	this->hoveringLeftAnimation_kun->getFrames().at(3)->setUserInfo(hoveringAnimationFrame03Info_kun);
+
+	//鱼的普通移动动画，随时可进行另一个动作或被另一个动作打断
 	this->movingRightAnimation_kun = Animation::create();
 	this->movingRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_right_00.png");
 	this->movingRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_right_01.png");
@@ -719,7 +781,127 @@ HeroSprite::HeroSprite()
 	this->movingDownLeftAnimation_kun->setRestoreOriginalFrame(true);
 	this->movingDownLeftAnimation_kun->retain();
 
+	//鱼的dashing动画
+	this->dashingRightAnimation_kun = Animation::create();
+	this->dashingRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_dashing_right_00.png");
+	this->dashingRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_dashing_right_01.png");
+	this->dashingRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_dashing_right_02.png");
+	this->dashingRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_dashing_right_03.png");
+	this->dashingRightAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->dashingRightAnimation_kun->setRestoreOriginalFrame(true);
+	this->dashingRightAnimation_kun->retain();
 
+	ValueMap dashingStartFrameInfo_kun;
+	ValueMap dashingRecoverAllAbilitiesFrameInfo_kun;
+	ValueMap dashingEndFrameInfo_kun;
+
+	dashingStartFrameInfo_kun["30"] = Value(30);
+	dashingRecoverAllAbilitiesFrameInfo_kun["31"] = Value(31);
+	dashingEndFrameInfo_kun["32"] = Value(32);
+
+	this->dashingRightAnimation_kun->getFrames().at(0)->setUserInfo(dashingStartFrameInfo_kun);
+	this->dashingRightAnimation_kun->getFrames().at(2)->setUserInfo(dashingRecoverAllAbilitiesFrameInfo_kun);
+	this->dashingRightAnimation_kun->getFrames().at(3)->setUserInfo(dashingEndFrameInfo_kun);
+
+	EventListenerCustom * dashingKunAnimationFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, dashingStartFrameInfo_kun, dashingRecoverAllAbilitiesFrameInfo_kun, dashingEndFrameInfo_kun](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == dashingStartFrameInfo_kun){
+			this->disableAllAbilities();
+			this->transformable_FishToBird = true;
+		}
+		if (*userData->userInfo == dashingRecoverAllAbilitiesFrameInfo_kun){
+			this->enableAllAbilities();
+			this->transformable_FishToBird = false;
+			if (this->directionToMoveUpRight ||
+				this->directionToMoveRight ||
+				this->directionToMoveDownRight ||
+				this->directionToMoveDown ||
+				this->directionToMoveDownLeft ||
+				this->directionToMoveLeft ||
+				this->directionToMoveUpLeft ||
+				this->directionToMoveUp){
+				this->move_kun();
+			}
+		}
+		if (*userData->userInfo == dashingEndFrameInfo_kun){
+			this->hover_kun();
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(dashingKunAnimationFrameEventListener, -1);
+
+	this->dashingDownRightAnimation_kun = Animation::create();
+	this->dashingDownRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_dashing_downright_00.png");
+	this->dashingDownRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_dashing_downright_01.png");
+	this->dashingDownRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_dashing_downright_02.png");
+	this->dashingDownRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_dashing_downright_03.png");
+	this->dashingDownRightAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->dashingDownRightAnimation_kun->setRestoreOriginalFrame(true);
+	this->dashingDownRightAnimation_kun->retain();
+
+	this->dashingDownRightAnimation_kun->getFrames().at(0)->setUserInfo(dashingStartFrameInfo_kun);
+	this->dashingDownRightAnimation_kun->getFrames().at(2)->setUserInfo(dashingRecoverAllAbilitiesFrameInfo_kun);
+	this->dashingDownRightAnimation_kun->getFrames().at(3)->setUserInfo(dashingEndFrameInfo_kun);
+
+
+
+
+	this->dashingUpRightAnimation_kun = Animation::create();
+	this->dashingUpRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_dashing_upright_00.png");
+	this->dashingUpRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_dashing_upright_01.png");
+	this->dashingUpRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_dashing_upright_02.png");
+	this->dashingUpRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_dashing_upright_03.png");
+	this->dashingUpRightAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->dashingUpRightAnimation_kun->setRestoreOriginalFrame(true);
+	this->dashingUpRightAnimation_kun->retain();
+
+	this->dashingUpRightAnimation_kun->getFrames().at(0)->setUserInfo(dashingStartFrameInfo_kun);
+	this->dashingUpRightAnimation_kun->getFrames().at(2)->setUserInfo(dashingRecoverAllAbilitiesFrameInfo_kun);
+	this->dashingUpRightAnimation_kun->getFrames().at(3)->setUserInfo(dashingEndFrameInfo_kun);
+
+
+
+
+	this->dashingLeftAnimation_kun = Animation::create();
+	this->dashingLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_dashing_left_00.png");
+	this->dashingLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_dashing_left_01.png");
+	this->dashingLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_dashing_left_02.png");
+	this->dashingLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_dashing_left_03.png");
+	this->dashingLeftAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->dashingLeftAnimation_kun->setRestoreOriginalFrame(true);
+	this->dashingLeftAnimation_kun->retain();
+
+	this->dashingLeftAnimation_kun->getFrames().at(0)->setUserInfo(dashingStartFrameInfo_kun);
+	this->dashingLeftAnimation_kun->getFrames().at(2)->setUserInfo(dashingRecoverAllAbilitiesFrameInfo_kun);
+	this->dashingLeftAnimation_kun->getFrames().at(3)->setUserInfo(dashingEndFrameInfo_kun);
+
+
+
+	this->dashingUpLeftAnimation_kun = Animation::create();
+	this->dashingUpLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_dashing_upleft_00.png");
+	this->dashingUpLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_dashing_upleft_01.png");
+	this->dashingUpLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_dashing_upleft_02.png");
+	this->dashingUpLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_dashing_upleft_03.png");
+	this->dashingUpLeftAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->dashingUpLeftAnimation_kun->setRestoreOriginalFrame(true);
+	this->dashingUpLeftAnimation_kun->retain();
+
+	this->dashingUpLeftAnimation_kun->getFrames().at(0)->setUserInfo(dashingStartFrameInfo_kun);
+	this->dashingUpLeftAnimation_kun->getFrames().at(2)->setUserInfo(dashingRecoverAllAbilitiesFrameInfo_kun);
+	this->dashingUpLeftAnimation_kun->getFrames().at(3)->setUserInfo(dashingEndFrameInfo_kun);
+
+
+	this->dashingDownLeftAnimation_kun = Animation::create();
+	this->dashingDownLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_dashing_downleft_00.png");
+	this->dashingDownLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_dashing_downleft_03.png");
+	this->dashingDownLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_dashing_downleft_03.png");
+	this->dashingDownLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_dashing_downleft_03.png");
+	this->dashingDownLeftAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->dashingDownLeftAnimation_kun->setRestoreOriginalFrame(true);
+	this->dashingDownLeftAnimation_kun->retain();
+
+	this->dashingDownLeftAnimation_kun->getFrames().at(0)->setUserInfo(dashingStartFrameInfo_kun);
+	this->dashingDownLeftAnimation_kun->getFrames().at(2)->setUserInfo(dashingRecoverAllAbilitiesFrameInfo_kun);
+	this->dashingDownLeftAnimation_kun->getFrames().at(3)->setUserInfo(dashingEndFrameInfo_kun);
 
 
 
@@ -774,7 +956,7 @@ void HeroSprite::button1Release(){
 
 }
 void HeroSprite::button2Hit(){
-	this->dash();
+	this->dash_forBothShapes();
 }
 void HeroSprite::button2Release(){
 	//do nothing
@@ -939,6 +1121,15 @@ void HeroSprite::dash(){
 	}
 }
 
+//给Button2用的generaldash
+void HeroSprite::dash_forBothShapes(){
+	if (this->isBird){
+		this->dash();
+	}
+	else{
+		this->dash_kun();
+	}
+}
 
 //bird dashing in 8 directions.
 void HeroSprite::dashUp(){
@@ -995,32 +1186,102 @@ void HeroSprite::dashDownLeft(){
 	this->runAction(Animate::create(this->dashingDownLeftAnimation));
 }
 
-void HeroSprite::dash_kun(){
 
+//鲲的dash
+void HeroSprite::dash_kun(){
+	if (this->dashable){
+		if (this->directionToMoveRight){
+			dashRight_kun();
+		}
+		else if (this->directionToMoveDown){
+			dashDown_kun();
+		}
+		else if (this->directionToMoveDownLeft){
+			dashDownLeft_kun();
+		}
+		else if (this->directionToMoveDownRight){
+			dashDownRight_kun();
+		}
+		else if (this->directionToMoveLeft){
+			dashLeft_kun();
+		}
+		else if (this->directionToMoveUp){
+			dashUp_kun();
+		}
+		else if (this->directionToMoveUpLeft){
+			dashUpLeft_kun();
+		}
+		else if (this->directionToMoveUpRight){
+			dashUpRight_kun();
+		}
+		if (this->directionToMoveDown == false &&
+			this->directionToMoveUp == false &&
+			this->directionToMoveRight == false &&
+			this->directionToMoveLeft == false &&
+			this->directionToMoveDownLeft == false &&
+			this->directionToMoveDownRight == false &&
+			this->directionToMoveUpLeft == false &&
+			this->directionToMoveUpRight == false){
+
+			if (this->facingRight){
+				dashRight_kun();
+			}
+			else if (this->facingLeft){
+				dashLeft_kun();
+			}
+		}
+
+	}
 }
 void HeroSprite::dashRight_kun(){
-
+	this->stopAllActions();
+	this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_WATER_DASHING, Vec2(this->DISTANCE_WATER_DASHING, 0)), MoveBy::create(this->TIME_FOR_WATER_DASHING_BRAKING, Vec2(this->DISTANCE_WATER_DASHING_BRAKING, 0)), nullptr));
+	this->runAction(Animate::create(this->dashingRightAnimation_kun));
 }
 void HeroSprite::dashUp_kun(){
-
+	this->stopAllActions();
+	this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_WATER_DASHING, Vec2(0,this->DISTANCE_WATER_DASHING)), MoveBy::create(this->TIME_FOR_WATER_DASHING_BRAKING, Vec2(0,this->DISTANCE_WATER_DASHING_BRAKING)), nullptr));
+	if (this->facingRight){
+		this->runAction(Animate::create(this->dashingUpRightAnimation_kun));
+	}
+	else {
+		this->runAction(Animate::create(this->dashingUpLeftAnimation_kun));
+	}
 }
 void HeroSprite::dashDown_kun(){
-
+	this->stopAllActions();
+	this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_WATER_DASHING, Vec2(0, -this->DISTANCE_WATER_DASHING)), MoveBy::create(this->TIME_FOR_WATER_DASHING_BRAKING, Vec2(0, -this->DISTANCE_WATER_DASHING_BRAKING)), nullptr));
+	if (this->facingRight){
+		this->runAction(Animate::create(this->dashingUpRightAnimation_kun));
+	}
+	else {
+		this->runAction(Animate::create(this->dashingUpLeftAnimation_kun));
+	}
 }
 void HeroSprite::dashLeft_kun(){
-
+	this->stopAllActions();
+	this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_WATER_DASHING, Vec2(-this->DISTANCE_WATER_DASHING, 0)), MoveBy::create(this->TIME_FOR_WATER_DASHING_BRAKING, Vec2(-this->DISTANCE_WATER_DASHING_BRAKING, 0)), nullptr));
+	this->runAction(Animate::create(this->dashingLeftAnimation_kun));
 }
 void HeroSprite::dashUpRight_kun(){
-
+	this->stopAllActions();
+	this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_WATER_DASHING, Vec2(this->DISTANCE_WATER_DASHING / 1.414, this->DISTANCE_WATER_DASHING / 1.414)), MoveBy::create(this->TIME_FOR_WATER_DASHING_BRAKING, Vec2(this->DISTANCE_WATER_DASHING_BRAKING / 1.414, this->DISTANCE_WATER_DASHING_BRAKING / 1.414)), nullptr));
+	this->runAction(Animate::create(this->dashingUpRightAnimation_kun));
 }
 void HeroSprite::dashUpLeft_kun(){
-
+	this->stopAllActions();
+	this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_WATER_DASHING, Vec2(-this->DISTANCE_WATER_DASHING / 1.414, this->DISTANCE_WATER_DASHING / 1.414)), MoveBy::create(this->TIME_FOR_WATER_DASHING_BRAKING, Vec2(-this->DISTANCE_WATER_DASHING_BRAKING / 1.414, this->DISTANCE_WATER_DASHING_BRAKING / 1.414)), nullptr));
+	this->runAction(Animate::create(this->dashingUpLeftAnimation_kun));
 }
 void HeroSprite::dashDownRight_kun(){
-
+	this->stopAllActions();
+	this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_WATER_DASHING, Vec2(this->DISTANCE_WATER_DASHING / 1.414, -this->DISTANCE_WATER_DASHING / 1.414)), MoveBy::create(this->TIME_FOR_WATER_DASHING_BRAKING, Vec2(this->DISTANCE_WATER_DASHING_BRAKING / 1.414, -this->DISTANCE_WATER_DASHING_BRAKING / 1.414)), nullptr));
+	this->runAction(Animate::create(this->dashingDownRightAnimation_kun));
 }
 void HeroSprite::dashDownLeft_kun(){
-
+	this->stopAllActions();
+	this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_WATER_DASHING, Vec2(-this->DISTANCE_WATER_DASHING / 1.414, -this->DISTANCE_WATER_DASHING / 1.414)), MoveBy::create(this->TIME_FOR_WATER_DASHING_BRAKING, Vec2(-this->DISTANCE_WATER_DASHING_BRAKING / 1.414, -this->DISTANCE_WATER_DASHING_BRAKING / 1.414)), nullptr));
+	this->runAction(Animate::create(this->dashingDownLeftAnimation_kun));
 }
 
 
@@ -1028,19 +1289,26 @@ void HeroSprite::dashDownLeft_kun(){
 
 void HeroSprite::transformFromBirdToFish(){
 	this->stopAllActions();
-	//this->isBird = false;
-	//this->isFish = true;
-	this->runAction(Sequence::create(MoveBy::create(0.1f,Vec2(0,-100)),MoveBy::create(0.2f, Vec2(0,-50)) , nullptr));
+	this->runAction(Sequence::create(MoveBy::create(0.1f,Vec2(0,-50)),MoveBy::create(0.2f, Vec2(0,-20)) , nullptr));
 	this->runAction(Animate::create(this->TransformingFromBirdToFishAnimation));
 }
 void HeroSprite::transformFromFishToBird(){
 	this->stopAllActions();
-	//this->isFish = false;
-	//this->isBird = true;
-	this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, 100)), MoveBy::create(0.2f, Vec2(0, 50)), nullptr));
+	this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, 50)), MoveBy::create(0.2f, Vec2(0, 20)), nullptr));
 	this->runAction(Animate::create(this->TransformingFromFishToBirdAnimation));
 }
 
+
+void HeroSprite::move_forBothShapes(){
+	if (this->moveable){
+		if (this->isBird){
+			this->move();
+		}
+		else{
+			this->move_kun();
+		}
+	}
+}
 
 //这个move对外开放，主角的普通移动只调用它。为了调试方便，所有细节目前都是public。八方向移动方法此时是public，今后应改为private。
 //在此验证了主角在调用move方法时的可移动性。
@@ -1084,43 +1352,6 @@ void HeroSprite::move(){
 			}
 		}
 	}
-	else if (this->isFish){
-		if (this->directionToMoveRight) {
-			moveRight_kun();
-		}
-		if (this->directionToMoveLeft){
-			moveLeft_kun();
-		}
-		if (this->directionToMoveUp){
-			moveUp_kun();
-		}
-		if (this->directionToMoveDown){
-			moveDown_kun();
-		}
-		if (this->directionToMoveUpRight){
-			moveUpRight_kun();
-		}
-		if (this->directionToMoveUpLeft){
-			moveUpLeft_kun();
-		}
-		if (this->directionToMoveDownRight){
-			moveDownRight_kun();
-		}
-		if (this->directionToMoveDownLeft){
-			moveDownLeft_kun();
-		}
-		if (this->directionToMoveUpRight == false &&
-			this->directionToMoveRight == false &&
-			this->directionToMoveDownRight == false &&
-			this->directionToMoveDown == false &&
-			this->directionToMoveDownLeft == false &&
-			this->directionToMoveLeft == false &&
-			this->directionToMoveUpLeft == false &&
-			this->directionToMoveUp == false){
-			moveBrake_kun();
-		}
-	}
-	
 }
 
 
@@ -1135,62 +1366,95 @@ void HeroSprite::moveRight(){
 	/*
 	Sequence和Spawn就是不能和RepeatForever一起用的。理由见源码，RepeatForever的interval = 0，不能做除数，跳入另一流程。
 	*/
-	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second, 0))));
+	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->SPEED_FLYING_PIXEL_PER_SECOND, 0))));
 	this->runAction(RepeatForever::create(Animate::create(this->movingRightAnimation)));
 }
 void HeroSprite::moveLeft(){
 	this->facingRight = false;
 	this->facingLeft = true;
 	this->stopAllActions();
-	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second, 0))));
+	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->SPEED_FLYING_PIXEL_PER_SECOND, 0))));
 	this->runAction(RepeatForever::create(Animate::create(this->movingLeftAnimation)));
 }
 void HeroSprite::moveUp(){
 	this->stopAllActions();
-	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, this->speed_flying_pixel_per_second))));
+	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, this->SPEED_FLYING_PIXEL_PER_SECOND))));
 	this->runAction(RepeatForever::create(Animate::create(this->movingUpAnimation)));
 }
 void HeroSprite::moveDown(){
 	this->stopAllActions();
-	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, -this->speed_flying_pixel_per_second))));
+	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, -this->SPEED_FLYING_PIXEL_PER_SECOND))));
 	this->runAction(RepeatForever::create(Animate::create(this->movingDownAnimation)));
 }
 void HeroSprite::moveUpRight(){
 	this->facingRight = true;
 	this->facingLeft = false;
 	this->stopAllActions();
-	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.4142, this->speed_flying_pixel_per_second / 1.4142))));
+	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->SPEED_FLYING_PIXEL_PER_SECOND / 1.4142, this->SPEED_FLYING_PIXEL_PER_SECOND / 1.4142))));
 	this->runAction(RepeatForever::create(Animate::create(this->movingUpRightAnimation)));
 }
 void HeroSprite::moveUpLeft(){
 	this->facingRight = false;
 	this->facingLeft = true;
 	this->stopAllActions();
-	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second / 1.4142, this->speed_flying_pixel_per_second / 1.4142))));
+	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->SPEED_FLYING_PIXEL_PER_SECOND / 1.4142, this->SPEED_FLYING_PIXEL_PER_SECOND / 1.4142))));
 	this->runAction(RepeatForever::create(Animate::create(this->movingUpLeftAnimation)));
 }
 void HeroSprite::moveDownRight(){
 	this->facingRight = true;
 	this->facingLeft = false;
 	this->stopAllActions();
-	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.4142, -this->speed_flying_pixel_per_second / 1.4142))));
+	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->SPEED_FLYING_PIXEL_PER_SECOND / 1.4142, -this->SPEED_FLYING_PIXEL_PER_SECOND / 1.4142))));
 	this->runAction(RepeatForever::create(Animate::create(this->movingDownRightAnimation)));
 }
 void HeroSprite::moveDownLeft(){
 	this->facingRight = false;
 	this->facingLeft = true;
 	this->stopAllActions();
-	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second / 1.4142, -this->speed_flying_pixel_per_second / 1.4142))));
+	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->SPEED_FLYING_PIXEL_PER_SECOND / 1.4142, -this->SPEED_FLYING_PIXEL_PER_SECOND / 1.4142))));
 	this->runAction(RepeatForever::create(Animate::create(this->movingDownLeftAnimation)));
 }
 
 
 void HeroSprite::move_kun(){
-	this->facingRight = true;
-	this->facingLeft = false;
-	this->stopAllActions();
-	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->SPEED_SWIMMING_PIXEL_PER_SECOND, 0))));
-	this->runAction(RepeatForever::create(Animate::create(this->movingRightAnimation_kun)));
+	if (this->moveable){
+		if (this->isFish){
+			if (this->directionToMoveRight) {
+				moveRight_kun();
+			}
+			if (this->directionToMoveLeft){
+				moveLeft_kun();
+			}
+			if (this->directionToMoveUp){
+				moveUp_kun();
+			}
+			if (this->directionToMoveDown){
+				moveDown_kun();
+			}
+			if (this->directionToMoveUpRight){
+				moveUpRight_kun();
+			}
+			if (this->directionToMoveUpLeft){
+				moveUpLeft_kun();
+			}
+			if (this->directionToMoveDownRight){
+				moveDownRight_kun();
+			}
+			if (this->directionToMoveDownLeft){
+				moveDownLeft_kun();
+			}
+			if (this->directionToMoveUpRight == false &&
+				this->directionToMoveRight == false &&
+				this->directionToMoveDownRight == false &&
+				this->directionToMoveDown == false &&
+				this->directionToMoveDownLeft == false &&
+				this->directionToMoveLeft == false &&
+				this->directionToMoveUpLeft == false &&
+				this->directionToMoveUp == false){
+				moveBrake_kun();
+			}
+		}
+	}
 }
 
 //鲲的普通移动。这里没做判断。

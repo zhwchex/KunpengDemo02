@@ -19,8 +19,8 @@ public:
 
 	float TIME_FOR_ANIMATION_FRAME_INTERVAL = 0.2f;
 
-	int speed_flying_pixel_per_second = 266;
-	int SPEED_SWIMMING_PIXEL_PER_SECOND = 200;
+	int SPEED_FLYING_PIXEL_PER_SECOND = 266;
+	int SPEED_SWIMMING_PIXEL_PER_SECOND = 166;
 
 	int SPEED_DURING_ATTACKING_FLYING = 133;
 
@@ -28,8 +28,13 @@ public:
 
 	int DISTANCE_AIR_DASHING = 200;
 	int DISTANCE_AIR_DASHING_BRAKING = 20;
+	int DISTANCE_WATER_DASHING = 120;
+	int DISTANCE_WATER_DASHING_BRAKING = 60;
+
 	float TIME_FOR_AIR_DASHING = 0.3f;
 	float TIME_FOR_AIR_DASHING_BRAKING = 0.2f;
+	float TIME_FOR_WATER_DASHING = 0.2f;
+	float TIME_FOR_WATER_DASHING_BRAKING = 0.3f;
 
 	int scratchingType = 1;
 
@@ -204,7 +209,9 @@ public:
 	void transformFromBirdToFish();
 	void transformFromFishToBird();
 
-	void move();//多个重载。！！**这是一个延时动作**！！
+
+	void move_forBothShapes();
+	void move();
 	void move_kun();
 
 	void moveWithoutAnimationBrake();
@@ -251,6 +258,8 @@ public:
 
 	
 
+
+	void dash_forBothShapes();
 
 	void dash();
 	void dashRight();
