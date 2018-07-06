@@ -85,7 +85,7 @@ public:
 	Animation * dashingLeftAnimation_kun;
 	Animation * dashingUpLeftAnimation_kun;
 
-	//技能动画
+	//鸟技能动画
 	Animation * blowingWindRightAnimation;
 	Animation * blowingWindLeftAnimation;
 	Animation * scratchingRightAnimation;
@@ -101,8 +101,16 @@ public:
 
 	Animation * throwingBossAnimation;//对Boss使用投技的动画
 
-	Animation * windBulletFlyingAnimation;
+	//鱼技能动画
+	Animation * blowingVortexRightAnimation;
+	Animation * blowingVortexLeftAnimation;
+	Animation * finAttackRightAnimation;
+	Animation * finAttackRightAnimation2;
+	Animation * finAttackLeftAnimation;
+	Animation * finAttackLeftAnimation2;
 
+	Animation * windBulletFlyingAnimation;
+	Animation * waterBulletFlyingAnimation;
 
 
 

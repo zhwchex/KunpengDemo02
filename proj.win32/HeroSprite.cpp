@@ -3,16 +3,6 @@
 
 HeroSprite::HeroSprite()
 {
-	this->moveRightWithoutAnimationAction = RepeatForever::create(MoveBy::create(1, Vec2(this->SPEED_DURING_ATTACKING_FLYING, 0)));
-	this->moveLeftWithoutAnimationAction = RepeatForever::create(MoveBy::create(1, Vec2(-this->SPEED_DURING_ATTACKING_FLYING, 0)));
-	this->moveUpWithoutAnimationAction = RepeatForever::create(MoveBy::create(1, Vec2(0,this->SPEED_DURING_ATTACKING_FLYING)));
-	this->moveDownWithoutAnimationAction = RepeatForever::create(MoveBy::create(1, Vec2(0,-this->SPEED_DURING_ATTACKING_FLYING)));
-	this->moveUpRightWithoutAnimationAction = RepeatForever::create(MoveBy::create(1, Vec2(this->SPEED_DURING_ATTACKING_FLYING/1.414, this->SPEED_DURING_ATTACKING_FLYING/1.414)));
-	this->moveDownRightWithoutAnimationAction = RepeatForever::create(MoveBy::create(1, Vec2(this->SPEED_DURING_ATTACKING_FLYING / 1.414, -this->SPEED_DURING_ATTACKING_FLYING / 1.414)));
-	this->moveUpLeftWithoutAnimationAction = RepeatForever::create(MoveBy::create(1, Vec2(-this->SPEED_DURING_ATTACKING_FLYING / 1.414, this->SPEED_DURING_ATTACKING_FLYING / 1.414)));
-	this->moveDownLeftWithoutAnimationAction = RepeatForever::create(MoveBy::create(1, Vec2(-this->SPEED_DURING_ATTACKING_FLYING / 1.414, -this->SPEED_DURING_ATTACKING_FLYING / 1.414)));
-	
-	this->moveRightWithoutAnimationAction->retain();
 
 	// bird's hovering animation
 	this->hoveringRightAnimation = Animation::create();
@@ -163,6 +153,8 @@ HeroSprite::HeroSprite()
 	this->movingUpLeftAnimation->setRestoreOriginalFrame(true);
 	this->movingUpLeftAnimation->retain();
 
+
+	//鸟的远程攻击动画
 	this->blowingWindRightAnimation = Animation::create();
 	this->blowingWindRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_windattacking_right_00.jpg");
 	this->blowingWindRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_windattacking_right_01.jpg");
@@ -249,7 +241,7 @@ HeroSprite::HeroSprite()
 	this->blowingWindLeftAnimation->getFrames().at(3)->setUserInfo(blowingRecoverAllAbilitiesInfo);
 	this->blowingWindLeftAnimation->getFrames().at(4)->setUserInfo(blowingEndInfo);
 
-
+	//风弹的转圈动画
 	this->windBulletFlyingAnimation = Animation::create();
 	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_00.jpg");
 	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_01.jpg");
@@ -919,8 +911,69 @@ HeroSprite::HeroSprite()
 	this->dashingDownLeftAnimation_kun->getFrames().at(3)->setUserInfo(dashingEndFrameInfo_kun);
 
 
+	//鱼的吐漩涡动画。尚需添加帧事件监听TODO
+	this->blowingVortexRightAnimation = Animation::create();
+	this->blowingVortexRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_right_00.png");
+	this->blowingVortexRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_right_01.png");
+	this->blowingVortexRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_right_02.png");
+	this->blowingVortexRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_right_03.png");
+	this->blowingVortexRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_right_04.png");
+	this->blowingVortexRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->blowingVortexRightAnimation->setRestoreOriginalFrame(true);
+	this->blowingVortexRightAnimation->retain();
 
+	this->blowingVortexLeftAnimation = Animation::create();
+	this->blowingVortexLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_left_00.png");
+	this->blowingVortexLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_left_01.png");
+	this->blowingVortexLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_left_02.png");
+	this->blowingVortexLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_left_03.png");
+	this->blowingVortexLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_left_04.png");
+	this->blowingVortexLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->blowingVortexLeftAnimation->setRestoreOriginalFrame(true);
+	this->blowingVortexLeftAnimation->retain();
 
+	//鱼的近战动画。尚需添加帧事件监听TODO
+	this->finAttackRightAnimation = Animation::create();
+	this->finAttackRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking_right_00.png");
+	this->finAttackRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking_right_01.png");
+	this->finAttackRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking_right_02.png");
+	this->finAttackRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking_right_03.png");
+	this->finAttackRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->finAttackRightAnimation->setRestoreOriginalFrame(true);
+	this->finAttackRightAnimation->retain();
+
+	this->finAttackRightAnimation2 = Animation::create();
+	this->finAttackRightAnimation2->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking2_right_00.png");
+	this->finAttackRightAnimation2->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking2_right_01.png");
+	this->finAttackRightAnimation2->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking2_right_02.png");
+	this->finAttackRightAnimation2->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking2_right_03.png");
+	this->finAttackRightAnimation2->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->finAttackRightAnimation2->setRestoreOriginalFrame(true);
+	this->finAttackRightAnimation2->retain();
+
+	this->finAttackLeftAnimation = Animation::create();
+	this->finAttackLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking_left_00.png");
+	this->finAttackLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking_left_01.png");
+	this->finAttackLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking_left_02.png");
+	this->finAttackLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking_left_03.png");
+	this->finAttackLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->finAttackLeftAnimation->setRestoreOriginalFrame(true);
+	this->finAttackLeftAnimation->retain();
+
+	this->finAttackLeftAnimation2 = Animation::create();
+	this->finAttackLeftAnimation2->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking2_left_00.png");
+	this->finAttackLeftAnimation2->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking2_left_01.png");
+	this->finAttackLeftAnimation2->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking2_left_02.png");
+	this->finAttackLeftAnimation2->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking2_left_03.png");
+	this->finAttackLeftAnimation2->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->finAttackLeftAnimation2->setRestoreOriginalFrame(true);
+	this->finAttackLeftAnimation2->retain();
+
+	//鱼的受击动画TODO
+
+	//鱼的冲撞动画TODO（不想做了……
+
+	//鱼飞上天空吐水的动画throwwater？
 
 
 }
@@ -979,15 +1032,15 @@ void HeroSprite::button2Release(){
 
 void HeroSprite::button3Hit(){
 	
-	this->getHurtGeneral();//测试过。没问题
-	/*
+	//this->getHurtGeneral();//测试过。没问题
+	
 	if (this->isFish){
 		this->transformFromFishToBird();
 	}
 	else if (this->isBird){
 		this->transformFromBirdToFish();
 	}
-	*/
+	
 }
 void HeroSprite::button3Release(){
 

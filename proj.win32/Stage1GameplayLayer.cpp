@@ -10,6 +10,8 @@ Stage1GameplayLayer::Stage1GameplayLayer()
 	this->background = Sprite::create("backgrounds/sky_and_water_small.jpg");
 	this->background->setAnchorPoint(Vec2(0,0.5));
 
+	this->waterSurface = Sprite::create("landscapes/water_surface.png");
+	this->addChild(waterSurface,1);
 }
 
 

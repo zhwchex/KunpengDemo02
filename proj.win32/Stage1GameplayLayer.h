@@ -12,6 +12,8 @@ class Stage1GameplayLayer :	public Layer
 {
 public:
 
+	Sprite * waterSurface = nullptr;
+
 	HeroSprite * kunpeng = nullptr;
 	Sprite * background = nullptr;
 	static Stage1GameplayLayer * create();
