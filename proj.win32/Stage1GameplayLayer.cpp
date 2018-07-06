@@ -1,7 +1,7 @@
 #include "Stage1GameplayLayer.h"
 #include "HeroSprite.h"
 #include "Stage1Scene.h"
-#include "bird_yyh.h"
+
 #include "Bullet.h"
 
 Stage1GameplayLayer::Stage1GameplayLayer()
@@ -36,12 +36,36 @@ void Stage1GameplayLayer::onEnter(){
 	//Sprite * backgroundSprite = Sprite::create("backgrounds/sky_and_water_small.jpg");
 	this->addChild(this->background);
 	//HeroSprite * kp = HeroSprite::create("characters/kunpeng/peng.jpg");
-
+	/*
 	GeneralUnit * enemy1ForTest = GeneralUnit::create("characters/general_unit/general_unit.jpg");
 	enemy1ForTest->camp = 2;
 	enemy1ForTest->setPosition(300, 0);
 	enemyList.pushBack(enemy1ForTest);
 	this->addChild(enemy1ForTest);
+	*/
+
+	/*
+	Bird_zwc * enemyZWC = Bird_zwc::create("characters/monster/peng_hovering_00.jpg");
+	enemyZWC->camp = 2;
+	enemyZWC->setPosition(600, 0);
+	enemyList.pushBack(enemyZWC);
+	enemyZWC->wanderAbout();
+	this->addChild(enemyZWC);
+
+	*/
+	/*
+	Bird_yyh * enemyYYH = Bird_yyh::create("characters/monster/peng_hovering_00.jpg");
+	enemyYYH->camp = 2;
+	enemyYYH->setPosition(600, 0);
+	enemyList.pushBack(enemyYYH);
+	enemyYYH->wanderAbout();
+	this->addChild(enemyYYH);
+	*/
+
+	GeneralUnit *fish = FishEnemy1::create("enemyfish/enemyfish.png");
+	fish->setPosition(Vec2(500, 0));
+	this->addChild(fish);
+	enemyList.pushBack(fish);
 
 	/*
 	Bird_yyh* bird1 = Bird_yyh::create("characters/Bird_yyh/bird1.jpg");
@@ -52,6 +76,8 @@ void Stage1GameplayLayer::onEnter(){
 	bird1->wanderAbout();
 	enemyList.pushBack(bird1);
 	*/
+
+
 
 	this->kunpeng->setTag(2);
 	this->addChild(this->kunpeng);

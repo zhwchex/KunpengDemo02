@@ -213,14 +213,13 @@ void Stage1Scene::updateHeroDirectionAndSetHimMoving(){
 void Stage1Scene::myUpdate(float dt){
 	Stage1GameplayLayer * gameplayLayer = (Stage1GameplayLayer*)this->getChildByTag(1);
 	HeroSprite * kp = gameplayLayer->kunpeng;
-	if (kp->facingRight){
-		gameplayLayer->positionRatioLeft = 0.4f;
-		gameplayLayer->positionRatioRight = 0.45f;
+	
+	Vector <GeneralUnit*> enemyList = gameplayLayer->enemyList;
+	for (GeneralUnit * enemy1 : enemyList){
+		enemy1->wanderAbout();
 	}
-	else if (kp->facingLeft){
-		gameplayLayer->positionRatioLeft = 0.55f;
-		gameplayLayer->positionRatioRight = 0.6f;
-	}
+
+
 	gameplayLayer->updateLayerPositionToMaintainHeroInCamera();
 	gameplayLayer->lockHeroWithinCamera();
 	gameplayLayer->lockHeroWithinLandscape();

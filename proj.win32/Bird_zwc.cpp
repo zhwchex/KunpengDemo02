@@ -18,6 +18,8 @@ Bird_zwc::Bird_zwc()
 
 	this->runAction(RepeatForever::create(Animate::create(this->wanderAboutAnimation)));
 
+
+	//this->schedule(schedule_selector(Bird_zwc::update));
 }
 
 

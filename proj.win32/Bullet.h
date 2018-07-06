@@ -1,8 +1,11 @@
+#ifndef BULLET_H
+#define BULLET_H
+
 
 #include "cocos2d.h"
 #include "Bird_yyh.h"
 USING_NS_CC;
-const float BULLETVElOCITY =200;//运行速度，可以自己控制，每秒所走的像素
+const float BULLETVElOCITY =100;//运行速度，可以自己控制，每秒所走的像素
 class Bullet :  public cocos2d::Sprite
 {
 public:
@@ -26,3 +29,5 @@ public:
 	SpriteBatchNode* bulletBatchNode;//批次渲染节点
 	Bird_yyh* b;//传入的英雄飞机
 };
+
+#endif

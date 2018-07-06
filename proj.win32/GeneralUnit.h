@@ -14,8 +14,9 @@ public:
 
 
 	//这4个接口是需要暴露出来的
-	void wanderAbout();//AI由你们写。我每帧都调用这个方法
+	virtual void wanderAbout() {}//AI由你们写。我每帧都调用这个方法
 	
+	virtual void getHurt(int damage) {}
 	void getHurtByWind(int damage);//由我来调用
 	void getHurtByPaw(int damage);
 	void getHurtByCrush(int damage);
@@ -23,7 +24,7 @@ public:
 	void getHurtByWater(int damage);
 	void getHurtByFin(int damage);
 
-	void die();
+	virtual void die() {}
 
 	static GeneralUnit * create(const std::string & filename);
 

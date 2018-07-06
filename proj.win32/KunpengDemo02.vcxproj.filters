@@ -11,6 +11,8 @@
     <ClCompile Include="GeneralUnit.cpp" />
     <ClCompile Include="bird_yyh.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Bird_zwc.cpp" />
+    <ClCompile Include="G:\QQ\641561609\FileRecv\MobileFile\FishEnemy1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
@@ -23,6 +25,8 @@
     <ClInclude Include="GeneralUnit.h" />
     <ClInclude Include="bird_yyh.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Bird_zwc.h" />
+    <ClInclude Include="FishEnemy1.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />

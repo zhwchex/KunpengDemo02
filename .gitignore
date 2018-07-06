@@ -337,4 +337,10 @@ cocos2d/cocos/editor-support/spine/proj.win32/Debug.win32/vc120.idb
 cocos2d/external/Box2D/proj.win32/Debug.win32/vc120.idb
 
 # .lastbuildstate files
+
+
+# .vcxproj and .filter filed 
+*.vcxproj
+*.vcxproj.filters
+
 *.lastbuildstate
