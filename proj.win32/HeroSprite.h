@@ -37,6 +37,7 @@ public:
 	float TIME_FOR_WATER_DASHING_BRAKING = 0.3f;
 
 	int scratchingType = 1;
+	int finAttackingType = 1;
 
 	//鸟悬停动画
 	Animation * hoveringRightAnimation;
@@ -201,11 +202,7 @@ public:
 	void button3Release();
 	
 
-	void scratch();
-	void scratchRight();
-	void scratchRight2();
-	void scratchLeft();
-	void scratchLeft2();
+
 
 
 	void disableAllAbilities();
@@ -291,6 +288,20 @@ public:
 	void dashDownLeft_kun();
 
 
+	void scratch();
+	void scratchRight();
+	void scratchRight2();
+	void scratchLeft();
+	void scratchLeft2();
+
+	void finAttack();
+	void finAttackRight();
+	void finAttackRight2();
+	void finAttackLeft();
+	void finAttackLeft2();
+
+
+
 	void windAttack();//多个重载
 	void pawAttack();
 	void pawHold();//！！**这是一个延时动作**！！
@@ -299,7 +310,7 @@ public:
 	void pawThrowBoss();//多个重载
 
 	void vortexAttack();
-	void finAttack();
+	
 
 
 	void getHurt();//多个重载

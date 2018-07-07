@@ -481,11 +481,11 @@ HeroSprite::HeroSprite()
 	this->scratchingRightAnimation2->setRestoreOriginalFrame(true);
 	this->scratchingRightAnimation2->retain();
 
-	scratchingRightAnimation2->getFrames().at(0)->setUserInfo(scratchingStartInfo);
-	scratchingRightAnimation2->getFrames().at(1)->setUserInfo(scratchingLoseAllAbilitiesInfo);
-	scratchingRightAnimation2->getFrames().at(2)->setUserInfo(scratchingRecoverScratchabilityInfo);
-	scratchingRightAnimation2->getFrames().at(3)->setUserInfo(scratchingRecoverAllAbilitiesInfo);
-	scratchingRightAnimation2->getFrames().at(4)->setUserInfo(scratchingToHoveringInfo);
+	this->scratchingRightAnimation2->getFrames().at(0)->setUserInfo(scratchingStartInfo);
+	this->scratchingRightAnimation2->getFrames().at(1)->setUserInfo(scratchingLoseAllAbilitiesInfo);
+	this->scratchingRightAnimation2->getFrames().at(2)->setUserInfo(scratchingRecoverScratchabilityInfo);
+	this->scratchingRightAnimation2->getFrames().at(3)->setUserInfo(scratchingRecoverAllAbilitiesInfo);
+	this->scratchingRightAnimation2->getFrames().at(4)->setUserInfo(scratchingToHoveringInfo);
 
 
 	this->scratchingLeftAnimation = Animation::create();
@@ -498,11 +498,11 @@ HeroSprite::HeroSprite()
 	this->scratchingLeftAnimation->setRestoreOriginalFrame(true);
 	this->scratchingLeftAnimation->retain();
 
-	scratchingLeftAnimation->getFrames().at(0)->setUserInfo(scratchingStartInfo);
-	scratchingLeftAnimation->getFrames().at(1)->setUserInfo(scratchingLoseAllAbilitiesInfo);
-	scratchingLeftAnimation->getFrames().at(2)->setUserInfo(scratchingRecoverScratchabilityInfo);
-	scratchingLeftAnimation->getFrames().at(3)->setUserInfo(scratchingRecoverAllAbilitiesInfo);
-	scratchingLeftAnimation->getFrames().at(4)->setUserInfo(scratchingToHoveringInfo);
+	this->scratchingLeftAnimation->getFrames().at(0)->setUserInfo(scratchingStartInfo);
+	this->scratchingLeftAnimation->getFrames().at(1)->setUserInfo(scratchingLoseAllAbilitiesInfo);
+	this->scratchingLeftAnimation->getFrames().at(2)->setUserInfo(scratchingRecoverScratchabilityInfo);
+	this->scratchingLeftAnimation->getFrames().at(3)->setUserInfo(scratchingRecoverAllAbilitiesInfo);
+	this->scratchingLeftAnimation->getFrames().at(4)->setUserInfo(scratchingToHoveringInfo);
 
 	this->scratchingLeftAnimation2 = Animation::create();
 	this->scratchingLeftAnimation2->addSpriteFrameWithFileName("characters/kunpeng/peng_scratching2_left_00.png");
@@ -514,11 +514,11 @@ HeroSprite::HeroSprite()
 	this->scratchingLeftAnimation2->setRestoreOriginalFrame(true);
 	this->scratchingLeftAnimation2->retain();
 
-	scratchingLeftAnimation2->getFrames().at(0)->setUserInfo(scratchingStartInfo);
-	scratchingLeftAnimation2->getFrames().at(1)->setUserInfo(scratchingLoseAllAbilitiesInfo);
-	scratchingLeftAnimation2->getFrames().at(2)->setUserInfo(scratchingRecoverScratchabilityInfo);
-	scratchingLeftAnimation2->getFrames().at(3)->setUserInfo(scratchingRecoverAllAbilitiesInfo);
-	scratchingLeftAnimation2->getFrames().at(4)->setUserInfo(scratchingToHoveringInfo);
+	this->scratchingLeftAnimation2->getFrames().at(0)->setUserInfo(scratchingStartInfo);
+	this->scratchingLeftAnimation2->getFrames().at(1)->setUserInfo(scratchingLoseAllAbilitiesInfo);
+	this->scratchingLeftAnimation2->getFrames().at(2)->setUserInfo(scratchingRecoverScratchabilityInfo);
+	this->scratchingLeftAnimation2->getFrames().at(3)->setUserInfo(scratchingRecoverAllAbilitiesInfo);
+	this->scratchingLeftAnimation2->getFrames().at(4)->setUserInfo(scratchingToHoveringInfo);
 
 	
 	this->gettingHurtGeneralAnimation = Animation::create();
@@ -919,7 +919,7 @@ HeroSprite::HeroSprite()
 	this->blowingVortexRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_right_02.png");
 	this->blowingVortexRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_right_03.png");
 	this->blowingVortexRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_right_04.png");
-	this->blowingVortexRightAnimation->setDelayPerUnit(1);
+	this->blowingVortexRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->blowingVortexRightAnimation->setRestoreOriginalFrame(true);
 	this->blowingVortexRightAnimation->retain();
 
@@ -1019,6 +1019,7 @@ HeroSprite::HeroSprite()
 	this->finAttackRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking_right_01.png");
 	this->finAttackRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking_right_02.png");
 	this->finAttackRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking_right_03.png");
+	this->finAttackRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking_right_03.png");
 	this->finAttackRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->finAttackRightAnimation->setRestoreOriginalFrame(true);
 	this->finAttackRightAnimation->retain();
@@ -1026,24 +1027,24 @@ HeroSprite::HeroSprite()
 	ValueMap finAttackingStartInfo;
 	ValueMap finAttackingLoseAllAbilitiesInfo;
 	ValueMap finAttackingRecoverScratchabilityInfo;
-	ValueMap scratchingRecoverAllAbilitiesInfo;
-	ValueMap scratchingToHoveringInfo;
+	ValueMap finAttackingRecoverAllAbilitiesInfo;
+	ValueMap finAttackingToHoveringInfo;
 
-	finAttackingStartInfo["42"] = Value(5);
-	scratchingLoseAllAbilitiesInfo["43"] = Value(6);
-	scratchingRecoverScratchabilityInfo["44"] = Value(7);
-	scratchingRecoverAllAbilitiesInfo["45"] = Value(8);
-	scratchingToHoveringInfo["46"] = Value(9);
+	finAttackingStartInfo["42"] = Value(42);
+	finAttackingLoseAllAbilitiesInfo["43"] = Value(43);
+	finAttackingRecoverScratchabilityInfo["44"] = Value(44);
+	finAttackingRecoverAllAbilitiesInfo["45"] = Value(45);
+	finAttackingToHoveringInfo["46"] = Value(46);
 
-	scratchingRightAnimation->getFrames().at(0)->setUserInfo(scratchingStartInfo);
-	scratchingRightAnimation->getFrames().at(1)->setUserInfo(scratchingLoseAllAbilitiesInfo);
-	scratchingRightAnimation->getFrames().at(2)->setUserInfo(scratchingRecoverScratchabilityInfo);
-	scratchingRightAnimation->getFrames().at(3)->setUserInfo(scratchingRecoverAllAbilitiesInfo);
-	scratchingRightAnimation->getFrames().at(4)->setUserInfo(scratchingToHoveringInfo);
+	finAttackRightAnimation->getFrames().at(0)->setUserInfo(finAttackingStartInfo);
+	finAttackRightAnimation->getFrames().at(1)->setUserInfo(finAttackingLoseAllAbilitiesInfo);
+	finAttackRightAnimation->getFrames().at(2)->setUserInfo(finAttackingRecoverScratchabilityInfo);
+	finAttackRightAnimation->getFrames().at(3)->setUserInfo(finAttackingRecoverAllAbilitiesInfo);
+	finAttackRightAnimation->getFrames().at(4)->setUserInfo(finAttackingToHoveringInfo);
 
-	EventListenerCustom * scratchingFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, scratchingStartInfo, scratchingLoseAllAbilitiesInfo, scratchingRecoverScratchabilityInfo, scratchingRecoverAllAbilitiesInfo, scratchingToHoveringInfo](EventCustom * event){
+	EventListenerCustom * finAttackingFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, finAttackingStartInfo, finAttackingLoseAllAbilitiesInfo, finAttackingRecoverScratchabilityInfo, finAttackingRecoverAllAbilitiesInfo, finAttackingToHoveringInfo](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
-		if (*userData->userInfo == scratchingStartInfo){
+		if (*userData->userInfo == finAttackingStartInfo){
 			this->disableAllAbilities();
 			if (this->directionToMoveRight){
 				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(this->DISTANCE_DURING_SCRATCHING, 0)));
@@ -1070,19 +1071,19 @@ HeroSprite::HeroSprite()
 				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(-this->DISTANCE_DURING_SCRATCHING / 1.414, -this->DISTANCE_DURING_SCRATCHING / 1.414)));
 			}
 		}
-		if (*userData->userInfo == scratchingLoseAllAbilitiesInfo){
+		if (*userData->userInfo == finAttackingLoseAllAbilitiesInfo){
 			log("attacking at frame2");
-			if (this->scratchingType == 1){
-				this->scratchingType = 2;
+			if (this->finAttackingType == 1){
+				this->finAttackingType = 2;
 			}
-			else if (this->scratchingType == 2){
-				this->scratchingType = 1;
+			else if (this->finAttackingType == 2){
+				this->finAttackingType = 1;
 			}
 		}
-		if (*userData->userInfo == scratchingRecoverScratchabilityInfo){
+		if (*userData->userInfo == finAttackingRecoverScratchabilityInfo){
 			this->scratchable = true;
 		}
-		if (*userData->userInfo == scratchingRecoverAllAbilitiesInfo){
+		if (*userData->userInfo == finAttackingRecoverAllAbilitiesInfo){
 			this->enableAllAbilities();
 			this->moveableWithoutAnimation = false;
 			if (this->directionToMoveUpRight ||
@@ -1093,16 +1094,17 @@ HeroSprite::HeroSprite()
 				this->directionToMoveLeft ||
 				this->directionToMoveUpLeft ||
 				this->directionToMoveUp){
-				this->move();
+				this->move_forBothShapes();
+				this->finAttackingType = 1;
 			}
 
 		}
-		if (*userData->userInfo == scratchingToHoveringInfo){
-			this->hover();
-			this->scratchingType = 1;
+		if (*userData->userInfo == finAttackingToHoveringInfo){
+			this->hover_kun();
+			this->finAttackingType = 1;
 		}
 	});
-
+	_eventDispatcher->addEventListenerWithFixedPriority(finAttackingFrameEventListener, -1);
 
 
 	this->finAttackRightAnimation2 = Animation::create();
@@ -1110,27 +1112,48 @@ HeroSprite::HeroSprite()
 	this->finAttackRightAnimation2->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking2_right_01.png");
 	this->finAttackRightAnimation2->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking2_right_02.png");
 	this->finAttackRightAnimation2->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking2_right_03.png");
+	this->finAttackRightAnimation2->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking2_right_03.png");
 	this->finAttackRightAnimation2->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->finAttackRightAnimation2->setRestoreOriginalFrame(true);
 	this->finAttackRightAnimation2->retain();
+
+	this->finAttackRightAnimation2->getFrames().at(0)->setUserInfo(finAttackingStartInfo);
+	this->finAttackRightAnimation2->getFrames().at(1)->setUserInfo(finAttackingLoseAllAbilitiesInfo);
+	this->finAttackRightAnimation2->getFrames().at(2)->setUserInfo(finAttackingRecoverScratchabilityInfo);
+	this->finAttackRightAnimation2->getFrames().at(3)->setUserInfo(finAttackingRecoverAllAbilitiesInfo);
+	this->finAttackRightAnimation2->getFrames().at(4)->setUserInfo(finAttackingToHoveringInfo);
 
 	this->finAttackLeftAnimation = Animation::create();
 	this->finAttackLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking_left_00.png");
 	this->finAttackLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking_left_01.png");
 	this->finAttackLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking_left_02.png");
+	this->finAttackLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking_left_03.png");	
 	this->finAttackLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking_left_03.png");
 	this->finAttackLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->finAttackLeftAnimation->setRestoreOriginalFrame(true);
 	this->finAttackLeftAnimation->retain();
+
+	this->finAttackLeftAnimation->getFrames().at(0)->setUserInfo(finAttackingStartInfo);
+	this->finAttackLeftAnimation->getFrames().at(1)->setUserInfo(finAttackingLoseAllAbilitiesInfo);
+	this->finAttackLeftAnimation->getFrames().at(2)->setUserInfo(finAttackingRecoverScratchabilityInfo);
+	this->finAttackLeftAnimation->getFrames().at(3)->setUserInfo(finAttackingRecoverAllAbilitiesInfo);
+	this->finAttackLeftAnimation->getFrames().at(4)->setUserInfo(finAttackingToHoveringInfo);
 
 	this->finAttackLeftAnimation2 = Animation::create();
 	this->finAttackLeftAnimation2->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking2_left_00.png");
 	this->finAttackLeftAnimation2->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking2_left_01.png");
 	this->finAttackLeftAnimation2->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking2_left_02.png");
 	this->finAttackLeftAnimation2->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking2_left_03.png");
+	this->finAttackLeftAnimation2->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking2_left_03.png");
 	this->finAttackLeftAnimation2->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->finAttackLeftAnimation2->setRestoreOriginalFrame(true);
 	this->finAttackLeftAnimation2->retain();
+
+	this->finAttackLeftAnimation2->getFrames().at(0)->setUserInfo(finAttackingStartInfo);
+	this->finAttackLeftAnimation2->getFrames().at(1)->setUserInfo(finAttackingLoseAllAbilitiesInfo);
+	this->finAttackLeftAnimation2->getFrames().at(2)->setUserInfo(finAttackingRecoverScratchabilityInfo);
+	this->finAttackLeftAnimation2->getFrames().at(3)->setUserInfo(finAttackingRecoverAllAbilitiesInfo);
+	this->finAttackLeftAnimation2->getFrames().at(4)->setUserInfo(finAttackingToHoveringInfo);
 
 	//鱼的受击动画TODO
 
@@ -1177,7 +1200,13 @@ void HeroSprite::button1Hit(){
 
 	}
 	if (enemyWithinScratch){
-		this->scratch();
+		if (this->isBird){
+			this->scratch();
+		}
+		else if (this->isFish){
+			this->finAttack();
+		}
+		
 	}
 	else{
 		if (this->isBird){
@@ -1264,12 +1293,6 @@ void HeroSprite::windAttack(){
 			this->stopAllActions();
 			this->runAction(Animate::create(this->blowingWindLeftAnimation));
 		}
-		/*
-		Sprite * windBullet = Sprite::create();
-		windBullet->setPosition(this->getPosition());
-		this->getParent()->addChild(windBullet);
-		windBullet->runAction(Spawn::create(MoveBy::create(0.4f, Vec2(300, 0)), Repeat::create(Animate::create(this->windBulletFlyingAnimation), 2), nullptr));
-		*/
 	}
 }
 
@@ -1312,6 +1335,7 @@ void HeroSprite::scratch(){
 	}
 }
 
+
 void HeroSprite::scratchRight(){
 	this->stopAllActions();
 	this->runAction(Animate::create(this->scratchingRightAnimation));
@@ -1328,6 +1352,50 @@ void HeroSprite::scratchLeft2(){
 	this->stopAllActions();
 	this->runAction(Animate::create(this->scratchingLeftAnimation2));
 }
+
+//鱼的近战动作
+void HeroSprite::finAttack(){
+	if (this->scratchable){
+		if (this->finAttackingType == 1){
+			if (this->facingRight){
+				this->finAttackRight();
+			}
+			else if (this->facingLeft){
+				this->finAttackLeft();
+			}
+			//this->scratchingType = 2;
+		}
+		else{
+			if (this->facingRight){
+				this->finAttackRight2();
+			}
+			else if (this->facingLeft){
+				this->finAttackLeft2();
+			}
+			//this->scratchingType = 1;
+		}
+	}
+
+
+}
+
+void HeroSprite::finAttackRight(){
+	this->stopAllActions();
+	this->runAction(Animate::create(this->finAttackRightAnimation));
+}
+void HeroSprite::finAttackRight2(){
+	this->stopAllActions();
+	this->runAction(Animate::create(this->finAttackRightAnimation2));
+}
+void HeroSprite::finAttackLeft(){
+	this->stopAllActions();
+	this->runAction(Animate::create(this->finAttackLeftAnimation));
+}
+void HeroSprite::finAttackLeft2(){
+	this->stopAllActions();
+	this->runAction(Animate::create(this->finAttackLeftAnimation2));
+}
+
 
 // bird dash
 void HeroSprite::dash(){
