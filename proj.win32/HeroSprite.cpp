@@ -4,6 +4,16 @@
 HeroSprite::HeroSprite()
 {
 
+
+	//10个风弹
+	for (int i = 0; i < 10; i++){
+		WindBullet * wb = WindBullet::create("characters/kunpeng/wind_bullet.png");
+		wb->setPosition(wb->magazineX, wb->magazineY);
+		wb->retain();
+		//this->getParent()->addChild(wb);
+		this->windBullets[i] = wb;
+	}
+
 	// bird's hovering animation
 	this->hoveringRightAnimation = Animation::create();
 	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_right_00.png");
@@ -65,7 +75,7 @@ HeroSprite::HeroSprite()
 		if (*userData->userInfo == hoveringAnimationFrame01info){
 			this->setPositionY(this->getPositionY() - 3);
 		}
-	
+
 	});
 
 	//将该事件添加到事件分发器
@@ -74,10 +84,10 @@ HeroSprite::HeroSprite()
 
 	this->stopAllActions();
 	this->runAction(RepeatForever::create(Animate::create(this->hoveringRightAnimation)));
-	
-	
 
-	
+
+
+
 
 
 	//Moving events won't need frame events. However, slight up-down swings during horizontal flights would be welcome.
@@ -183,14 +193,15 @@ HeroSprite::HeroSprite()
 	EventListenerCustom * blowingWindAnimationFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, blowingStartInfo, blowingLaunchingWindBulletInfo, blowingRecoverAllAbilitiesInfo, blowingEndInfo](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == blowingStartInfo){
-			log("Hitting first frame of blowing. ");
+			//log("Hitting first frame of blowing. ");
 			this->disableAllAbilities();
 		}
 		if (*userData->userInfo == blowingLaunchingWindBulletInfo){
+			int windBulletNumber = this->launchedWindBulletCount % this->NUM_OF_WIND_BULLETS;
 			if (this->facingRight){
 				//this->setPositionX(this->getPositionX() - 30);
 				this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(-10, 0)), MoveBy::create(0.2f, Vec2(-10, 0)), nullptr));
-				Sprite * windBullet = Sprite::create();
+				Sprite * windBullet = this->windBullets[windBulletNumber];
 				windBullet->setPosition(this->getPosition());
 				this->getParent()->addChild(windBullet);
 				windBullet->runAction(Spawn::create(MoveBy::create(0.4f, Vec2(300, 0)), Repeat::create(Animate::create(this->windBulletFlyingAnimation), 2), nullptr));
@@ -203,6 +214,8 @@ HeroSprite::HeroSprite()
 				this->getParent()->addChild(windBullet);
 				windBullet->runAction(Spawn::create(MoveBy::create(0.4f, Vec2(-300, 0)), Repeat::create(Animate::create(this->windBulletFlyingAnimation), 2), nullptr));
 			}
+			this->launchedWindBulletCount++;
+			log("%dth bullet launched.",this->launchedWindBulletCount);
 			this->windAttackable = true;
 		}
 		if (*userData->userInfo == blowingRecoverAllAbilitiesInfo){
@@ -248,10 +261,48 @@ HeroSprite::HeroSprite()
 	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_01.jpg");
 	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_02.jpg");
 	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_03.jpg");
+	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_03.jpg");
+	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_03.jpg");
 	this->windBulletFlyingAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->windBulletFlyingAnimation->setRestoreOriginalFrame(true);
 	this->windBulletFlyingAnimation->retain();
 
+	ValueMap windBulletCheckHitInfo;
+	ValueMap windBulletEndInfo;
+	windBulletCheckHitInfo["19"] = Value(19);
+	windBulletEndInfo["20"] = Value(20);
+
+	this->windBulletFlyingAnimation->getFrames().at(0)->setUserInfo(windBulletCheckHitInfo);
+	this->windBulletFlyingAnimation->getFrames().at(1)->setUserInfo(windBulletCheckHitInfo);
+	this->windBulletFlyingAnimation->getFrames().at(2)->setUserInfo(windBulletCheckHitInfo);
+	this->windBulletFlyingAnimation->getFrames().at(3)->setUserInfo(windBulletCheckHitInfo);
+	this->windBulletFlyingAnimation->getFrames().at(4)->setUserInfo(windBulletCheckHitInfo);
+	this->windBulletFlyingAnimation->getFrames().at(5)->setUserInfo(windBulletEndInfo);
+
+	EventListenerCustom * windBulletFlyingAnimationFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, windBulletCheckHitInfo, windBulletEndInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == windBulletCheckHitInfo){
+			WindBullet*  wb = (WindBullet *)(userData->target);
+			//log("Here is windbullet running 1st frame of windbulletflyinganimation. Some data from wb = %d",wb->magazineX);
+			Vector < GeneralUnit * > elist = ((Stage1GameplayLayer *)(this->getParent()))->enemyList;
+			for (GeneralUnit * enemy : elist){
+				int deltax = enemy->getPositionX() - wb->getPositionX();
+				int deltay = enemy->getPositionY() - wb->getPositionY();
+
+				double distance = sqrt(deltax*deltax + deltay*deltay);
+				if (distance < 50){
+					enemy->getHurt(10);
+					wb->removeFromParent();
+				}
+			}
+
+		}
+		if (*userData->userInfo == windBulletEndInfo){
+			WindBullet*  wb = (WindBullet *)(userData->target);
+			wb->removeFromParent();
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(windBulletFlyingAnimationFrameEventListener,-1);
 
 	//dashing animations would need frame events.
 	this->dashingRightAnimation = Animation::create();
@@ -263,7 +314,7 @@ HeroSprite::HeroSprite()
 	this->dashingRightAnimation->setRestoreOriginalFrame(true);
 	this->dashingRightAnimation->retain();
 
-	
+
 	ValueMap dashingRightFrame00Info;
 	ValueMap dashingRightFrame02Info;
 	ValueMap dashingRightFrame03Info;
@@ -283,13 +334,13 @@ HeroSprite::HeroSprite()
 		}
 		if (*userData->userInfo == dashingRightFrame02Info){
 			this->enableAllAbilities();
-			if (this->directionToMoveUpRight  ||
+			if (this->directionToMoveUpRight ||
 				this->directionToMoveRight ||
 				this->directionToMoveDownRight ||
 				this->directionToMoveDown ||
 				this->directionToMoveDownLeft ||
 				this->directionToMoveLeft ||
-				this->directionToMoveUpLeft||
+				this->directionToMoveUpLeft ||
 				this->directionToMoveUp){
 				this->move();
 			}
@@ -300,7 +351,7 @@ HeroSprite::HeroSprite()
 		}
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(dashingRightAnimationFrameEventListener, -1);
-	
+
 	this->dashingDownRightAnimation = Animation::create();
 	this->dashingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downright_00.jpg");
 	this->dashingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downright_01.jpg");
@@ -412,8 +463,8 @@ HeroSprite::HeroSprite()
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == scratchingStartInfo){
 			this->disableAllAbilities();
-			if (this->directionToMoveRight ){
-				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL*2, Vec2(this->DISTANCE_DURING_SCRATCHING, 0)));
+			if (this->directionToMoveRight){
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(this->DISTANCE_DURING_SCRATCHING, 0)));
 			}
 			else if (this->directionToMoveLeft){
 				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(-this->DISTANCE_DURING_SCRATCHING, 0)));
@@ -442,7 +493,7 @@ HeroSprite::HeroSprite()
 			if (this->scratchingType == 1){
 				this->scratchingType = 2;
 			}
-			else if(this->scratchingType == 2){
+			else if (this->scratchingType == 2){
 				this->scratchingType = 1;
 			}
 		}
@@ -462,7 +513,7 @@ HeroSprite::HeroSprite()
 				this->directionToMoveUp){
 				this->move();
 			}
-		
+
 		}
 		if (*userData->userInfo == scratchingToHoveringInfo){
 			this->hover();
@@ -520,7 +571,7 @@ HeroSprite::HeroSprite()
 	this->scratchingLeftAnimation2->getFrames().at(3)->setUserInfo(scratchingRecoverAllAbilitiesInfo);
 	this->scratchingLeftAnimation2->getFrames().at(4)->setUserInfo(scratchingToHoveringInfo);
 
-	
+
 	this->gettingHurtGeneralAnimation = Animation::create();
 	this->gettingHurtGeneralAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_getting_hurt_general_00.png");
 	this->gettingHurtGeneralAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_getting_hurt_general_01.png");
@@ -583,7 +634,7 @@ HeroSprite::HeroSprite()
 	ValueMap transformingBTFStartInfo;
 	ValueMap transformingBTFRecoverAllAbilitiesInfo;
 	ValueMap transformingBTFEndInfo;
-	
+
 	transformingBTFStartInfo["16"] = Value(16);
 	transformingBTFRecoverAllAbilitiesInfo["17"] = Value(17);
 	transformingBTFEndInfo["18"] = Value(18);
@@ -599,12 +650,12 @@ HeroSprite::HeroSprite()
 		}
 		if (*userData->userInfo == transformingBTFRecoverAllAbilitiesInfo){
 			this->enableAllAbilities();
-			
+
 			this->isBird = false;
 			this->isFish = true;
 			this->transformable_BirdToFish = false;
-			
-			
+
+
 			if (this->directionToMoveUpRight ||
 				this->directionToMoveRight ||
 				this->directionToMoveDownRight ||
@@ -688,7 +739,7 @@ HeroSprite::HeroSprite()
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(transformingFromFishToBirdAnimationFrameEventListener, -1);
 
-	
+
 
 
 	//Fish's hovering animation
@@ -929,9 +980,9 @@ HeroSprite::HeroSprite()
 	ValueMap blowingVortexEndInfo;
 
 	blowingVortexStartInfo["38"] = Value(38);
-	blowingVortexLaunchingWaterBulletInfo["39"] = Value(38);
-	blowingVortexRecoverAllAbilitiesInfo["40"] = Value(38);
-	blowingVortexEndInfo["41"] = Value(38);
+	blowingVortexLaunchingWaterBulletInfo["39"] = Value(39);
+	blowingVortexRecoverAllAbilitiesInfo["40"] = Value(40);
+	blowingVortexEndInfo["41"] = Value(41);
 
 	this->blowingVortexRightAnimation->getFrames().at(0)->setUserInfo(blowingVortexStartInfo);
 	this->blowingVortexRightAnimation->getFrames().at(1)->setUserInfo(blowingVortexLaunchingWaterBulletInfo);
@@ -1010,6 +1061,22 @@ HeroSprite::HeroSprite()
 	this->waterBulletMarchingAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->waterBulletMarchingAnimation->setRestoreOriginalFrame(true);
 	this->waterBulletMarchingAnimation->retain();
+
+	ValueMap waterBulletHitEnemyInfo;
+
+	waterBulletHitEnemyInfo["47"] = Value(47);
+
+	this->waterBulletMarchingAnimation->getFrames().at(0)->setUserInfo(waterBulletHitEnemyInfo);
+
+	EventListenerCustom * waterBulletFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, waterBulletHitEnemyInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == waterBulletHitEnemyInfo){
+			for (GeneralUnit * generalEnemy : ((Stage1GameplayLayer *)this->getParent())->enemyList){
+	
+
+			}
+		}
+	});
 
 
 
@@ -1127,7 +1194,7 @@ HeroSprite::HeroSprite()
 	this->finAttackLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking_left_00.png");
 	this->finAttackLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking_left_01.png");
 	this->finAttackLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking_left_02.png");
-	this->finAttackLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking_left_03.png");	
+	this->finAttackLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking_left_03.png");
 	this->finAttackLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking_left_03.png");
 	this->finAttackLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->finAttackLeftAnimation->setRestoreOriginalFrame(true);
@@ -1206,7 +1273,7 @@ void HeroSprite::button1Hit(){
 		else if (this->isFish){
 			this->finAttack();
 		}
-		
+
 	}
 	else{
 		if (this->isBird){
@@ -1228,16 +1295,16 @@ void HeroSprite::button2Release(){
 }
 
 void HeroSprite::button3Hit(){
-	
+
 	//this->getHurtGeneral();//测试过。没问题
-	
+
 	if (this->isFish){
 		this->transformFromFishToBird();
 	}
 	else if (this->isBird){
 		this->transformFromBirdToFish();
 	}
-	
+
 }
 void HeroSprite::button3Release(){
 
@@ -1415,7 +1482,7 @@ void HeroSprite::dash(){
 		else if (this->directionToMoveLeft){
 			dashLeft();
 		}
-		else if(this->directionToMoveUp){
+		else if (this->directionToMoveUp){
 			dashUp();
 		}
 		else if (this->directionToMoveUpLeft){
@@ -1461,7 +1528,7 @@ void HeroSprite::dashUp(){
 	if (this->facingRight){
 		this->runAction(Animate::create(this->dashingUpRightAnimation));
 	}
-	else if(this->facingLeft){
+	else if (this->facingLeft){
 		this->runAction(Animate::create(this->dashingUpLeftAnimation));
 	}
 }
@@ -1471,7 +1538,7 @@ void HeroSprite::dashDown(){
 	if (this->facingRight){
 		this->runAction(Animate::create(this->dashingDownRightAnimation));
 	}
-	else if(this->facingLeft){
+	else if (this->facingLeft){
 		this->runAction(Animate::create(this->dashingDownLeftAnimation));
 	}
 }
@@ -1563,7 +1630,7 @@ void HeroSprite::dashRight_kun(){
 }
 void HeroSprite::dashUp_kun(){
 	this->stopAllActions();
-	this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_WATER_DASHING, Vec2(0,this->DISTANCE_WATER_DASHING)), MoveBy::create(this->TIME_FOR_WATER_DASHING_BRAKING, Vec2(0,this->DISTANCE_WATER_DASHING_BRAKING)), nullptr));
+	this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_WATER_DASHING, Vec2(0, this->DISTANCE_WATER_DASHING)), MoveBy::create(this->TIME_FOR_WATER_DASHING_BRAKING, Vec2(0, this->DISTANCE_WATER_DASHING_BRAKING)), nullptr));
 	if (this->facingRight){
 		this->runAction(Animate::create(this->dashingUpRightAnimation_kun));
 	}
@@ -1612,7 +1679,7 @@ void HeroSprite::dashDownLeft_kun(){
 
 void HeroSprite::transformFromBirdToFish(){
 	this->stopAllActions();
-	this->runAction(Sequence::create(MoveBy::create(0.1f,Vec2(0,-50)),MoveBy::create(0.2f, Vec2(0,-20)) , nullptr));
+	this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, -50)), MoveBy::create(0.2f, Vec2(0, -20)), nullptr));
 	this->runAction(Animate::create(this->TransformingFromBirdToFishAnimation));
 }
 void HeroSprite::transformFromFishToBird(){

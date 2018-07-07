@@ -7,12 +7,24 @@
 #pragma once
 #include "cocos2d.h"
 #include "GeneralUnit.h"
+#include "WindBullet.h"
 
 USING_NS_CC;
 class HeroSprite :	public Sprite
 {
 
 public:
+
+
+
+	const int NUM_OF_WIND_BULLETS = 10;
+	(WindBullet *) windBullets[10];
+	int launchedWindBulletCount = 0;
+
+
+
+
+
 	int health = 100;
 
 	int camp = 1;
