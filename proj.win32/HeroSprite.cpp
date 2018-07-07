@@ -241,7 +241,8 @@ HeroSprite::HeroSprite()
 	this->blowingWindLeftAnimation->getFrames().at(3)->setUserInfo(blowingRecoverAllAbilitiesInfo);
 	this->blowingWindLeftAnimation->getFrames().at(4)->setUserInfo(blowingEndInfo);
 
-	//风弹的转圈动画
+
+	//风弹的转圈动画。应当为所有帧添加碰到敌人就爆炸的动画TODO
 	this->windBulletFlyingAnimation = Animation::create();
 	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_00.jpg");
 	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_01.jpg");
@@ -911,16 +912,75 @@ HeroSprite::HeroSprite()
 	this->dashingDownLeftAnimation_kun->getFrames().at(3)->setUserInfo(dashingEndFrameInfo_kun);
 
 
-	//鱼的吐漩涡动画。尚需添加帧事件监听TODO
+	//鱼的吐漩涡动画。尚需添加帧事件监听
 	this->blowingVortexRightAnimation = Animation::create();
 	this->blowingVortexRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_right_00.png");
 	this->blowingVortexRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_right_01.png");
 	this->blowingVortexRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_right_02.png");
 	this->blowingVortexRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_right_03.png");
 	this->blowingVortexRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_right_04.png");
-	this->blowingVortexRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->blowingVortexRightAnimation->setDelayPerUnit(1);
 	this->blowingVortexRightAnimation->setRestoreOriginalFrame(true);
 	this->blowingVortexRightAnimation->retain();
+
+	ValueMap blowingVortexStartInfo;
+	ValueMap blowingVortexLaunchingWaterBulletInfo;
+	ValueMap blowingVortexRecoverAllAbilitiesInfo;
+	ValueMap blowingVortexEndInfo;
+
+	blowingVortexStartInfo["38"] = Value(38);
+	blowingVortexLaunchingWaterBulletInfo["39"] = Value(38);
+	blowingVortexRecoverAllAbilitiesInfo["40"] = Value(38);
+	blowingVortexEndInfo["41"] = Value(38);
+
+	this->blowingVortexRightAnimation->getFrames().at(0)->setUserInfo(blowingVortexStartInfo);
+	this->blowingVortexRightAnimation->getFrames().at(1)->setUserInfo(blowingVortexLaunchingWaterBulletInfo);
+	this->blowingVortexRightAnimation->getFrames().at(2)->setUserInfo(blowingVortexRecoverAllAbilitiesInfo);
+	this->blowingVortexRightAnimation->getFrames().at(4)->setUserInfo(blowingVortexEndInfo);
+
+	EventListenerCustom * blowingVortexFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, blowingVortexStartInfo, blowingVortexLaunchingWaterBulletInfo, blowingVortexRecoverAllAbilitiesInfo, blowingVortexEndInfo](EventCustom* event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == blowingVortexStartInfo){
+			this->disableAllAbilities();
+		}
+		if (*userData->userInfo == blowingVortexLaunchingWaterBulletInfo){
+			if (this->facingRight){
+				//this->setPositionX(this->getPositionX() - 30);
+				this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(-10, 0)), MoveBy::create(0.2f, Vec2(-10, 0)), nullptr));
+				Sprite * waterBullet = Sprite::create();
+				waterBullet->setPosition(this->getPosition());
+				this->getParent()->addChild(waterBullet);
+				waterBullet->runAction(Spawn::create(MoveBy::create(0.6f, Vec2(300, 0)), Repeat::create(Animate::create(this->waterBulletMarchingAnimation), 2), nullptr));
+			}
+			else if (this->facingLeft){
+				//this->setPositionX(this->getPositionX()+ 30);
+				this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(10, 0)), MoveBy::create(0.2f, Vec2(10, 0)), nullptr));
+				Sprite * waterBullet = Sprite::create();
+				waterBullet->setPosition(this->getPosition());
+				this->getParent()->addChild(waterBullet);
+				waterBullet->runAction(Spawn::create(MoveBy::create(0.6f, Vec2(-300, 0)), Repeat::create(Animate::create(this->waterBulletMarchingAnimation), 2), nullptr));
+			}
+			this->vortexAttackable = true;
+		}
+		if (*userData->userInfo == blowingVortexRecoverAllAbilitiesInfo){
+			this->enableAllAbilities();
+			if (this->directionToMoveUpRight ||
+				this->directionToMoveRight ||
+				this->directionToMoveDownRight ||
+				this->directionToMoveDown ||
+				this->directionToMoveDownLeft ||
+				this->directionToMoveLeft ||
+				this->directionToMoveUpLeft ||
+				this->directionToMoveUp){
+				this->move_kun();
+			}
+		}
+		if (*userData->userInfo == blowingVortexEndInfo){
+			this->hover_kun();
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(blowingVortexFrameEventListener, -1);
+
 
 	this->blowingVortexLeftAnimation = Animation::create();
 	this->blowingVortexLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_left_00.png");
@@ -932,6 +992,27 @@ HeroSprite::HeroSprite()
 	this->blowingVortexLeftAnimation->setRestoreOriginalFrame(true);
 	this->blowingVortexLeftAnimation->retain();
 
+	this->blowingVortexLeftAnimation->getFrames().at(0)->setUserInfo(blowingVortexStartInfo);
+	this->blowingVortexLeftAnimation->getFrames().at(1)->setUserInfo(blowingVortexLaunchingWaterBulletInfo);
+	this->blowingVortexLeftAnimation->getFrames().at(2)->setUserInfo(blowingVortexRecoverAllAbilitiesInfo);
+	this->blowingVortexLeftAnimation->getFrames().at(4)->setUserInfo(blowingVortexEndInfo);
+
+
+	//水弹动画。应当为所有帧添加碰到敌人就爆炸的帧事件TODO
+	this->waterBulletMarchingAnimation = Animation::create();
+	this->waterBulletMarchingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_00.jpg");
+	this->waterBulletMarchingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_01.jpg");
+	this->waterBulletMarchingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_02.jpg");
+	this->waterBulletMarchingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_03.jpg");
+	this->waterBulletMarchingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_04.jpg");
+	this->waterBulletMarchingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_05.jpg");
+	this->waterBulletMarchingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_06.jpg");
+	this->waterBulletMarchingAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->waterBulletMarchingAnimation->setRestoreOriginalFrame(true);
+	this->waterBulletMarchingAnimation->retain();
+
+
+
 	//鱼的近战动画。尚需添加帧事件监听TODO
 	this->finAttackRightAnimation = Animation::create();
 	this->finAttackRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking_right_00.png");
@@ -941,6 +1022,88 @@ HeroSprite::HeroSprite()
 	this->finAttackRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->finAttackRightAnimation->setRestoreOriginalFrame(true);
 	this->finAttackRightAnimation->retain();
+
+	ValueMap finAttackingStartInfo;
+	ValueMap finAttackingLoseAllAbilitiesInfo;
+	ValueMap finAttackingRecoverScratchabilityInfo;
+	ValueMap scratchingRecoverAllAbilitiesInfo;
+	ValueMap scratchingToHoveringInfo;
+
+	finAttackingStartInfo["42"] = Value(5);
+	scratchingLoseAllAbilitiesInfo["43"] = Value(6);
+	scratchingRecoverScratchabilityInfo["44"] = Value(7);
+	scratchingRecoverAllAbilitiesInfo["45"] = Value(8);
+	scratchingToHoveringInfo["46"] = Value(9);
+
+	scratchingRightAnimation->getFrames().at(0)->setUserInfo(scratchingStartInfo);
+	scratchingRightAnimation->getFrames().at(1)->setUserInfo(scratchingLoseAllAbilitiesInfo);
+	scratchingRightAnimation->getFrames().at(2)->setUserInfo(scratchingRecoverScratchabilityInfo);
+	scratchingRightAnimation->getFrames().at(3)->setUserInfo(scratchingRecoverAllAbilitiesInfo);
+	scratchingRightAnimation->getFrames().at(4)->setUserInfo(scratchingToHoveringInfo);
+
+	EventListenerCustom * scratchingFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, scratchingStartInfo, scratchingLoseAllAbilitiesInfo, scratchingRecoverScratchabilityInfo, scratchingRecoverAllAbilitiesInfo, scratchingToHoveringInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == scratchingStartInfo){
+			this->disableAllAbilities();
+			if (this->directionToMoveRight){
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(this->DISTANCE_DURING_SCRATCHING, 0)));
+			}
+			else if (this->directionToMoveLeft){
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(-this->DISTANCE_DURING_SCRATCHING, 0)));
+			}
+			else if (this->directionToMoveUp){
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(0, this->DISTANCE_DURING_SCRATCHING)));
+			}
+			else if (this->directionToMoveDown){
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(0, -this->DISTANCE_DURING_SCRATCHING)));
+			}
+			else if (this->directionToMoveUpRight){
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(this->DISTANCE_DURING_SCRATCHING / 1.414, this->DISTANCE_DURING_SCRATCHING / 1.414)));
+			}
+			else if (this->directionToMoveUpLeft){
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(-this->DISTANCE_DURING_SCRATCHING / 1.414, this->DISTANCE_DURING_SCRATCHING / 1.414)));
+			}
+			else if (this->directionToMoveDownRight){
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(this->DISTANCE_DURING_SCRATCHING / 1.414, -this->DISTANCE_DURING_SCRATCHING / 1.414)));
+			}
+			else if (this->directionToMoveDownLeft){
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(-this->DISTANCE_DURING_SCRATCHING / 1.414, -this->DISTANCE_DURING_SCRATCHING / 1.414)));
+			}
+		}
+		if (*userData->userInfo == scratchingLoseAllAbilitiesInfo){
+			log("attacking at frame2");
+			if (this->scratchingType == 1){
+				this->scratchingType = 2;
+			}
+			else if (this->scratchingType == 2){
+				this->scratchingType = 1;
+			}
+		}
+		if (*userData->userInfo == scratchingRecoverScratchabilityInfo){
+			this->scratchable = true;
+		}
+		if (*userData->userInfo == scratchingRecoverAllAbilitiesInfo){
+			this->enableAllAbilities();
+			this->moveableWithoutAnimation = false;
+			if (this->directionToMoveUpRight ||
+				this->directionToMoveRight ||
+				this->directionToMoveDownRight ||
+				this->directionToMoveDown ||
+				this->directionToMoveDownLeft ||
+				this->directionToMoveLeft ||
+				this->directionToMoveUpLeft ||
+				this->directionToMoveUp){
+				this->move();
+			}
+
+		}
+		if (*userData->userInfo == scratchingToHoveringInfo){
+			this->hover();
+			this->scratchingType = 1;
+		}
+	});
+
+
 
 	this->finAttackRightAnimation2 = Animation::create();
 	this->finAttackRightAnimation2->addSpriteFrameWithFileName("characters/kunpeng/kun_fin_attacking2_right_00.png");
@@ -1017,7 +1180,12 @@ void HeroSprite::button1Hit(){
 		this->scratch();
 	}
 	else{
-		this->windAttack();
+		if (this->isBird){
+			this->windAttack();
+		}
+		else if (this->isFish){
+			this->vortexAttack();
+		}
 	}
 }
 void HeroSprite::button1Release(){
@@ -1070,6 +1238,8 @@ void HeroSprite::disableAllAbilities(){
 	this->throwable = false;
 	this->transformable_BirdToFish = false;
 	this->transformable_FishToBird = false;
+
+	this->vortexAttackable = false;
 }
 void HeroSprite::enableAllAbilities(){
 	this->catchable = true;
@@ -1080,6 +1250,8 @@ void HeroSprite::enableAllAbilities(){
 	this->throwable = true;
 	this->transformable_BirdToFish = true;
 	this->transformable_FishToBird = true;
+
+	this->vortexAttackable = true;
 }
 
 void HeroSprite::windAttack(){
@@ -1098,6 +1270,19 @@ void HeroSprite::windAttack(){
 		this->getParent()->addChild(windBullet);
 		windBullet->runAction(Spawn::create(MoveBy::create(0.4f, Vec2(300, 0)), Repeat::create(Animate::create(this->windBulletFlyingAnimation), 2), nullptr));
 		*/
+	}
+}
+
+void HeroSprite::vortexAttack(){
+	if (this->vortexAttackable){
+		if (this->facingRight){
+			this->stopAllActions();
+			this->runAction(Animate::create(this->blowingVortexRightAnimation));
+		}
+		else if (this->facingLeft){
+			this->stopAllActions();
+			this->runAction(Animate::create(this->blowingVortexLeftAnimation));
+		}
 	}
 }
 

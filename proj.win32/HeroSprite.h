@@ -110,7 +110,7 @@ public:
 	Animation * finAttackLeftAnimation2;
 
 	Animation * windBulletFlyingAnimation;
-	Animation * waterBulletFlyingAnimation;
+	Animation * waterBulletMarchingAnimation;
 
 
 
@@ -162,6 +162,7 @@ public:
 	bool catchable = true;//爪子能否抓东西。例：剧情安排或正在撕扯时该项为false。
 	bool throwable = true;//能否将爪子上的东西扔出。例：主角不能一心二用。如果当前正在使用翅膀发射风弹，则该项为false，该项为false时调用throw方法将不会触发敌人被扔下的动画，将触发敌人从爪下生还顺毛重新发动攻击的动画。
 
+	bool vortexAttackable = true;
 
 	//逻辑上讲，这两者不能同时为真。
 	bool transformable_BirdToFish = true;
@@ -296,6 +297,10 @@ public:
 	void pawThrowObject();
 	void pawThrowEnemy();
 	void pawThrowBoss();//多个重载
+
+	void vortexAttack();
+	void finAttack();
+
 
 	void getHurt();//多个重载
 	void getHurtGeneral();
