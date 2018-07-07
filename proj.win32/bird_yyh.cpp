@@ -128,6 +128,11 @@ Bird_yyh * Bird_yyh::create(const std::string &filename){
 }
 
 void Bird_yyh::update(float dt){
+	
+}
+void Bird_yyh::wanderAbout(){
+	if (dieflag == 0 && pauseflag == 0){
+	//scheduleUpdate();
 	AllocConsole();                                          // 开辟控制台
 	freopen("CONOUT$", "w", stdout);
 	/*Point p = this->getPosition();
@@ -144,9 +149,9 @@ void Bird_yyh::update(float dt){
 	//float x = cos(asin(0.5));
 	//cout << x << endl;
 	//int x_scope, y_scope;
-	float x_dis = hero.x - bird.x ;
+	float x_dis = hero.x - bird.x;
 	float y_dis = hero.y - bird.y;
-	
+
 	float x_scala = (rand() % 201 - 100) / 100.0;
 	float y_scala = (rand() % 201 - 100) / 100.0;  //先获得（-1,1）的百分位的随机小数
 	int change = 10;
@@ -155,16 +160,16 @@ void Bird_yyh::update(float dt){
 	lockBirdWithinLandscape();
 	//temp_bullet->schedule(schedule_selector(Bullet::ShootBullet), 0.1f);
 	if (distance <= battledistance && flag == 0){
-		cout << "come in" << endl;
-		
-		temp_bullet->schedule(schedule_selector(Bullet::ShootBullet), 0.1f);
-		flag = 1;
+	cout << "come in" << endl;
+
+	temp_bullet->schedule(schedule_selector(Bullet::ShootBullet), 0.1f);
+	flag = 1;
 
 	}
 	if (distance > battledistance && flag == 1){
-		cout << "stop" << endl;
-		temp_bullet->unschedule(schedule_selector(Bullet::ShootBullet));
-		flag = 0;
+	cout << "stop" << endl;
+	temp_bullet->unschedule(schedule_selector(Bullet::ShootBullet));
+	flag = 0;
 	}
 	*/
 	if (distance <= battledistance){
@@ -188,20 +193,20 @@ void Bird_yyh::update(float dt){
 			else{
 				Lockturnright(1);
 			}
-			
+
 		}
 		else if (y_dis == 0){
 			//this->stopAllActions();
 			if (x_scope > 0){
 				Lockturnright(2);
-			}	
+			}
 			else{
 				Lockturnleft(2);
 			}
-				
-			
 
-		}	
+
+
+		}
 		else{
 			//this->stopAllActions();
 			if (x_scope > 0)
@@ -210,7 +215,7 @@ void Bird_yyh::update(float dt){
 				Lockturnleft(3);
 			//this->runAction(MoveBy::create(1.0f, Vec2(x_scope * abs(x_change), y_scope * abs(y_change))));
 		}
-			
+
 		lockBirdWithinLandscape();
 		if (flag == 0 && dieflag == 0){
 			cout << "come in" << endl;
@@ -222,7 +227,7 @@ void Bird_yyh::update(float dt){
 
 	}
 	if (distance > battledistance){
-		
+
 		Lockhoving();
 		this->runAction(MoveBy::create(1.0f, Vec2(x_scala*change, y_scala*change)));
 		lockBirdWithinLandscape();
@@ -234,17 +239,7 @@ void Bird_yyh::update(float dt){
 
 	}
 
-	
-}
-void Bird_yyh::wanderAbout(){
-	scheduleUpdate();
-	/*
-	auto temp = (Stage1GameplayLayer*)this->getParent();
-	
-	
-	Point hero = temp->kunpeng->getPosition();
-	Point bird = this->getPosition();
-	float distance = sqrt(pow(hero.x - bird.x, 2) + pow(hero.y - bird.y, 2));*/
+  }
 	
 }
 
@@ -299,6 +294,7 @@ void Bird_yyh::Lockturnleft(int type){
 			auto delayTime = DelayTime::create(1.5f);
 			auto func = CallFunc::create([this](){ dir = -1; lock = 0; });
 			auto seq = Sequence::create(delayTime, func, nullptr);
+			
 			this->runAction(seq);
 		}
 		else{
@@ -308,6 +304,7 @@ void Bird_yyh::Lockturnleft(int type){
 			auto func = CallFunc::create([this](){ dir = -1; lock = 0; });
 			auto seq = Sequence::create(delayTime, func, nullptr);
 			this->runAction(seq);
+			cout << "dir:" << dir << ' ' << lock << endl;
 			if (type == 1)
 				this->runAction(MoveBy::create(1.0f, Vec2(0, y_scope * bird_step)));
 			if (type == 2)
@@ -434,19 +431,15 @@ void Bird_yyh::getHurtByWind(int damage){
 
 
 void Bird_yyh::getHurtByPaw(int damage){      //yyhyyh
-	unscheduleUpdate();
+	//unscheduleUpdate();
+	pauseflag = 1;
 	this->stopAllActions();
 
 	health = health - damage;
 	auto temp = (Stage1GameplayLayer*)this->getParent();
 	auto temp_bullet = (Bullet*)temp->getChildByName("bu");
-	if (dieflag == 0)
-	{
-		temp_bullet->unschedule(schedule_selector(Bullet::ShootBullet));
-		dieflag = 1;
-	}
+	temp_bullet->unschedule(schedule_selector(Bullet::ShootBullet));
 	
-	temp->removeChildByName("bu");
 
 	if (health > 0)
 	{
@@ -455,7 +448,7 @@ void Bird_yyh::getHurtByPaw(int damage){      //yyhyyh
 		if (dir == 1)
 			this->runAction(Animate::create(righthurtAnimation));
 		auto delayTime = DelayTime::create(2.0f);
-		auto func = CallFunc::create([this](){ scheduleUpdate(); });
+		auto func = CallFunc::create([this](){ pauseflag = 0; lock = 0; flag = 0; });
 		auto seq = Sequence::create(delayTime, func, nullptr);
 		this->runAction(seq);
 

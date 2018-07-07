@@ -75,7 +75,7 @@ void Stage1GameplayLayer::onEnter(){
 	this->addChild(bird1);
 	Bullet* bullet = Bullet::create(bird1);
 	this->addChild(bullet, 1, "bu");
-	bird1->wanderAbout();
+	//bird1->wanderAbout();
 	enemyList.pushBack(bird1);
 	
 

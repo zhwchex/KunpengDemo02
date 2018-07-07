@@ -291,7 +291,7 @@ HeroSprite::HeroSprite()
 
 				double distance = sqrt(deltax*deltax + deltay*deltay);
 				if (distance < 50){
-					enemy->getHurt(10);
+					enemy->getHurtByPaw(10);
 					wb->removeFromParent();
 				}
 			}

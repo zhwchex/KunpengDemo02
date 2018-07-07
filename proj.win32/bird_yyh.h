@@ -26,6 +26,7 @@ public:
 	int lock = 0;
 
 	int dieflag = 0;
+	int pauseflag = 0;
 
 	int x_scope, y_scope;
 	float x_change, y_change;

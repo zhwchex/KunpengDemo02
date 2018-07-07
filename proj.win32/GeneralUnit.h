@@ -18,7 +18,7 @@ public:
 	
 	virtual void getHurt(int damage) {}
 	void getHurtByWind(int damage);//由我来调用
-	void getHurtByPaw(int damage);
+	virtual void getHurtByPaw(int damage){}
 	void getHurtByCrush(int damage);
 
 	void getHurtByWater(int damage);
