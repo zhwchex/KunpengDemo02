@@ -168,7 +168,7 @@ void Bird_yyh::update(float dt){
 	}
 	*/
 	if (distance <= battledistance){
-		
+
 		x_change = bird_step*(cos(atan(x_dis / y_dis)));
 		y_change = bird_step*(sin(atan(x_dis / y_dis)));
 		if (x_dis >= 0)
@@ -212,7 +212,7 @@ void Bird_yyh::update(float dt){
 		}
 			
 		lockBirdWithinLandscape();
-		if (flag == 0){
+		if (flag == 0 && dieflag == 0){
 			cout << "come in" << endl;
 			//this->runAction(Animate::create(this->rightAnimation));
 			temp_bullet->schedule(schedule_selector(Bullet::ShootBullet), 0.1f);
@@ -226,7 +226,7 @@ void Bird_yyh::update(float dt){
 		Lockhoving();
 		this->runAction(MoveBy::create(1.0f, Vec2(x_scala*change, y_scala*change)));
 		lockBirdWithinLandscape();
-		if (flag == 1){
+		if (flag == 1 && dieflag == 0){
 			cout << "stop" << endl;
 			temp_bullet->unschedule(schedule_selector(Bullet::ShootBullet));
 			flag = 0;
@@ -395,6 +395,9 @@ void Bird_yyh::lockBirdWithinLandscape(){
 
 void Bird_yyh::getHurtByWind(int damage){
 	unscheduleUpdate();
+
+	this->stopAllActions();
+
 	health = health - damage;
 	if (health > 0)
 	{
@@ -428,9 +431,23 @@ void Bird_yyh::getHurtByWind(int damage){
 
 }
 
-void Bird_yyh::getHurtByPaw(int damage){
+
+
+void Bird_yyh::getHurtByPaw(int damage){      //yyhyyh
 	unscheduleUpdate();
+	this->stopAllActions();
+
 	health = health - damage;
+	auto temp = (Stage1GameplayLayer*)this->getParent();
+	auto temp_bullet = (Bullet*)temp->getChildByName("bu");
+	if (dieflag == 0)
+	{
+		temp_bullet->unschedule(schedule_selector(Bullet::ShootBullet));
+		dieflag = 1;
+	}
+	
+	temp->removeChildByName("bu");
+
 	if (health > 0)
 	{
 		if (dir == -1 || dir == 0)                            //徘徊的时候会不会受伤？？？
@@ -453,7 +470,11 @@ void Bird_yyh::getHurtByPaw(int damage){
 		auto func = CallFunc::create([this](){
 			auto temp = (Stage1GameplayLayer*)this->getParent();
 			temp->removeChild(this);
+
 			temp->removeChildByName("bu");
+
+			//temp->removeChildByName("bu");
+
 			temp->enemyList.eraseObject(this); });
 		auto seq = Sequence::create(delayTime, func, nullptr);
 		this->runAction(seq);

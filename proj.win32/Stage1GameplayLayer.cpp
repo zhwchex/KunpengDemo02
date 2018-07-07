@@ -69,7 +69,7 @@ void Stage1GameplayLayer::onEnter(){
 	this->addChild(fish);
 	enemyList.pushBack(fish);
 
-	/*
+	
 	Bird_yyh* bird1 = Bird_yyh::create("characters/Bird_yyh/bird1.jpg");
 	bird1->setPosition(300, 200);
 	this->addChild(bird1);
@@ -77,7 +77,7 @@ void Stage1GameplayLayer::onEnter(){
 	this->addChild(bullet, 1, "bu");
 	bird1->wanderAbout();
 	enemyList.pushBack(bird1);
-	*/
+	
 
 
 

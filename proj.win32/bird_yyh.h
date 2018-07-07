@@ -24,6 +24,9 @@ public:
 	int flag = 0;
 	int dir = 0;
 	int lock = 0;
+
+	int dieflag = 0;
+
 	int x_scope, y_scope;
 	float x_change, y_change;
 	int bird_step = 50;

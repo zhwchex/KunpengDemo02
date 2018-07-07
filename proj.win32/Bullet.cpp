@@ -68,7 +68,8 @@ void Bullet::ShootBullet(float dt) {
 	Point hero = temp->kunpeng->getPosition();
 	//cout << hero.x << ' ' << hero.y << endl;
 	
-	auto actionMove = MoveTo::create(Duration,hero);
+	auto actionMove = MoveTo::create(Duration, hero);
+	//auto actionMove = BezierTo::create(Duration, hero);
 
 	//子弹执行完动作后进行函数回调，调用移除子弹函数
 	auto actionDone = CallFuncN::create(CC_CALLBACK_1(Bullet::removeBullet, this));
