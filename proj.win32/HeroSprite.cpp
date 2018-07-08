@@ -5,13 +5,21 @@ HeroSprite::HeroSprite()
 {
 
 
-	//10个风弹
-	for (int i = 0; i < 10; i++){
+	//初始化10个风弹，反复使用它们以节省资源
+	for (int i = 0; i < this->NUM_OF_WIND_BULLETS; i++){
 		WindBullet * wb = WindBullet::create("characters/kunpeng/wind_bullet.png");
 		wb->setPosition(wb->magazineX, wb->magazineY);
 		wb->retain();
 		//this->getParent()->addChild(wb);
 		this->windBullets[i] = wb;
+	}
+	//初始化10个风弹爆炸效果，反复使用以节省资源
+	for (int i = 0; i < NUM_OF_WIND_BULLET_EXPLOSIONS; i++){
+		Sprite * wbe = Sprite::create("characters/kunpeng/wind_bullet_explosion.png");
+		//wb->setPosition(wb->magazineX, wb->magazineY);
+		wbe->retain();
+		//this->getParent()->addChild(wb);
+		this->windBulletExplosions[i] = wbe;
 	}
 
 	// bird's hovering animation
@@ -209,7 +217,7 @@ HeroSprite::HeroSprite()
 			else if (this->facingLeft){
 				//this->setPositionX(this->getPositionX()+ 30);
 				this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(10, 0)), MoveBy::create(0.2f, Vec2(10, 0)), nullptr));
-				Sprite * windBullet = Sprite::create();
+				Sprite * windBullet = this->windBullets[windBulletNumber];
 				windBullet->setPosition(this->getPosition());
 				this->getParent()->addChild(windBullet);
 				windBullet->runAction(Spawn::create(MoveBy::create(0.4f, Vec2(-300, 0)), Repeat::create(Animate::create(this->windBulletFlyingAnimation), 2), nullptr));
@@ -282,17 +290,30 @@ HeroSprite::HeroSprite()
 	EventListenerCustom * windBulletFlyingAnimationFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, windBulletCheckHitInfo, windBulletEndInfo](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == windBulletCheckHitInfo){
+			//userData里的target就是正在run这一帧的对象，例如A->runAction(Animate::...)，A就是这里的target
 			WindBullet*  wb = (WindBullet *)(userData->target);
+			int windBulletPositionX = wb->getPositionX();
+			int windBulletPositionY = wb->getPositionY();
 			//log("Here is windbullet running 1st frame of windbulletflyinganimation. Some data from wb = %d",wb->magazineX);
 			Vector < GeneralUnit * > elist = ((Stage1GameplayLayer *)(this->getParent()))->enemyList;
 			for (GeneralUnit * enemy : elist){
-				int deltax = enemy->getPositionX() - wb->getPositionX();
-				int deltay = enemy->getPositionY() - wb->getPositionY();
+				int deltax = enemy->getPositionX() - windBulletPositionX;
+				int deltay = enemy->getPositionY() - windBulletPositionY;
 
 				double distance = sqrt(deltax*deltax + deltay*deltay);
-				if (distance < 50){
-					enemy->getHurtByPaw(10);
+				if (distance < wb->getContentSize().width/2+enemy->getContentSize().width/2){
+					int windBulletExplosionNumber = this->windBulletExplosionCount % this->NUM_OF_WIND_BULLET_EXPLOSIONS;
+
+					Sprite * explosion = this->windBulletExplosions[windBulletExplosionNumber];
+					explosion->setPosition(windBulletPositionX,windBulletPositionY);
+					this->getParent()->addChild(explosion);
+					explosion->runAction(Animate::create(this->windBulletExplosionAnimation));
+
+					this->windBulletExplosionCount++;
+					
+					//enemy->getHurtByPaw(10);
 					wb->removeFromParent();
+					break;
 				}
 			}
 
@@ -303,6 +324,55 @@ HeroSprite::HeroSprite()
 		}
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(windBulletFlyingAnimationFrameEventListener,-1);
+
+
+	//风弹爆炸的效果
+	this->windBulletExplosionAnimation = Animation::create();
+	this->windBulletExplosionAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_exploding_00.png");
+	this->windBulletExplosionAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_exploding_01.png");
+	this->windBulletExplosionAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_exploding_02.png");
+	this->windBulletExplosionAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_exploding_03.png");
+	this->windBulletExplosionAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_exploding_04.png");
+	this->windBulletExplosionAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_exploding_05.png");
+	this->windBulletExplosionAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_exploding_05.png");
+	this->windBulletExplosionAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->windBulletExplosionAnimation->setRestoreOriginalFrame(true);
+	this->windBulletExplosionAnimation->retain();
+
+	ValueMap windBulletExplosionDealDamageInfo;
+	ValueMap windBulletExplosionEndInfo;
+
+	windBulletExplosionDealDamageInfo["21"] = Value(21);
+	windBulletExplosionEndInfo["22"] = Value(22);
+
+	this->windBulletExplosionAnimation->getFrames().at(0)->setUserInfo(windBulletExplosionDealDamageInfo);
+	this->windBulletExplosionAnimation->getFrames().at(6)->setUserInfo(windBulletExplosionEndInfo);
+
+	EventListenerCustom * windBulletExplosionFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, windBulletExplosionDealDamageInfo,windBulletExplosionEndInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == windBulletExplosionDealDamageInfo){
+			Sprite*  windBulletExplosion = (Sprite *)(userData->target);
+
+			Vector < GeneralUnit * > elist = ((Stage1GameplayLayer *)(this->getParent()))->enemyList;
+			for (GeneralUnit * enemy : elist){
+				int deltax = enemy->getPositionX() - windBulletExplosion->getPositionX();
+				int deltay = enemy->getPositionY() - windBulletExplosion->getPositionY();
+
+				double distance = sqrt(deltax*deltax + deltay*deltay);
+				if (distance < (windBulletExplosion->getContentSize().width + enemy->getContentSize().width) * 70 / 100){
+					enemy->getHurtByWind(this->DAMAGE_WIND);
+				}
+			}
+
+
+			//windBulletExplosion->removeFromParent();
+		}
+		if (*userData->userInfo == windBulletExplosionEndInfo){
+			Sprite*  windBulletExplosion = (Sprite *)(userData->target);
+			windBulletExplosion->removeFromParent();
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(windBulletExplosionFrameEventListener, -1);
 
 	//dashing animations would need frame events.
 	this->dashingRightAnimation = Animation::create();
