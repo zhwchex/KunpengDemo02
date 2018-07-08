@@ -1,3 +1,4 @@
+#pragma once
 #include "Stage1GameplayLayer.h"
 #include "HeroSprite.h"
 #include "Stage1Scene.h"
@@ -10,8 +11,8 @@ Stage1GameplayLayer::Stage1GameplayLayer()
 	this->background = Sprite::create("backgrounds/sky_and_water_small.jpg");
 	this->background->setAnchorPoint(Vec2(0,0.5));
 
-	this->waterSurface = Sprite::create("landscapes/water_surface.png");
-	this->addChild(waterSurface,1);
+	this->waterSurface = WaterSurface::create("landscapes/water_surface.png");
+	
 }
 
 
@@ -73,17 +74,39 @@ void Stage1GameplayLayer::onEnter(){
 	Bird_yyh* bird1 = Bird_yyh::create("characters/Bird_yyh/bird1.jpg");
 	bird1->setPosition(300, 200);
 	this->addChild(bird1);
-	Bullet* bullet = Bullet::create(bird1);
-	this->addChild(bullet, 1, "bu");
+	Bullet* bullet1 = Bullet::create(bird1);
+	this->addChild(bullet1, 1, "bu");
 	//bird1->wanderAbout();
 	enemyList.pushBack(bird1);
-	
 
+	Bird_yyh* bird2 = Bird_yyh::create("characters/Bird_yyh/bird1.jpg");
+	bird2->setPosition(700, 200);
+	this->addChild(bird2);
+	Bullet* bullet2 = Bullet::create(bird2);
+	this->addChild(bullet2, 1, "bu");
+	//bird1->wanderAbout();
+	enemyList.pushBack(bird2);
+
+	Bird_yyh* bird3 = Bird_yyh::create("characters/Bird_yyh/bird1.jpg");
+	bird3->setPosition(1100, 200);
+	this->addChild(bird3);
+	Bullet* bullet3 = Bullet::create(bird3);
+	this->addChild(bullet3, 1, "bu");
+	//bird1->wanderAbout();
+	enemyList.pushBack(bird3);
+	
+	Bird_yyh* bird4 = Bird_yyh::create("characters/Bird_yyh/bird1.jpg");
+	bird4->setPosition(1400, 200);
+	this->addChild(bird4);
+	Bullet* bullet4 = Bullet::create(bird3);
+	this->addChild(bullet4, 1, "bu");
+	//bird1->wanderAbout();
+	enemyList.pushBack(bird4);
 
 
 	this->kunpeng->setTag(2);
 	this->addChild(this->kunpeng);
-	
+	this->addChild(waterSurface, 1);
 	Layer::onEnter();
 }
 

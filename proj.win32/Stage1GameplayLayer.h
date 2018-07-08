@@ -6,13 +6,15 @@
 #include "bird_yyh.h"
 #include "Bullet.h"
 #include "FishEnemy1.h"
+#include "WaterSurface.h"
+#include "WindBullet.h"
 
 USING_NS_CC;
 class Stage1GameplayLayer :	public Layer
 {
 public:
 
-	Sprite * waterSurface = nullptr;
+	WaterSurface * waterSurface = nullptr;
 
 	HeroSprite * kunpeng = nullptr;
 	Sprite * background = nullptr;
