@@ -8,6 +8,7 @@
 #include "cocos2d.h"
 #include "GeneralUnit.h"
 #include "WindBullet.h"
+#include "WaterBullet.h"
 
 USING_NS_CC;
 class HeroSprite :	public Sprite
@@ -16,7 +17,7 @@ class HeroSprite :	public Sprite
 public:
 
 
-
+	//十个风弹和对应的爆炸效果
 	const int NUM_OF_WIND_BULLETS = 10;
 	(WindBullet *) windBullets[10];
 	int launchedWindBulletCount = 0;
@@ -25,14 +26,14 @@ public:
 	(Sprite *) windBulletExplosions[10];
 	int windBulletExplosionCount = 0;
 
+	//十个水弹和对应的爆炸效果
 	const int NUM_OF_WATER_BULLETS = 10;
+	(WaterBullet *)waterBullets[10];
+	int launchedWaterBulletCount = 0;
 
-	
-	
 	const int NUM_OF_WATER_BULLET_EXPLOSIONS = 10;
-	(Sprite *)waterBulletExplosions[10];
+	(Sprite *) waterBulletExplosions[10];
 	int waterBulletExplosionCount = 0;
-
 
 
 	int health = 100;
@@ -149,6 +150,7 @@ public:
 	Animation * waterBulletMarchingAnimation;
 	
 	Animation * windBulletExplosionAnimation;
+	Animation * waterBulletExplosionAnimation;
 
 
 	Animation * TransformingFromBirdToFishAnimation;
@@ -177,6 +179,7 @@ public:
 	//主角的运动状态，这些状态与技能施放有关。例如，只有在飞行时才能施放风弹
 	bool facingRight = true;
 	bool facingLeft = false;
+
 	bool inTheAir = true;
 	//bool walking = false;//放弃主角降落在地面并欢快奔跑的构想
 	bool inTheWater = false;

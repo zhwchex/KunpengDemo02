@@ -8,7 +8,7 @@ HeroSprite::HeroSprite()
 	//初始化10个风弹，反复使用它们以节省资源
 	for (int i = 0; i < this->NUM_OF_WIND_BULLETS; i++){
 		WindBullet * wb = WindBullet::create("characters/kunpeng/wind_bullet.png");
-		wb->setPosition(wb->magazineX, wb->magazineY);
+		//wb->setPosition(wb->magazineX, wb->magazineY);
 		wb->retain();
 		//this->getParent()->addChild(wb);
 		this->windBullets[i] = wb;
@@ -20,6 +20,24 @@ HeroSprite::HeroSprite()
 		wbe->retain();
 		//this->getParent()->addChild(wb);
 		this->windBulletExplosions[i] = wbe;
+	}
+
+
+	//初始化10个水弹，反复使用它们以节省资源
+	for (int i = 0; i < this->NUM_OF_WATER_BULLETS; i++){
+		WaterBullet * waterBullet = WaterBullet::create("characters/kunpeng/water_bullet.jpg");
+		//waterBullet->setPosition(wb->magazineX, wb->magazineY);
+		waterBullet->retain();
+		//this->getParent()->addChild(wb);
+		this->waterBullets[i] = waterBullet;
+	}
+	//初始化10个水弹爆炸特效，反复使用它们以节省资源
+	for (int i = 0; i < this->NUM_OF_WATER_BULLET_EXPLOSIONS; i++){
+		Sprite * waterBulletExplosion = Sprite::create("characters/kunpeng/water_bullet_exploding.png");
+		//wb->setPosition(wb->magazineX, wb->magazineY);
+		waterBulletExplosion->retain();
+		//this->getParent()->addChild(wb);
+		this->waterBulletExplosions[i] = waterBulletExplosion;
 	}
 
 	// bird's hovering animation
@@ -326,7 +344,7 @@ HeroSprite::HeroSprite()
 	_eventDispatcher->addEventListenerWithFixedPriority(windBulletFlyingAnimationFrameEventListener,-1);
 
 
-	//风弹爆炸的效果
+	//风弹爆炸的效果。只有第一帧具有攻击判定，其余帧只是播放一下做完爆炸效果。最后一帧将target从父节点移除。
 	this->windBulletExplosionAnimation = Animation::create();
 	this->windBulletExplosionAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_exploding_00.png");
 	this->windBulletExplosionAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_exploding_01.png");
@@ -359,7 +377,7 @@ HeroSprite::HeroSprite()
 				int deltay = enemy->getPositionY() - windBulletExplosion->getPositionY();
 
 				double distance = sqrt(deltax*deltax + deltay*deltay);
-				if (distance < (windBulletExplosion->getContentSize().width + enemy->getContentSize().width) * 70 / 100){
+				if (distance < (windBulletExplosion->getContentSize().width + enemy->getContentSize().width) * 75 / 100){
 					enemy->getHurtByWind(this->DAMAGE_WIND);
 				}
 			}
@@ -724,6 +742,8 @@ HeroSprite::HeroSprite()
 			this->isBird = false;
 			this->isFish = true;
 			this->transformable_BirdToFish = false;
+			this->inTheAir = false;
+			this->inTheWater = true;
 
 
 			if (this->directionToMoveUpRight ||
@@ -788,6 +808,8 @@ HeroSprite::HeroSprite()
 			this->isBird = true;
 			this->isFish = false;
 			this->transformable_FishToBird = false;
+			this->inTheAir = true;
+			this->inTheWater = false;
 
 
 			if (this->directionToMoveUpRight ||
@@ -1132,23 +1154,111 @@ HeroSprite::HeroSprite()
 	this->waterBulletMarchingAnimation->setRestoreOriginalFrame(true);
 	this->waterBulletMarchingAnimation->retain();
 
-	ValueMap waterBulletHitEnemyInfo;
+	ValueMap waterBulletCheckHitEnemyInfo;
+	ValueMap waterBulletEndInfo;
 
-	waterBulletHitEnemyInfo["47"] = Value(47);
+	waterBulletCheckHitEnemyInfo["47"] = Value(47);
+	waterBulletEndInfo["48"] = Value(48);
 
-	this->waterBulletMarchingAnimation->getFrames().at(0)->setUserInfo(waterBulletHitEnemyInfo);
+	this->waterBulletMarchingAnimation->getFrames().at(0)->setUserInfo(waterBulletCheckHitEnemyInfo);
+	this->waterBulletMarchingAnimation->getFrames().at(1)->setUserInfo(waterBulletCheckHitEnemyInfo);
+	this->waterBulletMarchingAnimation->getFrames().at(2)->setUserInfo(waterBulletCheckHitEnemyInfo);
+	this->waterBulletMarchingAnimation->getFrames().at(3)->setUserInfo(waterBulletCheckHitEnemyInfo);
+	this->waterBulletMarchingAnimation->getFrames().at(4)->setUserInfo(waterBulletCheckHitEnemyInfo);
+	this->waterBulletMarchingAnimation->getFrames().at(5)->setUserInfo(waterBulletCheckHitEnemyInfo);
+	this->waterBulletMarchingAnimation->getFrames().at(6)->setUserInfo(waterBulletEndInfo);
 
-	EventListenerCustom * waterBulletFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, waterBulletHitEnemyInfo](EventCustom * event){
+	EventListenerCustom * waterBulletFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, waterBulletCheckHitEnemyInfo, waterBulletEndInfo](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
-		if (*userData->userInfo == waterBulletHitEnemyInfo){
-			for (GeneralUnit * generalEnemy : ((Stage1GameplayLayer *)this->getParent())->enemyList){
-	
+		if (*userData->userInfo == waterBulletCheckHitEnemyInfo){
+			//userData里的target就是正在run这一帧的对象，例如A->runAction(Animate::...)，A就是这里的target
+			WaterBullet*  waterBullet = (WaterBullet *)(userData->target);
+			int waterBulletPositionX = waterBullet->getPositionX();
+			int waterBulletPositionY = waterBullet->getPositionY();
+			//log("Here is windbullet running 1st frame of windbulletflyinganimation. Some data from wb = %d",wb->magazineX);
+			Vector < GeneralUnit * > elist = ((Stage1GameplayLayer *)(this->getParent()))->enemyList;
+			for (GeneralUnit * enemy : elist){
+				int deltax = enemy->getPositionX() - waterBulletPositionX;
+				int deltay = enemy->getPositionY() - waterBulletPositionY;
 
+				double distance = sqrt(deltax*deltax + deltay*deltay);
+				if (distance < waterBullet->getContentSize().width / 2 + enemy->getContentSize().width / 2){
+					int waterBulletExplosionNumber = this->waterBulletExplosionCount % this->NUM_OF_WATER_BULLET_EXPLOSIONS;
+
+					Sprite * waterBulletExplosion = this->waterBulletExplosions[waterBulletExplosionNumber];
+					
+					waterBulletExplosion->setPosition(waterBulletPositionX, waterBulletPositionY);
+					this->getParent()->addChild(waterBulletExplosion);
+					waterBulletExplosion->runAction(Animate::create(this->waterBulletExplosionAnimation));
+
+					this->waterBulletExplosionCount++;
+
+					//enemy->getHurtByPaw(10);
+					
+					waterBullet->removeFromParent();
+					break;
+				}
 			}
+
+		}
+
+		if (*userData->userInfo == waterBulletEndInfo){
+			WaterBullet * waterBullet = (WaterBullet *)(userData->target);
+			waterBullet->removeFromParent();
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(waterBulletFrameEventListener,-1);
+
+
+	//水弹的爆炸特效。第一帧有群攻的攻击判定；接下来的帧是播放效果，不做事；最后一帧将target从parent移除。
+	this->waterBulletExplosionAnimation = Animation::create();
+	this->waterBulletExplosionAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_exploding_00.png");
+	this->waterBulletExplosionAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_exploding_01.png");
+	this->waterBulletExplosionAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_exploding_02.png");
+	this->waterBulletExplosionAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_exploding_03.png");
+	this->waterBulletExplosionAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_exploding_04.png");
+	this->waterBulletExplosionAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_exploding_05.png");
+	this->waterBulletExplosionAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_exploding_06.png");
+	this->waterBulletExplosionAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->waterBulletExplosionAnimation->setRestoreOriginalFrame(true);
+	this->waterBulletExplosionAnimation->retain();
+
+	ValueMap waterBulletExplosionDealDamageInfo;
+	ValueMap waterBulletExplosionEndInfo;
+
+	waterBulletExplosionDealDamageInfo["49"] = Value(49);
+	waterBulletExplosionEndInfo["50"] = Value(50);
+
+	this->waterBulletExplosionAnimation->getFrames().at(0)->setUserInfo(waterBulletExplosionDealDamageInfo);
+	this->waterBulletExplosionAnimation->getFrames().at(6)->setUserInfo(waterBulletExplosionEndInfo);
+
+	EventListenerCustom * waterBulletExplosionFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, waterBulletExplosionDealDamageInfo, waterBulletExplosionEndInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == waterBulletExplosionDealDamageInfo){
+			Sprite*  waterBulletExplosion = (Sprite *)(userData->target);
+
+			Vector < GeneralUnit * > elist = ((Stage1GameplayLayer *)(this->getParent()))->enemyList;
+			for (GeneralUnit * enemy : elist){
+				int deltax = enemy->getPositionX() - waterBulletExplosion->getPositionX();
+				int deltay = enemy->getPositionY() - waterBulletExplosion->getPositionY();
+
+				double distance = sqrt(deltax*deltax + deltay*deltay);
+				if (distance < (waterBulletExplosion->getContentSize().width + enemy->getContentSize().width) * 75 / 100){
+					//enemy->getHurtByWater(this->DAMAGE_VORTEX);//TODO!!!等他们填完再改
+					enemy->getHurtByWind(this->DAMAGE_WIND);
+				}
+			}
+
+
+			//windBulletExplosion->removeFromParent();
+		}
+		if (*userData->userInfo == waterBulletExplosionEndInfo){
+			Sprite*  waterBulletExplosion = (Sprite *)(userData->target);
+			waterBulletExplosion->removeFromParent();
 		}
 	});
 
-
+	_eventDispatcher->addEventListenerWithFixedPriority(waterBulletExplosionFrameEventListener, -1);
 
 	//鱼的近战动画。尚需添加帧事件监听TODO
 	this->finAttackRightAnimation = Animation::create();
@@ -1358,7 +1468,12 @@ void HeroSprite::button1Release(){
 
 }
 void HeroSprite::button2Hit(){
-	this->dash_forBothShapes();
+	if (this->isFish && this->inTheAir){
+		this->transformFromFishToBird();
+	}
+	else{
+		this->dash_forBothShapes();
+	}
 }
 void HeroSprite::button2Release(){
 	//do nothing
