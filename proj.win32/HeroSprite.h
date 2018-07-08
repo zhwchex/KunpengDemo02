@@ -21,13 +21,34 @@ public:
 	(WindBullet *) windBullets[10];
 	int launchedWindBulletCount = 0;
 
+	const int NUM_OF_WIND_BULLET_EXPLOSIONS = 10;
+	(Sprite *) windBulletExplosions[10];
+	int windBulletExplosionCount = 0;
 
+	const int NUM_OF_WATER_BULLETS = 10;
+
+	
+	
+	const int NUM_OF_WATER_BULLET_EXPLOSIONS = 10;
+	(Sprite *)waterBulletExplosions[10];
+	int waterBulletExplosionCount = 0;
 
 
 
 	int health = 100;
 
 	int camp = 1;
+
+
+	int DAMAGE_WIND = 15;
+
+	int DAMAGE_SCRATCH = 50;
+
+	int DAMAGE_VORTEX = 20;
+
+	int DAMAGE_FIN = 40;
+
+	int DAMAGE_CRUSH = 100;
 
 	float TIME_FOR_ANIMATION_FRAME_INTERVAL = 0.1f;
 
@@ -122,9 +143,12 @@ public:
 	Animation * finAttackLeftAnimation;
 	Animation * finAttackLeftAnimation2;
 
+
+	//主角的招式特效
 	Animation * windBulletFlyingAnimation;
 	Animation * waterBulletMarchingAnimation;
-
+	
+	Animation * windBulletExplosionAnimation;
 
 
 	Animation * TransformingFromBirdToFishAnimation;
