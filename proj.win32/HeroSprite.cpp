@@ -40,6 +40,9 @@ HeroSprite::HeroSprite()
 		this->waterBulletExplosions[i] = waterBulletExplosion;
 	}
 
+	//比较大的水花。主角出入水面时在水面处播放一下它，或者比较大的敌人掉进水里时也播放一下它。TODO
+
+
 	// bird's hovering animation
 	this->hoveringRightAnimation = Animation::create();
 	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_right_00.png");
@@ -79,19 +82,25 @@ HeroSprite::HeroSprite()
 	//以下是在第1帧和第3帧上加事件的例子，其中回调函数以lambda函数的形式给出
 	ValueMap hoveringAnimationFrame01info;
 	ValueMap hoveringAnimationFrame03info;
+	ValueMap hoveringAnimationChekcInTheWaterInfo;
+
+
 	hoveringAnimationFrame01info["1"] = Value(1);//除了让该info指向一个新地址外没有别的用处
 	hoveringAnimationFrame03info["2"] = Value(2);//除了让该info指向一个新地址外没有别的用处
+	hoveringAnimationChekcInTheWaterInfo["-1"] = Value(-1);
 	//log("here three = %s,", hoveringAnimationFrame04info["FrameId"].asString());//不知为什么不能输出string，string会变成？？，只能正确输出数字。
 
 	hoveringRightAnimation->getFrames().at(1)->setUserInfo(hoveringAnimationFrame01info);
 	hoveringRightAnimation->getFrames().at(3)->setUserInfo(hoveringAnimationFrame03info);
+	hoveringRightAnimation->getFrames().at(0)->setUserInfo(hoveringAnimationChekcInTheWaterInfo);
+
 
 	hoveringLeftAnimation->getFrames().at(1)->setUserInfo(hoveringAnimationFrame01info);
 	hoveringLeftAnimation->getFrames().at(3)->setUserInfo(hoveringAnimationFrame03info);
+	hoveringLeftAnimation->getFrames().at(0)->setUserInfo(hoveringAnimationChekcInTheWaterInfo);
 
 
-
-	EventListenerCustom * hoveringAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, hoveringAnimationFrame03info, hoveringAnimationFrame01info](EventCustom * event){
+	EventListenerCustom * hoveringAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, hoveringAnimationFrame03info, hoveringAnimationFrame01info, hoveringAnimationChekcInTheWaterInfo](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		//log("Target %p with data %s , if this frame added 03 = %d. ", userData->target, Value(userData->userInfo).getDescription().c_str(), *userData->userInfo == hoveringAnimationFrame03info);
 		//log("Value(userData->userInfo).asString = %s",Value(userData->userInfo).asString());
@@ -100,6 +109,11 @@ HeroSprite::HeroSprite()
 		}
 		if (*userData->userInfo == hoveringAnimationFrame01info){
 			this->setPositionY(this->getPositionY() - 3);
+		}
+		if (*userData->userInfo == hoveringAnimationChekcInTheWaterInfo){
+			if (this->getPositionY() < ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY()){
+				this->transformFromBirdToFish();
+			}
 		}
 
 	});
@@ -126,6 +140,31 @@ HeroSprite::HeroSprite()
 	this->movingUpAnimation->setRestoreOriginalFrame(true);
 	this->movingUpAnimation->retain();
 
+	ValueMap movingCheckIfToTransferBTFInfo;
+	movingCheckIfToTransferBTFInfo["-2"] = Value(-2);
+
+	this->movingUpAnimation->getFrames().at(0)->setUserInfo(movingCheckIfToTransferBTFInfo);
+	this->movingUpAnimation->getFrames().at(1)->setUserInfo(movingCheckIfToTransferBTFInfo);
+	this->movingUpAnimation->getFrames().at(2)->setUserInfo(movingCheckIfToTransferBTFInfo);
+	this->movingUpAnimation->getFrames().at(3)->setUserInfo(movingCheckIfToTransferBTFInfo);
+
+	EventListenerCustom * movingAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, movingCheckIfToTransferBTFInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		//log("Target %p with data %s , if this frame added 03 = %d. ", userData->target, Value(userData->userInfo).getDescription().c_str(), *userData->userInfo == hoveringAnimationFrame03info);
+		//log("Value(userData->userInfo).asString = %s",Value(userData->userInfo).asString());
+		if (*userData->userInfo == movingCheckIfToTransferBTFInfo){
+			if (this->getPositionY() < ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY()){
+				this->transformFromBirdToFish();
+			}
+		}
+
+
+	});
+
+	
+	_eventDispatcher->addEventListenerWithFixedPriority(movingAnimationFrameEventListener, -1);
+
+
 	this->movingDownAnimation = Animation::create();
 	this->movingDownAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_00.jpg");
 	this->movingDownAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_01.jpg");
@@ -134,6 +173,11 @@ HeroSprite::HeroSprite()
 	this->movingDownAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingDownAnimation->setRestoreOriginalFrame(true);
 	this->movingDownAnimation->retain();
+
+	this->movingDownAnimation->getFrames().at(0)->setUserInfo(movingCheckIfToTransferBTFInfo);
+	this->movingDownAnimation->getFrames().at(1)->setUserInfo(movingCheckIfToTransferBTFInfo);
+	this->movingDownAnimation->getFrames().at(2)->setUserInfo(movingCheckIfToTransferBTFInfo);
+	this->movingDownAnimation->getFrames().at(3)->setUserInfo(movingCheckIfToTransferBTFInfo);
 
 	this->movingRightAnimation = Animation::create();
 	this->movingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_00.jpg");
@@ -162,6 +206,11 @@ HeroSprite::HeroSprite()
 	this->movingDownRightAnimation->setRestoreOriginalFrame(true);
 	this->movingDownRightAnimation->retain();
 
+	this->movingDownRightAnimation->getFrames().at(0)->setUserInfo(movingCheckIfToTransferBTFInfo);
+	this->movingDownRightAnimation->getFrames().at(1)->setUserInfo(movingCheckIfToTransferBTFInfo);
+	this->movingDownRightAnimation->getFrames().at(2)->setUserInfo(movingCheckIfToTransferBTFInfo);
+	this->movingDownRightAnimation->getFrames().at(3)->setUserInfo(movingCheckIfToTransferBTFInfo);
+
 	this->movingLeftAnimation = Animation::create();
 	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_00.jpg");
 	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_01.jpg");
@@ -179,6 +228,12 @@ HeroSprite::HeroSprite()
 	this->movingDownLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingDownLeftAnimation->setRestoreOriginalFrame(true);
 	this->movingDownLeftAnimation->retain();
+
+
+	this->movingDownLeftAnimation->getFrames().at(0)->setUserInfo(movingCheckIfToTransferBTFInfo);
+	this->movingDownLeftAnimation->getFrames().at(1)->setUserInfo(movingCheckIfToTransferBTFInfo);
+	this->movingDownLeftAnimation->getFrames().at(2)->setUserInfo(movingCheckIfToTransferBTFInfo);
+	this->movingDownLeftAnimation->getFrames().at(3)->setUserInfo(movingCheckIfToTransferBTFInfo);
 
 	this->movingUpLeftAnimation = Animation::create();
 	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_00.jpg");
@@ -404,24 +459,42 @@ HeroSprite::HeroSprite()
 
 
 	ValueMap dashingRightFrame00Info;
+	ValueMap dashingCkeckIfToTransformInfo;
 	ValueMap dashingRightFrame02Info;
 	ValueMap dashingRightFrame03Info;
 
 	dashingRightFrame00Info["3"] = Value(3);
+	dashingCkeckIfToTransformInfo["-3"] = Value(-3);
 	dashingRightFrame02Info["4"] = Value(4);
 	dashingRightFrame03Info["333"] = Value(333);
 
 	this->dashingRightAnimation->getFrames().at(0)->setUserInfo(dashingRightFrame00Info);
+	this->dashingRightAnimation->getFrames().at(1)->setUserInfo(dashingCkeckIfToTransformInfo);
+
 	this->dashingRightAnimation->getFrames().at(2)->setUserInfo(dashingRightFrame02Info);
 	this->dashingRightAnimation->getFrames().at(3)->setUserInfo(dashingRightFrame03Info);
 
-	EventListenerCustom * dashingRightAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, dashingRightFrame00Info, dashingRightFrame02Info, dashingRightFrame03Info](EventCustom * event){
+	EventListenerCustom * dashingRightAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, dashingRightFrame00Info, dashingCkeckIfToTransformInfo, dashingRightFrame02Info, dashingRightFrame03Info](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == dashingRightFrame00Info){
 			this->disableAllAbilities();
+			if (this->getPositionY() < ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY()){
+				this->enableAllAbilities();
+				this->transformFromBirdToFish();
+			}
 		}
+		if (*userData->userInfo == dashingCkeckIfToTransformInfo){
+			if (this->getPositionY() < ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY()){
+				this->transformFromBirdToFish();
+			}
+		}
+		
 		if (*userData->userInfo == dashingRightFrame02Info){
 			this->enableAllAbilities();
+			if (this->getPositionY() < ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY()){
+
+				this->transformFromBirdToFish();
+			}
 			if (this->directionToMoveUpRight ||
 				this->directionToMoveRight ||
 				this->directionToMoveDownRight ||
@@ -450,6 +523,7 @@ HeroSprite::HeroSprite()
 	this->dashingDownRightAnimation->retain();
 
 	this->dashingDownRightAnimation->getFrames().at(0)->setUserInfo(dashingRightFrame00Info);
+	this->dashingDownRightAnimation->getFrames().at(1)->setUserInfo(dashingCkeckIfToTransformInfo);
 	this->dashingDownRightAnimation->getFrames().at(2)->setUserInfo(dashingRightFrame02Info);
 	this->dashingDownRightAnimation->getFrames().at(3)->setUserInfo(dashingRightFrame03Info);
 
@@ -510,6 +584,8 @@ HeroSprite::HeroSprite()
 	this->dashingDownLeftAnimation->retain();
 
 	this->dashingDownLeftAnimation->getFrames().at(0)->setUserInfo(dashingRightFrame00Info);
+	this->dashingDownLeftAnimation->getFrames().at(1)->setUserInfo(dashingCkeckIfToTransformInfo);
+
 	this->dashingDownLeftAnimation->getFrames().at(2)->setUserInfo(dashingRightFrame02Info);
 	this->dashingDownLeftAnimation->getFrames().at(3)->setUserInfo(dashingRightFrame03Info);
 
