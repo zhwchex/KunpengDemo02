@@ -40,7 +40,36 @@ HeroSprite::HeroSprite()
 		this->waterBulletExplosions[i] = waterBulletExplosion;
 	}
 
-	//比较大的水花。主角出入水面时在水面处播放一下它，或者比较大的敌人掉进水里时也播放一下它。TODO
+	//比较大的水花。主角出入水面时在水面处播放一下它，或者比较大的敌人掉进水里时也播放一下它。需要在结尾调用removeFromParent。TODO
+	this->waterSplashingAnimation_big = Animation::create();
+	this->waterSplashingAnimation_big->addSpriteFrameWithFileName("landscapes/splash_big_00.png");
+	this->waterSplashingAnimation_big->addSpriteFrameWithFileName("landscapes/splash_big_01.png");
+	this->waterSplashingAnimation_big->addSpriteFrameWithFileName("landscapes/splash_big_02.png");
+	this->waterSplashingAnimation_big->addSpriteFrameWithFileName("landscapes/splash_big_03.png");
+	this->waterSplashingAnimation_big->addSpriteFrameWithFileName("landscapes/splash_big_03.png");
+	this->waterSplashingAnimation_big->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->waterSplashingAnimation_big->setRestoreOriginalFrame(true);
+	this->waterSplashingAnimation_big->retain();
+
+	ValueMap waterSplashingEndInfo;
+
+	waterSplashingEndInfo["-3"] = Value(-3);
+
+	this->waterSplashingAnimation_big->getFrames().at(4)->setUserInfo(waterSplashingEndInfo);
+
+	EventListenerCustom * waterSplashingFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, waterSplashingEndInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		//log("Target %p with data %s , if this frame added 03 = %d. ", userData->target, Value(userData->userInfo).getDescription().c_str(), *userData->userInfo == hoveringAnimationFrame03info);
+		//log("Value(userData->userInfo).asString = %s",Value(userData->userInfo).asString());
+		if (*userData->userInfo == waterSplashingEndInfo){
+			userData->target->removeFromParent();
+		}
+
+
+	});
+
+	//将该事件添加到事件分发器
+	_eventDispatcher->addEventListenerWithFixedPriority(waterSplashingFrameEventListener, -1);
 
 
 	// bird's hovering animation
@@ -141,20 +170,23 @@ HeroSprite::HeroSprite()
 	this->movingUpAnimation->retain();
 
 	ValueMap movingCheckIfToTransferBTFInfo;
+
 	movingCheckIfToTransferBTFInfo["-2"] = Value(-2);
 
-	this->movingUpAnimation->getFrames().at(0)->setUserInfo(movingCheckIfToTransferBTFInfo);
-	this->movingUpAnimation->getFrames().at(1)->setUserInfo(movingCheckIfToTransferBTFInfo);
-	this->movingUpAnimation->getFrames().at(2)->setUserInfo(movingCheckIfToTransferBTFInfo);
-	this->movingUpAnimation->getFrames().at(3)->setUserInfo(movingCheckIfToTransferBTFInfo);
+	//this->movingUpAnimation->getFrames().at(0)->setUserInfo(movingCheckIfToTransferBTFInfo);
+	//this->movingUpAnimation->getFrames().at(1)->setUserInfo(movingCheckIfToTransferBTFInfo);
+	//this->movingUpAnimation->getFrames().at(2)->setUserInfo(movingCheckIfToTransferBTFInfo);
+	//this->movingUpAnimation->getFrames().at(3)->setUserInfo(movingCheckIfToTransferBTFInfo);
 
 	EventListenerCustom * movingAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, movingCheckIfToTransferBTFInfo](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		//log("Target %p with data %s , if this frame added 03 = %d. ", userData->target, Value(userData->userInfo).getDescription().c_str(), *userData->userInfo == hoveringAnimationFrame03info);
 		//log("Value(userData->userInfo).asString = %s",Value(userData->userInfo).asString());
 		if (*userData->userInfo == movingCheckIfToTransferBTFInfo){
-			if (this->getPositionY() < ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY()){
+			if (this->getPositionY() - ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY()   < this->getContentSize().height * 45 / 100){
 				this->transformFromBirdToFish();
+				
+
 			}
 		}
 
@@ -459,22 +491,22 @@ HeroSprite::HeroSprite()
 
 
 	ValueMap dashingRightFrame00Info;
-	ValueMap dashingCkeckIfToTransformInfo;
+	ValueMap dashingCheckIfToTransformInfo;
 	ValueMap dashingRightFrame02Info;
 	ValueMap dashingRightFrame03Info;
 
 	dashingRightFrame00Info["3"] = Value(3);
-	dashingCkeckIfToTransformInfo["-3"] = Value(-3);
+	dashingCheckIfToTransformInfo["-33"] = Value(-33);
 	dashingRightFrame02Info["4"] = Value(4);
 	dashingRightFrame03Info["333"] = Value(333);
 
 	this->dashingRightAnimation->getFrames().at(0)->setUserInfo(dashingRightFrame00Info);
-	this->dashingRightAnimation->getFrames().at(1)->setUserInfo(dashingCkeckIfToTransformInfo);
+	this->dashingRightAnimation->getFrames().at(1)->setUserInfo(dashingCheckIfToTransformInfo);
 
 	this->dashingRightAnimation->getFrames().at(2)->setUserInfo(dashingRightFrame02Info);
 	this->dashingRightAnimation->getFrames().at(3)->setUserInfo(dashingRightFrame03Info);
 
-	EventListenerCustom * dashingRightAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, dashingRightFrame00Info, dashingCkeckIfToTransformInfo, dashingRightFrame02Info, dashingRightFrame03Info](EventCustom * event){
+	EventListenerCustom * dashingRightAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, dashingRightFrame00Info, dashingCheckIfToTransformInfo, dashingRightFrame02Info, dashingRightFrame03Info](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == dashingRightFrame00Info){
 			this->disableAllAbilities();
@@ -483,7 +515,7 @@ HeroSprite::HeroSprite()
 				this->transformFromBirdToFish();
 			}
 		}
-		if (*userData->userInfo == dashingCkeckIfToTransformInfo){
+		if (*userData->userInfo == dashingCheckIfToTransformInfo){
 			if (this->getPositionY() < ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY()){
 				this->transformFromBirdToFish();
 			}
@@ -523,7 +555,7 @@ HeroSprite::HeroSprite()
 	this->dashingDownRightAnimation->retain();
 
 	this->dashingDownRightAnimation->getFrames().at(0)->setUserInfo(dashingRightFrame00Info);
-	this->dashingDownRightAnimation->getFrames().at(1)->setUserInfo(dashingCkeckIfToTransformInfo);
+	this->dashingDownRightAnimation->getFrames().at(1)->setUserInfo(dashingCheckIfToTransformInfo);
 	this->dashingDownRightAnimation->getFrames().at(2)->setUserInfo(dashingRightFrame02Info);
 	this->dashingDownRightAnimation->getFrames().at(3)->setUserInfo(dashingRightFrame03Info);
 
@@ -584,7 +616,7 @@ HeroSprite::HeroSprite()
 	this->dashingDownLeftAnimation->retain();
 
 	this->dashingDownLeftAnimation->getFrames().at(0)->setUserInfo(dashingRightFrame00Info);
-	this->dashingDownLeftAnimation->getFrames().at(1)->setUserInfo(dashingCkeckIfToTransformInfo);
+	this->dashingDownLeftAnimation->getFrames().at(1)->setUserInfo(dashingCheckIfToTransformInfo);
 
 	this->dashingDownLeftAnimation->getFrames().at(2)->setUserInfo(dashingRightFrame02Info);
 	this->dashingDownLeftAnimation->getFrames().at(3)->setUserInfo(dashingRightFrame03Info);
@@ -920,23 +952,66 @@ HeroSprite::HeroSprite()
 	this->hoveringRightAnimation_kun->setRestoreOriginalFrame(true);
 	this->hoveringRightAnimation_kun->retain();
 
+	ValueMap hoveringAnimationCheckIfToTransformInfo_kun;
 	ValueMap hoveringAnimationFrame01Info_kun;
 	ValueMap hoveringAnimationFrame03Info_kun;
+
+	hoveringAnimationCheckIfToTransformInfo_kun["-4"] = Value(-4);
 	hoveringAnimationFrame01Info_kun["33"] = Value(33);//除了让该info指向一个新地址外没有别的用处
 	hoveringAnimationFrame03Info_kun["34"] = Value(34);//除了让该info指向一个新地址外没有别的用处
 
+	hoveringRightAnimation_kun->getFrames().at(0)->setUserInfo(hoveringAnimationCheckIfToTransformInfo_kun);
 	hoveringRightAnimation_kun->getFrames().at(1)->setUserInfo(hoveringAnimationFrame01Info_kun);
 	hoveringRightAnimation_kun->getFrames().at(3)->setUserInfo(hoveringAnimationFrame03Info_kun);
 
 
-	EventListenerCustom * hoveringKunAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, hoveringAnimationFrame01Info_kun, hoveringAnimationFrame03Info_kun](EventCustom * event){
+	EventListenerCustom * hoveringKunAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, hoveringAnimationCheckIfToTransformInfo_kun, hoveringAnimationFrame01Info_kun, hoveringAnimationFrame03Info_kun](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == hoveringAnimationCheckIfToTransformInfo_kun){
+			this->moving = false;
+			this->hovering = true;
+			this->dashing = false;
+
+
+			int heightDifference = this->getPositionY() - ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY();
+
+			if (heightDifference > 0){
+				this->fallFromSky_kun();
+			}
+			else if (heightDifference > -this->getContentSize().height * 25 / 100){
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, heightDifference)));
+			}
+			/*
+			if (((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY() - this->getPositionY() < this->getContentSize().height * 25 / 100){
+				//this->transformFromFishToBird();
+				int heightDifference = ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY() - this->getPositionY() - this->getContentSize().height * 35 / 100;
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, heightDifference)));
+			}
+			*/
+		}
 		if (*userData->userInfo == hoveringAnimationFrame01Info_kun){
 			this->setPositionY(this->getPositionY() + 3);
+			int heightDifference = this->getPositionY() - ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY();
+
+			if (heightDifference > 0){
+				this->fallFromSky_kun();
+			}
+			else if (heightDifference > -this->getContentSize().height * 25 / 100){
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, heightDifference)));
+			}
 		}
 		if (*userData->userInfo == hoveringAnimationFrame03Info_kun){
 			this->setPositionY(this->getPositionY() - 3);
+			int heightDifference = this->getPositionY() - ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY();
+
+			if (heightDifference > 0){
+				this->fallFromSky_kun();
+			}
+			else if (heightDifference > -this->getContentSize().height * 25 / 100){
+				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, heightDifference)));
+			}
 		}
+		
 	});
 
 	_eventDispatcher->addEventListenerWithFixedPriority(hoveringKunAnimationFrameEventListener, -1);
@@ -950,6 +1025,7 @@ HeroSprite::HeroSprite()
 	this->hoveringLeftAnimation_kun->setRestoreOriginalFrame(true);
 	this->hoveringLeftAnimation_kun->retain();
 
+	this->hoveringLeftAnimation_kun->getFrames().at(0)->setUserInfo(hoveringAnimationCheckIfToTransformInfo_kun);
 	this->hoveringLeftAnimation_kun->getFrames().at(1)->setUserInfo(hoveringAnimationFrame01Info_kun);
 	this->hoveringLeftAnimation_kun->getFrames().at(3)->setUserInfo(hoveringAnimationFrame03Info_kun);
 
@@ -963,6 +1039,54 @@ HeroSprite::HeroSprite()
 	this->movingRightAnimation_kun->setRestoreOriginalFrame(true);
 	this->movingRightAnimation_kun->retain();
 
+	ValueMap movingCheckIfToStayInWaterInfo;
+
+	movingCheckIfToStayInWaterInfo["-5"] = Value(-5);
+
+	this->movingRightAnimation_kun->getFrames().at(0)->setUserInfo(movingCheckIfToStayInWaterInfo);
+	this->movingRightAnimation_kun->getFrames().at(1)->setUserInfo(movingCheckIfToStayInWaterInfo);
+	this->movingRightAnimation_kun->getFrames().at(2)->setUserInfo(movingCheckIfToStayInWaterInfo);
+	this->movingRightAnimation_kun->getFrames().at(3)->setUserInfo(movingCheckIfToStayInWaterInfo);
+
+	EventListenerCustom * movingKunAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, movingCheckIfToStayInWaterInfo](EventCustom * event){
+		this->moving = true;
+		this->hovering = false;
+		this->dashing = true;
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == movingCheckIfToStayInWaterInfo){
+			if (((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY() - this->getPositionY() < this->getContentSize().height * 20 / 100){
+
+				int heightDifference = this->getPositionY() - ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY();
+
+				if (heightDifference > 0){
+					this->fallFromSky_kun();
+				}
+				else if (heightDifference > -this->getContentSize().height * 25 / 100){
+					//this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, heightDifference)));
+					int distanceToDrop = ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY() - this->getPositionY() - this->getContentSize().height * 25 / 100;
+					this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, distanceToDrop)));
+				}
+
+				/*
+				int difference = ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY() - this->getPositionY() - this->getContentSize().height * 25 / 100;
+				if (this->moving && this->directionToMoveUp ){
+					this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL,Vec2(0,difference)));
+				}
+				else if (this->moving && this->directionToMoveUpRight){
+					this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, difference)));
+				}
+				else if (this->moving && this->directionToMoveUpLeft){
+					this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, difference)));
+				}
+				*/
+
+			}
+		}
+		
+	});
+
+	_eventDispatcher->addEventListenerWithFixedPriority(movingKunAnimationFrameEventListener, -1);
+
 	this->movingUpRightAnimation_kun = Animation::create();
 	this->movingUpRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_upright_00.png");
 	this->movingUpRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_upright_01.png");
@@ -971,6 +1095,11 @@ HeroSprite::HeroSprite()
 	this->movingUpRightAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingUpRightAnimation_kun->setRestoreOriginalFrame(true);
 	this->movingUpRightAnimation_kun->retain();
+
+	this->movingUpRightAnimation_kun->getFrames().at(0)->setUserInfo(movingCheckIfToStayInWaterInfo);
+	this->movingUpRightAnimation_kun->getFrames().at(1)->setUserInfo(movingCheckIfToStayInWaterInfo);
+	this->movingUpRightAnimation_kun->getFrames().at(2)->setUserInfo(movingCheckIfToStayInWaterInfo);
+	this->movingUpRightAnimation_kun->getFrames().at(3)->setUserInfo(movingCheckIfToStayInWaterInfo);
 
 	this->movingDownRightAnimation_kun = Animation::create();
 	this->movingDownRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_downright_00.png");
@@ -981,6 +1110,8 @@ HeroSprite::HeroSprite()
 	this->movingDownRightAnimation_kun->setRestoreOriginalFrame(true);
 	this->movingDownRightAnimation_kun->retain();
 
+
+
 	this->movingLeftAnimation_kun = Animation::create();
 	this->movingLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_left_00.png");
 	this->movingLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_left_01.png");
@@ -990,6 +1121,13 @@ HeroSprite::HeroSprite()
 	this->movingLeftAnimation_kun->setRestoreOriginalFrame(true);
 	this->movingLeftAnimation_kun->retain();
 
+	this->movingLeftAnimation_kun->getFrames().at(0)->setUserInfo(movingCheckIfToStayInWaterInfo);
+	this->movingLeftAnimation_kun->getFrames().at(1)->setUserInfo(movingCheckIfToStayInWaterInfo);
+	this->movingLeftAnimation_kun->getFrames().at(2)->setUserInfo(movingCheckIfToStayInWaterInfo);
+	this->movingLeftAnimation_kun->getFrames().at(3)->setUserInfo(movingCheckIfToStayInWaterInfo);
+
+
+
 	this->movingUpLeftAnimation_kun = Animation::create();
 	this->movingUpLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_upleft_00.png");
 	this->movingUpLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_upleft_01.png");
@@ -998,6 +1136,11 @@ HeroSprite::HeroSprite()
 	this->movingUpLeftAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingUpLeftAnimation_kun->setRestoreOriginalFrame(true);
 	this->movingUpLeftAnimation_kun->retain();
+
+	this->movingUpLeftAnimation_kun->getFrames().at(0)->setUserInfo(movingCheckIfToStayInWaterInfo);
+	this->movingUpLeftAnimation_kun->getFrames().at(1)->setUserInfo(movingCheckIfToStayInWaterInfo);
+	this->movingUpLeftAnimation_kun->getFrames().at(2)->setUserInfo(movingCheckIfToStayInWaterInfo);
+	this->movingUpLeftAnimation_kun->getFrames().at(3)->setUserInfo(movingCheckIfToStayInWaterInfo);
 
 	this->movingDownLeftAnimation_kun = Animation::create();
 	this->movingDownLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_moving_downleft_00.png");
@@ -1031,6 +1174,9 @@ HeroSprite::HeroSprite()
 	this->dashingRightAnimation_kun->getFrames().at(3)->setUserInfo(dashingEndFrameInfo_kun);
 
 	EventListenerCustom * dashingKunAnimationFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, dashingStartFrameInfo_kun, dashingRecoverAllAbilitiesFrameInfo_kun, dashingEndFrameInfo_kun](EventCustom * event){
+		this->dashing = true;
+		this->moving = false;
+		this->hovering = false;
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == dashingStartFrameInfo_kun){
 			this->disableAllAbilities();
@@ -1038,7 +1184,13 @@ HeroSprite::HeroSprite()
 		}
 		if (*userData->userInfo == dashingRecoverAllAbilitiesFrameInfo_kun){
 			this->enableAllAbilities();
-			this->transformable_FishToBird = false;
+			int heightDifference = this->getPositionY() - ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY();
+
+			if (heightDifference > 0){
+				this->dashable = false;
+			}
+
+			//this->transformable_FishToBird = false;
 			if (this->directionToMoveUpRight ||
 				this->directionToMoveRight ||
 				this->directionToMoveDownRight ||
@@ -1484,6 +1636,123 @@ HeroSprite::HeroSprite()
 
 	//鱼飞上天空吐水的动画throwwater？
 
+	//鱼的掉落动画。
+	this->fallingFromSkyRightAnimation = Animation::create();
+	this->fallingFromSkyRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_falling_right_00.png");
+	this->fallingFromSkyRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_falling_right_01.png");
+	this->fallingFromSkyRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_falling_right_02.png");
+	this->fallingFromSkyRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_falling_right_03.png");
+	this->fallingFromSkyRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->fallingFromSkyRightAnimation->setRestoreOriginalFrame(true);
+	this->fallingFromSkyRightAnimation->retain();
+
+	ValueMap fallingFromSkyCheckIfInWaterInfo;
+
+	fallingFromSkyCheckIfInWaterInfo["54"] = Value(54);
+
+	this->fallingFromSkyRightAnimation->getFrames().at(0)->setUserInfo(fallingFromSkyCheckIfInWaterInfo);
+	this->fallingFromSkyRightAnimation->getFrames().at(1)->setUserInfo(fallingFromSkyCheckIfInWaterInfo);
+	this->fallingFromSkyRightAnimation->getFrames().at(2)->setUserInfo(fallingFromSkyCheckIfInWaterInfo);
+	this->fallingFromSkyRightAnimation->getFrames().at(3)->setUserInfo(fallingFromSkyCheckIfInWaterInfo);
+
+	EventListenerCustom * fallingFronSkyFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, fallingFromSkyCheckIfInWaterInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == fallingFromSkyCheckIfInWaterInfo){
+			this->disableAllAbilities();
+			this->spittable = true;
+			this->transformable_FishToBird = true;
+			int heightDifference = this->getPositionY() - ((Stage1GameplayLayer *)(this->getParent()))->waterSurface->getPositionY();
+			if (heightDifference < 0){
+				this->enterWater_kun();
+			}
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(fallingFronSkyFrameEventListener, -1);
+
+
+	this->fallingFromSkyLeftAnimation = Animation::create();
+	this->fallingFromSkyLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_falling_left_00.png");
+	this->fallingFromSkyLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_falling_left_01.png");
+	this->fallingFromSkyLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_falling_left_02.png");
+	this->fallingFromSkyLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_falling_left_03.png");
+	this->fallingFromSkyLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->fallingFromSkyLeftAnimation->setRestoreOriginalFrame(true);
+	this->fallingFromSkyLeftAnimation->retain();
+
+	this->fallingFromSkyLeftAnimation->getFrames().at(0)->setUserInfo(fallingFromSkyCheckIfInWaterInfo);
+	this->fallingFromSkyLeftAnimation->getFrames().at(1)->setUserInfo(fallingFromSkyCheckIfInWaterInfo);
+	this->fallingFromSkyLeftAnimation->getFrames().at(2)->setUserInfo(fallingFromSkyCheckIfInWaterInfo);
+	this->fallingFromSkyLeftAnimation->getFrames().at(3)->setUserInfo(fallingFromSkyCheckIfInWaterInfo);
+
+	//鱼的入水动画。
+	this->enteringIntoWaterRightAnimation = Animation::create();
+	this->enteringIntoWaterRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_entering_water_right_00.png");
+	this->enteringIntoWaterRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_entering_water_right_01.png");
+	this->enteringIntoWaterRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_entering_water_right_02.png");
+	this->enteringIntoWaterRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_entering_water_right_03.png");
+	this->enteringIntoWaterRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_entering_water_right_04.png");
+	this->enteringIntoWaterRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->enteringIntoWaterRightAnimation->setRestoreOriginalFrame(true);
+	this->enteringIntoWaterRightAnimation->retain();
+
+	ValueMap enteringWaterFirstFrameInfo;
+	ValueMap enteringWaterRecoverAllAbilitiesInfo;
+	ValueMap enteringWaterLastFrameInfo;
+
+	enteringWaterFirstFrameInfo["51"] = Value(51);
+	enteringWaterRecoverAllAbilitiesInfo["52"] = Value(52);
+	enteringWaterLastFrameInfo["53"] = Value(53);
+
+	this->enteringIntoWaterRightAnimation->getFrames().at(0)->setUserInfo(enteringWaterFirstFrameInfo);
+	this->enteringIntoWaterRightAnimation->getFrames().at(2)->setUserInfo(enteringWaterRecoverAllAbilitiesInfo);
+	this->enteringIntoWaterRightAnimation->getFrames().at(4)->setUserInfo(enteringWaterLastFrameInfo);
+
+	EventListenerCustom * enteringWaterFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, enteringWaterFirstFrameInfo, enteringWaterRecoverAllAbilitiesInfo, enteringWaterLastFrameInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == enteringWaterFirstFrameInfo){
+			this->disableAllAbilities();
+			Sprite * splash = Sprite::create("landscapes/splash_big_00.png");
+			splash->setPosition(this->getPositionX(), ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY());
+			this->getParent()->addChild(splash);
+			splash->runAction(Animate::create(this->waterSplashingAnimation_big));
+		}
+		if (*userData->userInfo == enteringWaterRecoverAllAbilitiesInfo){
+			this->enableAllAbilities();
+			if (this->directionToMoveUpRight ||
+				this->directionToMoveRight ||
+				this->directionToMoveDownRight ||
+				this->directionToMoveDown ||
+				this->directionToMoveDownLeft ||
+				this->directionToMoveLeft ||
+				this->directionToMoveUpLeft ||
+				this->directionToMoveUp){
+				this->move_kun();
+			}
+		}
+		if (*userData->userInfo == enteringWaterLastFrameInfo){
+			this->hover_kun();
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(enteringWaterFrameEventListener, -1);
+
+
+	this->enteringIntoWaterLeftAnimation = Animation::create();
+	this->enteringIntoWaterLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_entering_water_left_00.png");
+	this->enteringIntoWaterLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_entering_water_left_01.png");
+	this->enteringIntoWaterLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_entering_water_left_02.png");
+	this->enteringIntoWaterLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_entering_water_left_03.png");
+	this->enteringIntoWaterLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_entering_water_left_04.png");
+	this->enteringIntoWaterLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->enteringIntoWaterLeftAnimation->setRestoreOriginalFrame(true);
+	this->enteringIntoWaterLeftAnimation->retain();
+
+	this->enteringIntoWaterLeftAnimation->getFrames().at(0)->setUserInfo(enteringWaterFirstFrameInfo);
+	this->enteringIntoWaterLeftAnimation->getFrames().at(2)->setUserInfo(enteringWaterRecoverAllAbilitiesInfo);
+	this->enteringIntoWaterLeftAnimation->getFrames().at(4)->setUserInfo(enteringWaterLastFrameInfo);
+
+
+
+
 
 }
 
@@ -1559,12 +1828,15 @@ void HeroSprite::button3Hit(){
 
 	//this->getHurtGeneral();//测试过。没问题
 
+	this->enterWater_kun();
+	/*
 	if (this->isFish){
 		this->transformFromFishToBird();
 	}
 	else if (this->isBird){
 		this->transformFromBirdToFish();
 	}
+	*/
 
 }
 void HeroSprite::button3Release(){
@@ -1597,6 +1869,7 @@ void HeroSprite::disableAllAbilities(){
 	this->transformable_FishToBird = false;
 
 	this->vortexAttackable = false;
+	this->spittable = false;
 }
 void HeroSprite::enableAllAbilities(){
 	this->catchable = true;
@@ -1609,6 +1882,7 @@ void HeroSprite::enableAllAbilities(){
 	this->transformable_FishToBird = true;
 
 	this->vortexAttackable = true;
+	this->spittable = true;
 }
 
 void HeroSprite::windAttack(){
@@ -1639,6 +1913,35 @@ void HeroSprite::vortexAttack(){
 
 
 
+
+//鱼从空中掉落的动作。
+void HeroSprite::fallFromSky_kun(){
+	if (this->facingRight){
+		this->stopAllActions();
+		this->runAction(RepeatForever::create(MoveBy::create(1.0f,Vec2(0,-400))));
+		this->runAction(RepeatForever::create(Animate::create(this->fallingFromSkyRightAnimation)));
+	}
+	else {
+		this->stopAllActions();
+		this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, -400))));
+		this->runAction(RepeatForever::create(Animate::create(this->fallingFromSkyLeftAnimation)));
+	}
+}
+
+//鱼的入水动作。包含位移Action和动画。已根据面向决定落水方向（左下？右下？）和落水动画（头往左还是往右？）
+void HeroSprite::enterWater_kun(){
+	if (this->facingRight){
+		this->stopAllActions();
+		this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 1, Vec2(5, -30)), MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 1, Vec2(20, -5)), MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 1, Vec2(10, 0)), nullptr));
+		this->runAction(Animate::create(this->enteringIntoWaterRightAnimation));
+	}
+	else{
+		this->stopAllActions();
+		this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 1, Vec2(-5, -30)), MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 1, Vec2(-20, -5)), MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 1, Vec2(-10, 0)), nullptr));
+		this->runAction(Animate::create(this->enteringIntoWaterLeftAnimation));
+	}
+}
+
 //鸟的抓挠动作（敌人太近时就从法爷转战士）
 void HeroSprite::scratch(){
 	if (this->scratchable){
@@ -1662,6 +1965,7 @@ void HeroSprite::scratch(){
 		}
 	}
 }
+
 
 
 void HeroSprite::scratchRight(){
@@ -1939,14 +2243,28 @@ void HeroSprite::dashDownLeft_kun(){
 
 
 void HeroSprite::transformFromBirdToFish(){
-	this->stopAllActions();
-	this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, -50)), MoveBy::create(0.2f, Vec2(0, -20)), nullptr));
-	this->runAction(Animate::create(this->TransformingFromBirdToFishAnimation));
+	if (this->isBird){
+		this->stopAllActions();
+		this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, -50)), MoveBy::create(0.2f, Vec2(0, -20)), nullptr));
+		this->runAction(Animate::create(this->TransformingFromBirdToFishAnimation));
+		Sprite * bigSplash = Sprite::create("landscapes/splash_big_00.png");
+		bigSplash->setPositionX(this->getPositionX());
+		bigSplash->setPositionY(((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY());
+		this->getParent()->addChild(bigSplash);
+		bigSplash->runAction(Animate::create(this->waterSplashingAnimation_big));
+	}
 }
 void HeroSprite::transformFromFishToBird(){
-	this->stopAllActions();
-	this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, 50)), MoveBy::create(0.2f, Vec2(0, 20)), nullptr));
-	this->runAction(Animate::create(this->TransformingFromFishToBirdAnimation));
+	if (this->isFish){
+		this->stopAllActions();
+		this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, 50)), MoveBy::create(0.2f, Vec2(0, 20)), nullptr));
+		this->runAction(Animate::create(this->TransformingFromFishToBirdAnimation));
+		Sprite * bigSplash = Sprite::create("landscapes/splash_big_00.png");
+		bigSplash->setPositionX(this->getPositionX());
+		bigSplash->setPositionY(((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY());
+		this->getParent()->addChild(bigSplash);
+		bigSplash->runAction(Animate::create(this->waterSplashingAnimation_big));
+	}
 }
 
 
