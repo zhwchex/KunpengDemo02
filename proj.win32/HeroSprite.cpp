@@ -57,10 +57,8 @@ HeroSprite::HeroSprite()
 
 	this->waterSplashingAnimation_big->getFrames().at(4)->setUserInfo(waterSplashingEndInfo);
 
-	EventListenerCustom * waterSplashingFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, waterSplashingEndInfo](EventCustom * event){
+	EventListenerCustom * waterBigSplashingFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, waterSplashingEndInfo](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
-		//log("Target %p with data %s , if this frame added 03 = %d. ", userData->target, Value(userData->userInfo).getDescription().c_str(), *userData->userInfo == hoveringAnimationFrame03info);
-		//log("Value(userData->userInfo).asString = %s",Value(userData->userInfo).asString());
 		if (*userData->userInfo == waterSplashingEndInfo){
 			userData->target->removeFromParent();
 		}
@@ -69,7 +67,7 @@ HeroSprite::HeroSprite()
 	});
 
 	//将该事件添加到事件分发器
-	_eventDispatcher->addEventListenerWithFixedPriority(waterSplashingFrameEventListener, -1);
+	_eventDispatcher->addEventListenerWithFixedPriority(waterBigSplashingFrameEventListener, -1);
 
 
 	// bird's hovering animation
@@ -1755,6 +1753,173 @@ HeroSprite::HeroSprite()
 
 
 
+	//鱼跳入空中吐水球的动画。会有个后坐力。
+	this->spittingRightAnimation = Animation::create();
+	this->spittingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_spitting_waterBall_right_00.png");
+	this->spittingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_spitting_waterBall_right_01.png");
+	this->spittingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_spitting_waterBall_right_02.png");
+	this->spittingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_spitting_waterBall_right_03.png");
+	this->spittingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_spitting_waterBall_right_04.png");
+	this->spittingRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->spittingRightAnimation->setRestoreOriginalFrame(true);
+	this->spittingRightAnimation->retain();
+
+	ValueMap spittingThrowingWaterballInfo;
+	ValueMap spittingEndInfo;
+
+	spittingThrowingWaterballInfo["58"] = Value(58);
+	spittingEndInfo["57"] = Value(57);
+	
+	this->spittingRightAnimation->getFrames().at(2)->setUserInfo(spittingThrowingWaterballInfo);
+	this->spittingRightAnimation->getFrames().at(4)->setUserInfo(spittingEndInfo);
+
+	EventListenerCustom * spittingFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, spittingThrowingWaterballInfo, spittingEndInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == spittingThrowingWaterballInfo){
+			/**
+			if (this->facingLeft){
+				Sprite * waterBall = Sprite::create("characters/kunpeng/water_ball_flying_00.png");
+				waterBall->setPosition(this->getPosition());
+				this->getParent()->addChild(waterBall);
+				waterBall->runAction(MoveBy::create(10, Vec2(-1111, -220)));
+				waterBall->runAction(RepeatForever::create(Animate::create(this->waterBallFlyingAnimation)));
+			}
+			else{
+				Sprite * waterBall = Sprite::create("characters/kunpeng/water_ball_flying_00.png");
+				waterBall->setPosition(this->getPosition());
+				this->getParent()->addChild(waterBall);
+				waterBall->runAction(MoveBy::create(10, Vec2(1111, -220)));
+				waterBall->runAction(Animate::create(this->waterBallFlyingAnimation));//问题在waterBallFlyingAnimation里面
+
+			}
+			*/
+
+			this->createWaterballAndFlyIt();
+			this->spittable = false;
+		}
+		if (*userData->userInfo == spittingEndInfo){
+			if (this->facingLeft){
+				this->facingLeft = false;
+				this->facingRight = true;
+			}
+			else{
+				this->facingLeft = true;
+				this->facingRight = false;
+			}
+			this->fallFromSky_kun();
+		}
+
+
+	});
+
+	//将该事件添加到事件分发器
+	_eventDispatcher->addEventListenerWithFixedPriority(spittingFrameEventListener, -1);
+
+
+	this->spittingLeftAnimation = Animation::create();
+	this->spittingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_spitting_waterBall_left_00.png");
+	this->spittingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_spitting_waterBall_left_01.png");
+	this->spittingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_spitting_waterBall_left_02.png");
+	this->spittingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_spitting_waterBall_left_03.png");
+	this->spittingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_spitting_waterBall_left_04.png");
+	this->spittingLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->spittingLeftAnimation->setRestoreOriginalFrame(true);
+	this->spittingLeftAnimation->retain();
+
+	this->spittingLeftAnimation->getFrames().at(1)->setUserInfo(spittingThrowingWaterballInfo);
+	this->spittingLeftAnimation->getFrames().at(4)->setUserInfo(spittingEndInfo);
+
+
+	//水球飞行的动画。无限循环。水球会受到重力作用逐渐落到水里。
+	this->waterBallFlyingAnimation = Animation::create();
+	this->waterBallFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_ball_flying_00.png");
+	this->waterBallFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_ball_flying_01.png");
+	this->waterBallFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_ball_flying_02.png");
+	this->waterBallFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_ball_flying_03.png");
+	this->waterBallFlyingAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->waterBallFlyingAnimation->setRestoreOriginalFrame(true);
+	this->waterBallFlyingAnimation->retain();
+
+	ValueMap waterBallFlyingCheckIfHitEnemyOrInWaterInfo;
+
+	waterBallFlyingCheckIfHitEnemyOrInWaterInfo["55"] = Value(55);
+
+	this->waterBallFlyingAnimation->getFrames().at(0)->setUserInfo(waterBallFlyingCheckIfHitEnemyOrInWaterInfo);
+	this->waterBallFlyingAnimation->getFrames().at(1)->setUserInfo(waterBallFlyingCheckIfHitEnemyOrInWaterInfo);
+	this->waterBallFlyingAnimation->getFrames().at(2)->setUserInfo(waterBallFlyingCheckIfHitEnemyOrInWaterInfo);
+	this->waterBallFlyingAnimation->getFrames().at(3)->setUserInfo(waterBallFlyingCheckIfHitEnemyOrInWaterInfo);
+
+	EventListenerCustom * waterBallFlyingFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, waterBallFlyingCheckIfHitEnemyOrInWaterInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == waterBallFlyingCheckIfHitEnemyOrInWaterInfo){
+			Sprite * waterBall = (Sprite *)userData->target;
+			int heightDifference = waterBall->getPositionY() - ((Stage1GameplayLayer *)(this->getParent()))->waterSurface->getPositionY();
+			if (heightDifference < 0){
+				Sprite * smallSplash = Sprite::create("landscapes/splash_small_00.png");
+				smallSplash->setPositionX(waterBall->getPositionX());
+				smallSplash->setPositionY(((Stage1GameplayLayer *)(this->getParent()))->waterSurface->getPositionY());
+				this->getParent()->addChild(smallSplash);
+				smallSplash->runAction(Animate::create(this->waterSplashingAnimation_small));
+
+				waterBall->removeFromParent();
+			}
+			else{
+				
+			}
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(waterBallFlyingFrameEventListener, -1);
+
+
+
+
+	//比较小的水花。投掷物掉进水里或打到敌人身上调用一下它。需要在结尾调用removeFromParent。
+	this->waterSplashingAnimation_small = Animation::create();
+	this->waterSplashingAnimation_small->addSpriteFrameWithFileName("landscapes/splash_small_00.png");
+	this->waterSplashingAnimation_small->addSpriteFrameWithFileName("landscapes/splash_small_01.png");
+	this->waterSplashingAnimation_small->addSpriteFrameWithFileName("landscapes/splash_small_02.png");
+	this->waterSplashingAnimation_small->addSpriteFrameWithFileName("landscapes/splash_small_03.png");
+	this->waterSplashingAnimation_small->addSpriteFrameWithFileName("landscapes/splash_small_03.png");
+	this->waterSplashingAnimation_small->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->waterSplashingAnimation_small->setRestoreOriginalFrame(true);
+	this->waterSplashingAnimation_small->retain();
+
+	
+	ValueMap smallSplashingStartInfo;
+	ValueMap smallSplashingEndInfo;
+
+	smallSplashingStartInfo["59"] = Value(59);
+	smallSplashingEndInfo["56"] = Value(56);
+
+	this->waterSplashingAnimation_small->getFrames().at(0)->setUserInfo(smallSplashingStartInfo);
+	this->waterSplashingAnimation_small->getFrames().at(4)->setUserInfo(smallSplashingEndInfo);
+
+	EventListenerCustom * waterSmallSplashingFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, smallSplashingStartInfo, smallSplashingEndInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == smallSplashingStartInfo){
+			Sprite * explosion =(Sprite * ) userData->target;
+			Vector<GeneralUnit *> enemyList = ((Stage1GameplayLayer *)this->getParent())->enemyList;
+			for (GeneralUnit * enemy : enemyList){
+				int deltax = enemy->getPositionX() - explosion->getPositionX();
+				int deltay = enemy->getPositionY() - explosion->getPositionY();
+				double distance = sqrt(pow(deltax,2)+pow(deltay,2));
+				if (distance < (enemy->getContentSize().width + explosion->getContentSize().width) / 2){
+					enemy->getHurtByWind(this->DAMAGE_WATER_BALL);//TODOTODOTODO 疯狂需要改动
+				}
+			}
+		}
+		if (*userData->userInfo == smallSplashingEndInfo){
+			userData->target->removeFromParent();
+		}
+
+
+
+	});
+
+	//将该事件添加到事件分发器
+	_eventDispatcher->addEventListenerWithFixedPriority(waterSmallSplashingFrameEventListener, -1);
+
+
 
 
 }
@@ -1831,7 +1996,10 @@ void HeroSprite::button3Hit(){
 
 	//this->getHurtGeneral();//测试过。没问题
 
-	this->enterWater_kun();
+	//this->enterWater_kun();
+
+	spitWaterballAttack();
+
 	/*
 	if (this->isFish){
 		this->transformFromFishToBird();
@@ -1857,6 +2025,12 @@ HeroSprite * HeroSprite::create(const std::string &filename){
 }
 
 void HeroSprite::getHurtGeneral(){
+	this->stopAllActions();
+	this->runAction(Animate::create(this->gettingHurtGeneralAnimation));
+}
+
+void HeroSprite::getHurtGeneral(int damage){
+	this->health -= damage;
 	this->stopAllActions();
 	this->runAction(Animate::create(this->gettingHurtGeneralAnimation));
 }
@@ -1914,7 +2088,39 @@ void HeroSprite::vortexAttack(){
 	}
 }
 
+void HeroSprite::spitWaterballAttack(){
+	if (this->spittable){
+		if (this->facingLeft){
+			this->stopAllActions();
+			this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(0, 0)), MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(10, 10)), MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(10, 0)), nullptr));
+			this->runAction(Animate::create(this->spittingLeftAnimation));
+			this->spittable = false;
+		}
+		else{
+			this->stopAllActions();
+			this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(0, 0)), MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(-10, 10)), MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(-10, 0)), nullptr));
+			this->runAction(Animate::create(this->spittingRightAnimation));
+			this->spittable = false;
+		}
+	}
+}
 
+void HeroSprite::createWaterballAndFlyIt(){
+	Sprite * waterBall = Sprite::create("characters/kunpeng/water_ball_flying_00.png");
+	waterBall->setPositionY(this->getPositionY());
+	if (this->facingLeft){
+		waterBall->setPositionX(this->getPositionX() - this->getContentSize().width / 2);
+		this->getParent()->addChild(waterBall);
+		waterBall->runAction(JumpBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 10, Vec2(-this->getContentSize().width * 8, -this->getContentSize().width * 3), this->getContentSize().height * 1.5, 1));
+		waterBall->runAction(RepeatForever::create(Animate::create(this->waterBallFlyingAnimation)));
+	}
+	else{
+		waterBall->setPositionX(this->getPositionX() + this->getContentSize().width / 2);
+		this->getParent()->addChild(waterBall);
+		waterBall->runAction(JumpBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 10, Vec2(this->getContentSize().width * 8, -this->getContentSize().width * 3), this->getContentSize().height * 1.5, 1));
+		waterBall->runAction(RepeatForever::create(Animate::create(this->waterBallFlyingAnimation)));
+	}
+}
 
 
 //鱼从空中掉落的动作。
@@ -1923,12 +2129,19 @@ void HeroSprite::fallFromSky_kun(){
 		this->stopAllActions();
 		//this->runAction(RepeatForever::create(MoveBy::create(1.0f,Vec2(0,-400))));
 		//this->runAction(JumpBy::create(1.0f, Vec2(100,-300), 0.0f, 1));
+		
 		this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2::ZERO),
 						MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(5, -5)), 
 						MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL  , Vec2(5, -15)),
 						MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL , Vec2(5, -25)),
 						MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL*10, Vec2(50, -500)),
 						nullptr));
+		
+		/*
+		this->runAction(Sequence::create(DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2),
+			JumpBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 10, Vec2(this->getContentSize().width * 1, -this->getContentSize().width * 3), this->getContentSize().height * 0.6, 1),
+			nullptr));
+		*/
 		this->runAction(RepeatForever::create(Animate::create(this->fallingFromSkyRightAnimation)));
 	}
 	else {

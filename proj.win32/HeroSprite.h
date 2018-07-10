@@ -49,6 +49,8 @@ public:
 
 	int DAMAGE_FIN = 40;
 
+	int DAMAGE_WATER_BALL = 80;
+
 	int DAMAGE_CRUSH = 100;
 
 	float TIME_FOR_ANIMATION_FRAME_INTERVAL = 0.1f;
@@ -149,10 +151,18 @@ public:
 	Animation * enteringIntoWaterRightAnimation;//入水动画。第一帧开始禁掉全能力，播放到一半enable全能力并且如果有方向键就move_kun，最后一帧转入hover_kun。
 	Animation * enteringIntoWaterLeftAnimation;//入水动画。第一帧开始禁掉全能力，播放到一半enable全能力并且如果有方向键就move_kun，最后一帧转入hover_kun。
 
+	Animation * spittingRightAnimation;//名字非常nasty。该动作是在空中吐水球的动作，第一帧鼓起腮帮，第二帧释放水球，接下来是不受控制（可变鹏？）地掉回水里。
+	Animation * spittingLeftAnimation;//名字非常nasty。该动作是在空中吐水球的动作，第一帧鼓起腮帮，第二帧释放水球，接下来是不受控制（可变鹏？）地掉回水里。
+
+
+
+
 	//主角的招式特效
 	Animation * windBulletFlyingAnimation;
 	Animation * waterBulletMarchingAnimation;
 	
+	Animation * waterBallFlyingAnimation;//无限循环播放，落入水里算歇。每帧都判定一下是否攻击到敌人
+
 	Animation * windBulletExplosionAnimation;
 	Animation * waterBulletExplosionAnimation;
 
@@ -356,6 +366,10 @@ public:
 	void pawThrowBoss();//多个重载
 
 	void vortexAttack();
+
+	void spitWaterballAttack();
+
+	void createWaterballAndFlyIt();
 
 	void fallFromSky_kun();
 	void enterWater_kun();
