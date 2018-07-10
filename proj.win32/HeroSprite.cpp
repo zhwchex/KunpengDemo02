@@ -1188,18 +1188,21 @@ HeroSprite::HeroSprite()
 
 			if (heightDifference > 0){
 				this->dashable = false;
+				this->vortexAttackable = false;
+				this->scratchable = false;
 			}
-
-			//this->transformable_FishToBird = false;
-			if (this->directionToMoveUpRight ||
-				this->directionToMoveRight ||
-				this->directionToMoveDownRight ||
-				this->directionToMoveDown ||
-				this->directionToMoveDownLeft ||
-				this->directionToMoveLeft ||
-				this->directionToMoveUpLeft ||
-				this->directionToMoveUp){
-				this->move_kun();
+			else {
+				//this->transformable_FishToBird = false;
+				if (this->directionToMoveUpRight ||
+					this->directionToMoveRight ||
+					this->directionToMoveDownRight ||
+					this->directionToMoveDown ||
+					this->directionToMoveDownLeft ||
+					this->directionToMoveLeft ||
+					this->directionToMoveUpLeft ||
+					this->directionToMoveUp){
+					this->move_kun();
+				}
 			}
 		}
 		if (*userData->userInfo == dashingEndFrameInfo_kun){
@@ -1918,12 +1921,25 @@ void HeroSprite::vortexAttack(){
 void HeroSprite::fallFromSky_kun(){
 	if (this->facingRight){
 		this->stopAllActions();
-		this->runAction(RepeatForever::create(MoveBy::create(1.0f,Vec2(0,-400))));
+		//this->runAction(RepeatForever::create(MoveBy::create(1.0f,Vec2(0,-400))));
+		//this->runAction(JumpBy::create(1.0f, Vec2(100,-300), 0.0f, 1));
+		this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2::ZERO),
+						MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(5, -5)), 
+						MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL  , Vec2(5, -15)),
+						MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL , Vec2(5, -25)),
+						MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL*10, Vec2(50, -500)),
+						nullptr));
 		this->runAction(RepeatForever::create(Animate::create(this->fallingFromSkyRightAnimation)));
 	}
 	else {
 		this->stopAllActions();
-		this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, -400))));
+		//this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, -400))));
+		this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2::ZERO),
+						MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(-5, -5)),
+						MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL , Vec2(-5, -15)),
+						MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL , Vec2(-5, -25)),
+						MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 10, Vec2(-50, -500)),
+						nullptr));
 		this->runAction(RepeatForever::create(Animate::create(this->fallingFromSkyLeftAnimation)));
 	}
 }
