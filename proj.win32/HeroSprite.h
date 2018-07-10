@@ -377,6 +377,7 @@ public:
 
 	void getHurt();//多个重载
 	void getHurtGeneral();
+	void getHurtGeneral(int damage);
 	void getHurtByThunder();//被雷电击中，骨架闪烁+原地震颤
 	void getHurtByFire();//被火球击中，羽毛烧焦闪烁+后退
 	void getHurtByWater();//被水流击中，变落汤鸡+下落

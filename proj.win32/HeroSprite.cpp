@@ -331,6 +331,7 @@ HeroSprite::HeroSprite()
 		}
 		if (*userData->userInfo == blowingRecoverAllAbilitiesInfo){
 			this->enableAllAbilities();
+			this->spittable = false;
 			if (this->directionToMoveUpRight ||
 				this->directionToMoveRight ||
 				this->directionToMoveDownRight ||
@@ -1284,7 +1285,7 @@ HeroSprite::HeroSprite()
 	this->dashingDownLeftAnimation_kun->getFrames().at(3)->setUserInfo(dashingEndFrameInfo_kun);
 
 
-	//鱼的吐漩涡动画。尚需添加帧事件监听
+	//鱼的吐漩涡动画。
 	this->blowingVortexRightAnimation = Animation::create();
 	this->blowingVortexRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_right_00.png");
 	this->blowingVortexRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_right_01.png");
@@ -1660,7 +1661,7 @@ HeroSprite::HeroSprite()
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == fallingFromSkyCheckIfInWaterInfo){
 			this->disableAllAbilities();
-			this->spittable = true;
+			//this->spittable = true;
 			this->transformable_FishToBird = true;
 			int heightDifference = this->getPositionY() - ((Stage1GameplayLayer *)(this->getParent()))->waterSurface->getPositionY();
 			if (heightDifference < 0){
@@ -1830,7 +1831,7 @@ HeroSprite::HeroSprite()
 	this->spittingLeftAnimation->getFrames().at(4)->setUserInfo(spittingEndInfo);
 
 
-	//水球飞行的动画。无限循环。水球会受到重力作用逐渐落到水里。
+	//水球飞行的动画。无限循环。水球会受到重力作用逐渐落到水里。每帧都判断一下是否打到人。
 	this->waterBallFlyingAnimation = Animation::create();
 	this->waterBallFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_ball_flying_00.png");
 	this->waterBallFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_ball_flying_01.png");
@@ -1864,7 +1865,20 @@ HeroSprite::HeroSprite()
 				waterBall->removeFromParent();
 			}
 			else{
-				
+				Vector<GeneralUnit *> enemyList = ((Stage1GameplayLayer *)(this->getParent()))->enemyList;
+				for (GeneralUnit * enemy : enemyList){
+					int deltax = enemy->getPositionX() - waterBall->getPositionX();
+					int deltay = enemy->getPositionY() - waterBall->getPositionY();
+					double distance = sqrt(pow(deltax,2) + pow(deltay,2));
+					if (distance < (enemy->getContentSize().width + waterBall->getContentSize().width) / 2){
+						Sprite * smallSplash = Sprite::create("landscapes/splash_small_00.png");
+						smallSplash->setPosition(waterBall->getPosition());
+						this->getParent()->addChild(smallSplash);
+						smallSplash->runAction(Animate::create(this->waterSplashingAnimation_small));
+						//waterBall->removeFromParent();
+						//break;
+					}
+				}
 			}
 		}
 	});
@@ -1904,7 +1918,7 @@ HeroSprite::HeroSprite()
 				int deltay = enemy->getPositionY() - explosion->getPositionY();
 				double distance = sqrt(pow(deltax,2)+pow(deltay,2));
 				if (distance < (enemy->getContentSize().width + explosion->getContentSize().width) / 2){
-					enemy->getHurtByWind(this->DAMAGE_WATER_BALL);//TODOTODOTODO 疯狂需要改动
+					enemy->getHurtByWind(this->DAMAGE_WATER_BALL);//TODOTODOTODO 疯狂需要改动。此处需要改成getHurtByWater
 				}
 			}
 		}
@@ -2046,7 +2060,7 @@ void HeroSprite::disableAllAbilities(){
 	this->transformable_FishToBird = false;
 
 	this->vortexAttackable = false;
-	this->spittable = false;
+	//this->spittable = false;
 }
 void HeroSprite::enableAllAbilities(){
 	this->catchable = true;
