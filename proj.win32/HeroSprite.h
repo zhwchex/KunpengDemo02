@@ -130,6 +130,11 @@ public:
 	Animation * scratchingLeftAnimation;
 	Animation * scratchingLeftAnimation2;
 
+	Animation * scratchLeftBladeEffectAnimation;
+	Animation * scratchLeftBladeEffect2Animation;
+	Animation * scratchRightBladeEffectAnimation;
+	Animation * scratchRightBladeEffect2Animation;
+
 	Animation * tryCatchAnimation;//试图使用一下投技
 	Animation * holdingObjectAnimation;//抓住物品不放的动画
 	Animation * holdingEnemyAnimation;//抓住敌人不放的动画
@@ -153,6 +158,11 @@ public:
 
 	Animation * spittingRightAnimation;//名字非常nasty。该动作是在空中吐水球的动作，第一帧鼓起腮帮，第二帧释放水球，接下来是不受控制（可变鹏？）地掉回水里。
 	Animation * spittingLeftAnimation;//名字非常nasty。该动作是在空中吐水球的动作，第一帧鼓起腮帮，第二帧释放水球，接下来是不受控制（可变鹏？）地掉回水里。
+
+	Animation * finLeftBladeEffectAnimation;
+	Animation * finLeftBladeEffect2Animation;
+	Animation * finRightBladeEffectAnimation;
+	Animation * finRightBladeEffect2Animation;
 
 
 

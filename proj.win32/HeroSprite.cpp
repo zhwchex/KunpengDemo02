@@ -684,11 +684,44 @@ HeroSprite::HeroSprite()
 			}
 		}
 		if (*userData->userInfo == scratchingLoseAllAbilitiesInfo){
-			log("attacking at frame2");
+			log("scratch-attacking at frame2");
+
 			if (this->scratchingType == 1){
+				if (this->facingLeft){
+					//制造type为1，面向左边的刀光
+					Sprite * bladeEffect = Sprite::create("characters/kunpeng/peng_scratch_left_blade_effect_00.png");
+					bladeEffect->setPositionX(this->getPositionX() - this->getContentSize().width/2);
+					bladeEffect->setPositionY(this->getPositionY());
+					this->getParent()->addChild(bladeEffect);
+					bladeEffect->runAction(Animate::create(this->scratchLeftBladeEffectAnimation));
+				}
+				else{
+					//制造type为1，面向右边的刀光
+					Sprite * bladeEffect = Sprite::create("characters/kunpeng/peng_scratch_right_blade_effect_00.png");
+					bladeEffect->setPositionX(this->getPositionX() + this->getContentSize().width / 2);
+					bladeEffect->setPositionY(this->getPositionY());
+					this->getParent()->addChild(bladeEffect);
+					bladeEffect->runAction(Animate::create(this->scratchRightBladeEffectAnimation));
+				}
 				this->scratchingType = 2;
 			}
 			else if (this->scratchingType == 2){
+				if (this->facingLeft){
+					//制造type为2，面向左边的刀光
+					Sprite * bladeEffect = Sprite::create("characters/kunpeng/peng_scratch_left_blade_effect2_00.png");
+					bladeEffect->setPositionX(this->getPositionX() - this->getContentSize().width / 2);
+					bladeEffect->setPositionY(this->getPositionY());
+					this->getParent()->addChild(bladeEffect);
+					bladeEffect->runAction(Animate::create(this->scratchLeftBladeEffect2Animation));
+				}
+				else{
+					//制造type为2，面向右边的刀光
+					Sprite * bladeEffect = Sprite::create("characters/kunpeng/peng_scratch_right_blade_effect2_00.png");
+					bladeEffect->setPositionX(this->getPositionX() + this->getContentSize().width / 2);
+					bladeEffect->setPositionY(this->getPositionY());
+					this->getParent()->addChild(bladeEffect);
+					bladeEffect->runAction(Animate::create(this->scratchRightBladeEffect2Animation));
+				}
 				this->scratchingType = 1;
 			}
 		}
@@ -767,6 +800,99 @@ HeroSprite::HeroSprite()
 	this->scratchingLeftAnimation2->getFrames().at(4)->setUserInfo(scratchingToHoveringInfo);
 
 
+	//抓挠的刀光动画。 TM这要画死我
+	this->scratchLeftBladeEffectAnimation = Animation::create();
+	this->scratchLeftBladeEffectAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratch_left_blade_effect_00.png");
+	this->scratchLeftBladeEffectAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratch_left_blade_effect_01.png");
+	this->scratchLeftBladeEffectAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratch_left_blade_effect_02.png");
+	this->scratchLeftBladeEffectAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratch_left_blade_effect_03.png");
+	this->scratchLeftBladeEffectAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->scratchLeftBladeEffectAnimation->setRestoreOriginalFrame(true);
+	this->scratchLeftBladeEffectAnimation->retain();
+
+	ValueMap scratchBladeEffectDealDamageInfo;
+	ValueMap scratchBladeEffectEndInfo;
+
+	scratchBladeEffectDealDamageInfo["-6"] = Value(-6);
+	scratchBladeEffectEndInfo["-7"] = Value(-7);
+
+	this->scratchLeftBladeEffectAnimation->getFrames().at(0)->setUserInfo(scratchBladeEffectDealDamageInfo);
+	this->scratchLeftBladeEffectAnimation->getFrames().at(3)->setUserInfo(scratchBladeEffectEndInfo);
+
+	EventListenerCustom * scratchBladeEffectFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, scratchBladeEffectDealDamageInfo, scratchBladeEffectEndInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == scratchBladeEffectDealDamageInfo){
+			Sprite*  bladeEffect = (Sprite *)(userData->target);
+
+			Vector < GeneralUnit * > elist = ((Stage1GameplayLayer *)(this->getParent()))->enemyList;
+			for (GeneralUnit * enemy : elist){
+				int deltax = enemy->getPositionX() - bladeEffect->getPositionX();
+				int deltay = enemy->getPositionY() - bladeEffect->getPositionY();
+
+				double distance = sqrt(deltax*deltax + deltay*deltay);
+				if (distance < (bladeEffect->getContentSize().width + enemy->getContentSize().width) * 60 / 100){
+					enemy->getHurtByWind(this->DAMAGE_SCRATCH);//疯狂要改。
+				}
+			}
+
+
+			//windBulletExplosion->removeFromParent();
+		}
+		if (*userData->userInfo == scratchBladeEffectEndInfo){
+			Sprite*  bladeEffect = (Sprite *)(userData->target);
+			bladeEffect->removeFromParent();
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(scratchBladeEffectFrameEventListener, -1);
+
+
+	this->scratchLeftBladeEffect2Animation = Animation::create();
+	this->scratchLeftBladeEffect2Animation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratch_left_blade_effect2_00.png");
+	this->scratchLeftBladeEffect2Animation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratch_left_blade_effect2_01.png");
+	this->scratchLeftBladeEffect2Animation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratch_left_blade_effect2_02.png");
+	this->scratchLeftBladeEffect2Animation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratch_left_blade_effect2_03.png");
+	this->scratchLeftBladeEffect2Animation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->scratchLeftBladeEffect2Animation->setRestoreOriginalFrame(true);
+	this->scratchLeftBladeEffect2Animation->retain();
+
+	this->scratchLeftBladeEffect2Animation->getFrames().at(0)->setUserInfo(scratchBladeEffectDealDamageInfo);
+	this->scratchLeftBladeEffect2Animation->getFrames().at(3)->setUserInfo(scratchBladeEffectEndInfo);
+
+	this->scratchRightBladeEffectAnimation = Animation::create();
+	this->scratchRightBladeEffectAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratch_right_blade_effect_00.png");
+	this->scratchRightBladeEffectAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratch_right_blade_effect_01.png");
+	this->scratchRightBladeEffectAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratch_right_blade_effect_02.png");
+	this->scratchRightBladeEffectAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratch_right_blade_effect_03.png");
+	this->scratchRightBladeEffectAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->scratchRightBladeEffectAnimation->setRestoreOriginalFrame(true);
+	this->scratchRightBladeEffectAnimation->retain();
+
+	this->scratchRightBladeEffectAnimation->getFrames().at(0)->setUserInfo(scratchBladeEffectDealDamageInfo);
+	this->scratchRightBladeEffectAnimation->getFrames().at(3)->setUserInfo(scratchBladeEffectEndInfo);
+
+	this->scratchRightBladeEffect2Animation = Animation::create();
+	this->scratchRightBladeEffect2Animation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratch_right_blade_effect2_00.png");
+	this->scratchRightBladeEffect2Animation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratch_right_blade_effect2_01.png");
+	this->scratchRightBladeEffect2Animation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratch_right_blade_effect2_02.png");
+	this->scratchRightBladeEffect2Animation->addSpriteFrameWithFileName("characters/kunpeng/peng_scratch_right_blade_effect2_03.png");
+	this->scratchRightBladeEffect2Animation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->scratchRightBladeEffect2Animation->setRestoreOriginalFrame(true);
+	this->scratchRightBladeEffect2Animation->retain();
+
+	this->scratchRightBladeEffect2Animation->getFrames().at(0)->setUserInfo(scratchBladeEffectDealDamageInfo);
+	this->scratchRightBladeEffect2Animation->getFrames().at(3)->setUserInfo(scratchBladeEffectEndInfo);
+
+
+
+
+
+
+
+
+
+
+
+	//受伤动画
 	this->gettingHurtGeneralAnimation = Animation::create();
 	this->gettingHurtGeneralAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_getting_hurt_general_00.png");
 	this->gettingHurtGeneralAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_getting_hurt_general_01.png");
@@ -940,8 +1066,98 @@ HeroSprite::HeroSprite()
 
 
 
+	//鱼鳍的刀光动画。
+	this->finRightBladeEffectAnimation = Animation::create();
+	this->finRightBladeEffectAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_finAttack_right_blade_effect_00.png");
+	this->finRightBladeEffectAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_finAttack_right_blade_effect_01.png");
+	this->finRightBladeEffectAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_finAttack_right_blade_effect_02.png");
+	this->finRightBladeEffectAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_finAttack_right_blade_effect_03.png");
+	this->finRightBladeEffectAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->finRightBladeEffectAnimation->setRestoreOriginalFrame(true);
+	this->finRightBladeEffectAnimation->retain();
 
-	//Fish's hovering animation
+	ValueMap finAttackBladeEffectDealDamageInfo;
+	ValueMap finAttackBladeEffectEndInfo;
+
+	finAttackBladeEffectDealDamageInfo["60"] = Value(60);
+	finAttackBladeEffectEndInfo["61"] = Value(61);
+
+	this->finRightBladeEffectAnimation->getFrames().at(0)->setUserInfo(finAttackBladeEffectDealDamageInfo);
+	this->finRightBladeEffectAnimation->getFrames().at(3)->setUserInfo(finAttackBladeEffectEndInfo);
+
+	EventListenerCustom * finAttackBladeEffectFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, finAttackBladeEffectDealDamageInfo, finAttackBladeEffectEndInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == finAttackBladeEffectDealDamageInfo){
+			Sprite*  finAttackbladeEffect = (Sprite *)(userData->target);
+
+			Vector < GeneralUnit * > elist = ((Stage1GameplayLayer *)(this->getParent()))->enemyList;
+			for (GeneralUnit * enemy : elist){
+				int deltax = enemy->getPositionX() - finAttackbladeEffect->getPositionX();
+				int deltay = enemy->getPositionY() - finAttackbladeEffect->getPositionY();
+
+				double distance = sqrt(deltax*deltax + deltay*deltay);
+				if (distance < (finAttackbladeEffect->getContentSize().width + enemy->getContentSize().width) * 60 / 100){
+					enemy->getHurtByWind(this->DAMAGE_SCRATCH);//疯狂要改。
+				}
+			}
+
+
+			//windBulletExplosion->removeFromParent();
+		}
+		if (*userData->userInfo == finAttackBladeEffectEndInfo){
+			Sprite*  finAttackbladeEffect = (Sprite *)(userData->target);
+			finAttackbladeEffect->removeFromParent();
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(finAttackBladeEffectFrameEventListener, -1);
+
+
+
+	this->finRightBladeEffect2Animation = Animation::create();
+	this->finRightBladeEffect2Animation->addSpriteFrameWithFileName("characters/kunpeng/kun_finAttack_right_blade_effect2_00.png");
+	this->finRightBladeEffect2Animation->addSpriteFrameWithFileName("characters/kunpeng/kun_finAttack_right_blade_effect2_01.png");
+	this->finRightBladeEffect2Animation->addSpriteFrameWithFileName("characters/kunpeng/kun_finAttack_right_blade_effect2_02.png");
+	this->finRightBladeEffect2Animation->addSpriteFrameWithFileName("characters/kunpeng/kun_finAttack_right_blade_effect2_03.png");
+	this->finRightBladeEffect2Animation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->finRightBladeEffect2Animation->setRestoreOriginalFrame(true);
+	this->finRightBladeEffect2Animation->retain();
+
+	this->finRightBladeEffect2Animation->getFrames().at(0)->setUserInfo(finAttackBladeEffectDealDamageInfo);
+	this->finRightBladeEffect2Animation->getFrames().at(3)->setUserInfo(finAttackBladeEffectEndInfo);
+
+
+
+	this->finLeftBladeEffectAnimation = Animation::create();
+	this->finLeftBladeEffectAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_finAttack_left_blade_effect_00.png");
+	this->finLeftBladeEffectAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_finAttack_left_blade_effect_01.png");
+	this->finLeftBladeEffectAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_finAttack_left_blade_effect_02.png");
+	this->finLeftBladeEffectAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_finAttack_left_blade_effect_03.png");
+	this->finLeftBladeEffectAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->finLeftBladeEffectAnimation->setRestoreOriginalFrame(true);
+	this->finLeftBladeEffectAnimation->retain();
+
+	this->finLeftBladeEffectAnimation->getFrames().at(0)->setUserInfo(finAttackBladeEffectDealDamageInfo);
+	this->finLeftBladeEffectAnimation->getFrames().at(3)->setUserInfo(finAttackBladeEffectEndInfo);
+
+
+
+
+	this->finLeftBladeEffect2Animation = Animation::create();
+	this->finLeftBladeEffect2Animation->addSpriteFrameWithFileName("characters/kunpeng/kun_finAttack_left_blade_effect2_00.png");
+	this->finLeftBladeEffect2Animation->addSpriteFrameWithFileName("characters/kunpeng/kun_finAttack_left_blade_effect2_01.png");
+	this->finLeftBladeEffect2Animation->addSpriteFrameWithFileName("characters/kunpeng/kun_finAttack_left_blade_effect2_02.png");
+	this->finLeftBladeEffect2Animation->addSpriteFrameWithFileName("characters/kunpeng/kun_finAttack_left_blade_effect2_03.png");
+	this->finLeftBladeEffect2Animation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->finLeftBladeEffect2Animation->setRestoreOriginalFrame(true);
+	this->finLeftBladeEffect2Animation->retain();
+
+	this->finLeftBladeEffect2Animation->getFrames().at(0)->setUserInfo(finAttackBladeEffectDealDamageInfo);
+	this->finLeftBladeEffect2Animation->getFrames().at(3)->setUserInfo(finAttackBladeEffectEndInfo);
+
+
+
+
+	//鱼的悬浮动画
 	this->hoveringRightAnimation_kun = Animation::create();
 	this->hoveringRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_facing_right_00.png");
 	this->hoveringRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_facing_right_01.png");
@@ -1551,9 +1767,46 @@ HeroSprite::HeroSprite()
 		if (*userData->userInfo == finAttackingLoseAllAbilitiesInfo){
 			log("attacking at frame2");
 			if (this->finAttackingType == 1){
+
+				if (this->facingLeft){
+					//制造type为1，面向左边的刀光
+					Sprite * finAttackbladeEffect = Sprite::create("characters/kunpeng/kun_finAttack_left_blade_effect_00.png");
+					finAttackbladeEffect->setPositionX(this->getPositionX() - this->getContentSize().width / 2);
+					finAttackbladeEffect->setPositionY(this->getPositionY());
+					this->getParent()->addChild(finAttackbladeEffect);
+					finAttackbladeEffect->runAction(Animate::create(this->finLeftBladeEffectAnimation));
+				}
+				else{
+					//制造type为1，面向右边的刀光
+					Sprite * finAttackbladeEffect = Sprite::create("characters/kunpeng/kun_finAttack_right_blade_effect_00.png");
+					finAttackbladeEffect->setPositionX(this->getPositionX() + this->getContentSize().width / 2);
+					finAttackbladeEffect->setPositionY(this->getPositionY());
+					this->getParent()->addChild(finAttackbladeEffect);
+					finAttackbladeEffect->runAction(Animate::create(this->finRightBladeEffectAnimation));
+				}
+
 				this->finAttackingType = 2;
 			}
 			else if (this->finAttackingType == 2){
+
+				if (this->facingLeft){
+					//制造type为2，面向左边的刀光
+					Sprite * finAttackbladeEffect = Sprite::create("characters/kunpeng/kun_finAttack_left_blade_effect2_00.png");
+					finAttackbladeEffect->setPositionX(this->getPositionX() - this->getContentSize().width / 2);
+					finAttackbladeEffect->setPositionY(this->getPositionY());
+					this->getParent()->addChild(finAttackbladeEffect);
+					finAttackbladeEffect->runAction(Animate::create(this->finLeftBladeEffect2Animation));
+				}
+				else{
+					//制造type为2，面向右边的刀光
+					Sprite * finAttackbladeEffect = Sprite::create("characters/kunpeng/kun_finAttack_right_blade_effect2_00.png");
+					finAttackbladeEffect->setPositionX(this->getPositionX() + this->getContentSize().width / 2);
+					finAttackbladeEffect->setPositionY(this->getPositionY());
+					this->getParent()->addChild(finAttackbladeEffect);
+					finAttackbladeEffect->runAction(Animate::create(this->finRightBladeEffect2Animation));
+				}
+
+
 				this->finAttackingType = 1;
 			}
 		}
@@ -1945,49 +2198,56 @@ HeroSprite::~HeroSprite()
 
 
 void HeroSprite::button1Hit(){
-	Vector<GeneralUnit *> enemyList1 = ((Stage1GameplayLayer *)this->getParent())->enemyList;
-	bool enemyWithinScratch = false;
-	for (GeneralUnit * enemy1 : enemyList1){
-		int enemy_x = enemy1->getPositionX();
-		int enemy_y = enemy1->getPositionY();
-		if (enemy_y - this->getPositionY() < 50 && enemy_y - this->getPositionY() > -50){
-			if (this->facingRight){
-				if (enemy_x - this->getPositionX() < 100 && enemy_x - this->getPositionX() > 0){
-					enemyWithinScratch = true;
-					break;
+
+	if (this->isFish && this->getPositionY() - ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY() > 0){
+		spitWaterballAttack();
+	}
+	else{
+
+		Vector<GeneralUnit *> enemyList1 = ((Stage1GameplayLayer *)this->getParent())->enemyList;
+		bool enemyWithinScratch = false;
+		for (GeneralUnit * enemy1 : enemyList1){
+			int enemy_x = enemy1->getPositionX();
+			int enemy_y = enemy1->getPositionY();
+			if (enemy_y - this->getPositionY() < 50 && enemy_y - this->getPositionY() > -50){
+				if (this->facingRight){
+					if (enemy_x - this->getPositionX() < 100 && enemy_x - this->getPositionX() > 0){
+						enemyWithinScratch = true;
+						break;
+					}
 				}
-			}
-			else if (this->facingLeft){
-				if (enemy_x - this->getPositionX() > -100 && enemy_x - this->getPositionX() < 0){
-					enemyWithinScratch = true;
-					break;
+				else if (this->facingLeft){
+					if (enemy_x - this->getPositionX() > -100 && enemy_x - this->getPositionX() < 0){
+						enemyWithinScratch = true;
+						break;
+					}
+				}
+				else{
+					continue;
 				}
 			}
 			else{
 				continue;
 			}
+
+
+		}
+		if (enemyWithinScratch){
+			if (this->isBird){
+				this->scratch();
+			}
+			else if (this->isFish){
+				this->finAttack();
+			}
+
 		}
 		else{
-			continue;
-		}
-
-
-	}
-	if (enemyWithinScratch){
-		if (this->isBird){
-			this->scratch();
-		}
-		else if (this->isFish){
-			this->finAttack();
-		}
-
-	}
-	else{
-		if (this->isBird){
-			this->windAttack();
-		}
-		else if (this->isFish){
-			this->vortexAttack();
+			if (this->isBird){
+				this->windAttack();
+			}
+			else if (this->isFish){
+				this->vortexAttack();
+			}
 		}
 	}
 }
@@ -1995,7 +2255,7 @@ void HeroSprite::button1Release(){
 
 }
 void HeroSprite::button2Hit(){
-	if (this->isFish && this->inTheAir){
+	if (this->isFish && this->getPositionY() - ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY() > 0){
 		this->transformFromFishToBird();
 	}
 	else{
@@ -2012,16 +2272,16 @@ void HeroSprite::button3Hit(){
 
 	//this->enterWater_kun();
 
-	spitWaterballAttack();
+	//spitWaterballAttack();
 
-	/*
+	
 	if (this->isFish){
 		this->transformFromFishToBird();
 	}
 	else if (this->isBird){
 		this->transformFromBirdToFish();
 	}
-	*/
+	
 
 }
 void HeroSprite::button3Release(){
