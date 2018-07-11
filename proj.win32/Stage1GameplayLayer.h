@@ -8,6 +8,7 @@
 #include "FishEnemy1.h"
 #include "WaterSurface.h"
 #include "WindBullet.h"
+#include "Zhurong.h"
 
 USING_NS_CC;
 class Stage1GameplayLayer :	public Layer

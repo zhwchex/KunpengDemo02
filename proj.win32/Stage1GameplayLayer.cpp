@@ -5,6 +5,7 @@
 
 #include "Bullet.h"
 
+
 Stage1GameplayLayer::Stage1GameplayLayer()
 {
 	this->kunpeng = HeroSprite::create("characters/kunpeng/kunpeng.jpg");
@@ -65,12 +66,14 @@ void Stage1GameplayLayer::onEnter(){
 	this->addChild(enemyYYH);
 	*/
 
+	/*
 	GeneralUnit *fish = FishEnemy1::create("enemyfish/enemyfish.png");
 	fish->setPosition(Vec2(500, 0));
 	this->addChild(fish);
 	enemyList.pushBack(fish);
-
+	*/
 	
+	/*
 	Bird_yyh* bird1 = Bird_yyh::create("characters/Bird_yyh/bird1.jpg");
 	bird1->setPosition(300, 200);
 	this->addChild(bird1);
@@ -102,7 +105,13 @@ void Stage1GameplayLayer::onEnter(){
 	this->addChild(bullet4, 1, "bu");
 	//bird1->wanderAbout();
 	enemyList.pushBack(bird4);
-
+	*/
+	
+	Zhurong * zhurong = Zhurong::create("characters/zhurong/walking_left_while_facing_left_00.png");
+	zhurong->setPosition(1800, 100);
+	this->addChild(zhurong);
+	enemyList.pushBack(zhurong);
+	
 
 	this->kunpeng->setTag(2);
 	this->addChild(this->kunpeng);

@@ -921,7 +921,8 @@ HeroSprite::HeroSprite()
 		if (*userData->userInfo == gettingHurtGeneralEndInfo){
 			//log("recovering from getting hurt");
 			this->enableAllAbilities();
-			this->hover();
+			if (this->isBird) this->hover();
+			else this->hover_kun();
 			if (this->directionToMoveUpRight ||
 				this->directionToMoveRight ||
 				this->directionToMoveDownRight ||
@@ -930,7 +931,7 @@ HeroSprite::HeroSprite()
 				this->directionToMoveLeft ||
 				this->directionToMoveUpLeft ||
 				this->directionToMoveUp){
-				this->move();
+				this->move_forBothShapes();
 			}
 		}
 	});
