@@ -62,14 +62,14 @@ public:
 
 	int DISTANCE_DURING_SCRATCHING = 20;
 
-	int DISTANCE_AIR_DASHING = 200;
-	int DISTANCE_AIR_DASHING_BRAKING = 20;
+	int DISTANCE_AIR_DASHING = 150;
+	int DISTANCE_AIR_DASHING_BRAKING = 70;
 	int DISTANCE_WATER_DASHING = 120;
 	int DISTANCE_WATER_DASHING_BRAKING = 60;
 
-	float TIME_FOR_AIR_DASHING = 0.3f;
-	float TIME_FOR_AIR_DASHING_BRAKING = 0.2f;
-	float TIME_FOR_WATER_DASHING = 0.2f;
+	float TIME_FOR_AIR_DASHING = 0.1f;
+	float TIME_FOR_AIR_DASHING_BRAKING = 0.3f;
+	float TIME_FOR_WATER_DASHING = 0.1f;
 	float TIME_FOR_WATER_DASHING_BRAKING = 0.3f;
 
 	int scratchingType = 1;
@@ -135,13 +135,13 @@ public:
 	Animation * scratchRightBladeEffectAnimation;
 	Animation * scratchRightBladeEffect2Animation;
 
-	Animation * tryCatchAnimation;//试图使用一下投技
+	Animation * tryCatchingAnimation;//试图使用一下投技
 	Animation * holdingObjectAnimation;//抓住物品不放的动画
 	Animation * holdingEnemyAnimation;//抓住敌人不放的动画
 	Animation * throwingObjectAnimation;//扔出物品的动画
-	Animation * throwingEnemyAnimationi;//对小兵使用投技的动画
+	Animation * slamDunkingEnemyAnimationi;//对小兵使用投技的动画
 
-	Animation * throwingBossAnimation;//对Boss使用投技的动画
+	Animation * slamDunkingBossAnimation;//对Boss使用投技的动画
 
 	//鱼技能动画
 	Animation * blowingVortexRightAnimation;
@@ -225,7 +225,12 @@ public:
 	bool moveable = true;//能自由移动
 	bool windAttackable = true;//翅膀未被占用，能发射风弹
 	bool scratchable = true;//爪子未被占用，能撕扯。例：当使用爪子提起物品或敌人时该项设为false，该项为false时即使敌人近身也无法触发近战爪子攻击
+	bool holdable = true;
+	bool slamDunkable = true;
+	
 	bool dashable = true;//能否冲刺。
+	
+	
 	bool catchable = true;//爪子能否抓东西。例：剧情安排或正在撕扯时该项为false。
 	bool throwable = true;//能否将爪子上的东西扔出。例：主角不能一心二用。如果当前正在使用翅膀发射风弹，则该项为false，该项为false时调用throw方法将不会触发敌人被扔下的动画，将触发敌人从爪下生还顺毛重新发动攻击的动画。
 	bool spittable = false;//能否吐口水（
@@ -269,6 +274,10 @@ public:
 	
 
 
+
+	void tryCatch();
+	void tryHold();
+	void trySlamDunk();
 
 
 	void disableAllAbilities();

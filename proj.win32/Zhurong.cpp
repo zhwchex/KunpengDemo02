@@ -108,14 +108,11 @@ Zhurong::Zhurong()
 
 
 	ValueMap fireballCheckIfHitHeroOrHitWaterInfo;
-
 	fireballCheckIfHitHeroOrHitWaterInfo["zhurong5"] = Value("zhurong5");
-
 	this->fireballSpinningAnimation->getFrames().at(0)->setUserInfo(fireballCheckIfHitHeroOrHitWaterInfo);
 	this->fireballSpinningAnimation->getFrames().at(1)->setUserInfo(fireballCheckIfHitHeroOrHitWaterInfo);
 	this->fireballSpinningAnimation->getFrames().at(2)->setUserInfo(fireballCheckIfHitHeroOrHitWaterInfo);
 	this->fireballSpinningAnimation->getFrames().at(3)->setUserInfo(fireballCheckIfHitHeroOrHitWaterInfo);
-
 	EventListenerCustom * fireBallSpinningFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, fireballCheckIfHitHeroOrHitWaterInfo](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == fireballCheckIfHitHeroOrHitWaterInfo){
@@ -125,16 +122,20 @@ Zhurong::Zhurong()
 			int deltax = fireBall->getPositionX() - hero->getPositionX();
 			int deltay = fireBall->getPositionY() - hero->getPositionY();;
 
-			double distance = sqrt(pow(deltax,2)+pow(deltax,2));
+			double distance = sqrt(pow(deltax,2)+pow(deltay,2));
 			if (distance < (fireBall->getContentSize().width + (hero->getContentSize().width)) * 50 / 100){
 				((HeroSprite*)hero)->getHurtGeneral(10);
 				fireBall->stopAllActions();
 				fireBall->removeFromParent();
 			}
+
+			//判断火球是否在水面下。如果在水面下就（溅起一个水花并）消失。TODO
 		}
 		
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(fireBallSpinningFrameEventListener, -1);
+
+
 
 
 }
