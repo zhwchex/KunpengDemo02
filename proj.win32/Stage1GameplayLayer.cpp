@@ -9,7 +9,7 @@
 Stage1GameplayLayer::Stage1GameplayLayer()
 {
 	this->kunpeng = HeroSprite::create("characters/kunpeng/kunpeng.jpg");
-	this->background = Sprite::create("backgrounds/sky_and_water_small.jpg");
+	this->background = Sprite::create("backgrounds/background_wufan1.png");
 	this->background->setAnchorPoint(Vec2(0,0.5));
 
 	this->waterSurface = WaterSurface::create("landscapes/water_surface.png");
@@ -114,6 +114,7 @@ void Stage1GameplayLayer::onEnter(){
 	
 
 	this->kunpeng->setTag(2);
+	this->kunpeng->setPosition(Vec2(kunpeng->getContentSize().width ,kunpeng->getContentSize().height ));
 	this->addChild(this->kunpeng);
 	this->addChild(waterSurface, 1);
 	Layer::onEnter();
@@ -121,7 +122,7 @@ void Stage1GameplayLayer::onEnter(){
 
 //当地图增加纵向面积时，这里需要更改
 void Stage1GameplayLayer::updateLayerPositionToMaintainHeroInCamera(float positionRatioLeft,  float positionRatioRight, float screenScrollingSpeedRatio){
-	Stage1Scene * scene = (Stage1Scene *)this->getParent();
+	//Stage1Scene * scene = (Stage1Scene *)this->getParent();
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	int heroPositionInCameraX = this->getPositionX() + this->kunpeng->getPositionX();
 	if (heroPositionInCameraX > visibleSize.width * positionRatioRight){
@@ -137,7 +138,7 @@ void Stage1GameplayLayer::updateLayerPositionToMaintainHeroInCamera(float positi
 }
 
 void Stage1GameplayLayer::updateLayerPositionToMaintainHeroInCamera(){
-	Stage1Scene * scene = (Stage1Scene *)this->getParent();
+	//Stage1Scene * scene = (Stage1Scene *)this->getParent();
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	int heroPositionInCameraX = this->getPositionX() + this->kunpeng->getPositionX();
 	if (heroPositionInCameraX > visibleSize.width * this->positionRatioRight){
@@ -150,6 +151,36 @@ void Stage1GameplayLayer::updateLayerPositionToMaintainHeroInCamera(){
 		this->setPositionX(this->getPositionX() - this->screenScrollingSpeedRatio * difference);
 	}
 
+
+	int heroPositionInCameraY = this->getPositionY() + this->kunpeng->getPositionY();
+
+	if (heroPositionInCameraY > visibleSize.height * this->positionRatioUp){
+		int heightDifference = heroPositionInCameraY - visibleSize.height * this->positionRatioUp;
+		this->setPositionY(this->getPositionY() - this->screenScrollingSpeedRatio * heightDifference);
+	}
+
+	if (heroPositionInCameraY < visibleSize.height * this->positionRatioDown){
+		int heightDifference = heroPositionInCameraY - visibleSize.height * this->positionRatioDown;
+		this->setPositionY(this->getPositionY() - this->screenScrollingSpeedRatio * heightDifference);
+	}
+
+
+
+	/*
+	if (this->getPositionX() > -20){
+		this->setPositionX(0);
+	}
+	else if (this->getPositionX() < visibleSize.width - this->getContentSize().width){
+		this->setPositionX(visibleSize.width - this->getContentSize().width);
+	}
+	
+	if (this->getPositionY() > this->getContentSize().height * 0.5){
+		this->setPositionY(this->getContentSize().height * 0.5);
+	}
+	else if (this->getPositionY() < visibleSize.height - 0.5 * this->getContentSize().height){
+		this->setPositionY(visibleSize.height - 0.5 * this->getContentSize().height);
+	}
+	*/
 }
 
 

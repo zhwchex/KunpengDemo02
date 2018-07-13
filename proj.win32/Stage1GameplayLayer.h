@@ -26,10 +26,10 @@ public:
 
 	void onEnter();
 	
-	float positionRatioLeft = 0.1f;
-	float positionRatioRight = 0.3f;
-	float positionRatioUp = 0.1f;
-	float positionRatioDown = 0.3f;
+	float positionRatioLeft = 0.4f;
+	float positionRatioRight = 0.4f;
+	float positionRatioUp = 0.5f;
+	float positionRatioDown = 0.5f;
 	float screenScrollingSpeedRatio = 0.1f;
 
 	void updateLayerPositionToMaintainHeroInCamera(float positionRatioLeft, float positionRatioRight, float screenScrollingSpeedRatio);

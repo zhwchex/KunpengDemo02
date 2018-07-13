@@ -2319,14 +2319,15 @@ void HeroSprite::button3Hit(){
 
 	//spitWaterballAttack();
 
-	
+	log("now gamelayer is at (%d,%d)",this->getParent()->getPositionX(),this->getParent()->getPositionY());
+	/*
 	if (this->transformable_FishToBird &&this->isFish){
 		this->transformFromFishToBird();
 	}
 	else if (this->transformable_BirdToFish &&this->isBird){
 		this->transformFromBirdToFish();
 	}
-	
+	*/
 
 }
 void HeroSprite::button3Release(){
