@@ -907,25 +907,47 @@ HeroSprite::HeroSprite()
 	this->gettingHurtGeneralAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_getting_hurt_general_01.png");
 	this->gettingHurtGeneralAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_getting_hurt_general_02.png");
 	this->gettingHurtGeneralAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_getting_hurt_general_03.png");
+	this->gettingHurtGeneralAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_getting_hurt_general_00.png");
+	this->gettingHurtGeneralAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_getting_hurt_general_01.png");
+	this->gettingHurtGeneralAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_getting_hurt_general_02.png");
+	this->gettingHurtGeneralAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_getting_hurt_general_03.png");
 	this->gettingHurtGeneralAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->gettingHurtGeneralAnimation->setRestoreOriginalFrame(true);
 	this->gettingHurtGeneralAnimation->retain();
 
 	ValueMap gettingHurtGeneralStartInfo;
+	ValueMap gettingHurtGeneralRecoverMovabilityInfo;
 	ValueMap gettingHurtGeneralEndInfo;
 
 	gettingHurtGeneralStartInfo["14"] = Value(10);
+	gettingHurtGeneralRecoverMovabilityInfo["14.5"] = Value(14.5);
 	gettingHurtGeneralEndInfo["15"] = Value(11);
 
 
 	this->gettingHurtGeneralAnimation->getFrames().at(0)->setUserInfo(gettingHurtGeneralStartInfo);
-	this->gettingHurtGeneralAnimation->getFrames().at(3)->setUserInfo(gettingHurtGeneralEndInfo);
+	this->gettingHurtGeneralAnimation->getFrames().at(5)->setUserInfo(gettingHurtGeneralRecoverMovabilityInfo);
+	this->gettingHurtGeneralAnimation->getFrames().at(7)->setUserInfo(gettingHurtGeneralEndInfo);
 
-	EventListenerCustom * gettingHurtGeneralFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, gettingHurtGeneralStartInfo, gettingHurtGeneralEndInfo](EventCustom * event){
+	EventListenerCustom * gettingHurtGeneralFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, gettingHurtGeneralStartInfo, gettingHurtGeneralRecoverMovabilityInfo, gettingHurtGeneralEndInfo](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == gettingHurtGeneralStartInfo){
 			//log("get hurt");
 			this->disableAllAbilities();
+		}
+		if (*userData->userInfo == gettingHurtGeneralRecoverMovabilityInfo){
+			//log("get hurt");
+			this->enableAllAbilities();
+			if (this->directionToMoveUpRight ||
+				this->directionToMoveRight ||
+				this->directionToMoveDownRight ||
+				this->directionToMoveDown ||
+				this->directionToMoveDownLeft ||
+				this->directionToMoveLeft ||
+				this->directionToMoveUpLeft ||
+				this->directionToMoveUp){
+				this->move_forBothShapes();
+			}
+
 		}
 		if (*userData->userInfo == gettingHurtGeneralEndInfo){
 			//log("recovering from getting hurt");
@@ -2352,6 +2374,13 @@ void HeroSprite::getHurtGeneral(){
 void HeroSprite::getHurtGeneral(int damage){
 	this->health -= damage;
 	this->stopAllActions();
+	if (this->facingLeft){
+		this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 1, Vec2(this->getContentSize().width * 1, 0)), MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 5, Vec2(this->getContentSize().width /2, 0)), nullptr));
+	}
+	else{
+		this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 1, Vec2(-this->getContentSize().width * 1, 0)), MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 5, Vec2(-this->getContentSize().width /2, 0)), nullptr));
+
+	}
 	this->runAction(Animate::create(this->gettingHurtGeneralAnimation));
 }
 
