@@ -221,6 +221,6 @@ void Stage1Scene::myUpdate(float dt){
 
 
 	gameplayLayer->updateLayerPositionToMaintainHeroInCamera();
-	gameplayLayer->lockHeroWithinCamera();
-	gameplayLayer->lockHeroWithinLandscape();
+	gameplayLayer->pauseflagHeroWithinCamera();
+	gameplayLayer->pauseflagHeroWithinLandscape();
 }

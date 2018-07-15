@@ -19,7 +19,7 @@ Bullet* Bullet::create(Bird_yyh* b){
 		delete bu;
 		bu = NULL;
 		return NULL;
-	}
+	}		
 
 }
 bool Bullet::init() {
@@ -31,7 +31,7 @@ bool Bullet::init() {
 		//cout << birdPos.x << ' ' << birdPos.y << endl;
 
 		//创建BatchNode节点
-
+		//this->setAnchorPoint(Point(0.5f, 0.5f));
 		bulletBatchNode = SpriteBatchNode::create("characters/Bird_yyh/bullet.png",50);
 		this->addChild(bulletBatchNode);
 		//Bullet::ShootBullet();
@@ -58,24 +58,39 @@ void Bullet::ShootBullet(float dt) {
 	vecBullet.pushBack(spritebullet);
 	
 	Point bulletPos = birdPos;
-	spritebullet->setPosition(bulletPos);
+	//spritebullet->setPosition(bulletPos);
+	if (b->dir == -1){
+		spritebullet->setPosition(Vec2(0, 42));
+		spritebullet->setRotation(-45);
+		b->Lockfightleft();
+	}
+		
+	if (b->dir == 1){
+		spritebullet->setPosition(Vec2(100, 42));
+		spritebullet->setRotation(45);
+		b->Lockfightright();
+	}
+		
 	spritebullet->setScale(0.8f);
-
-
-	float Duration =0.5f;//实际飞行的时间
+	//spritebullet->setScale(5);
+	
+	float Duration =2.0f;//实际飞行的时间
 	//auto b_temp = (Bird_yyh*)this->getParent();
 	auto temp = (Stage1GameplayLayer*)b->getParent();
 	Point hero = temp->kunpeng->getPosition();
+	Point bendi = hero - birdPos;
 	//cout << hero.x << ' ' << hero.y << endl;
 	
-	auto actionMove = MoveTo::create(Duration, hero);
+	auto actionMove = MoveTo::create(Duration, bendi);
 	//auto actionMove = BezierTo::create(Duration, hero);
+
 
 	//子弹执行完动作后进行函数回调，调用移除子弹函数
 	auto actionDone = CallFuncN::create(CC_CALLBACK_1(Bullet::removeBullet, this));
-
+	//	spritebullet->runAction(RotateTo::create(Duration, 360));
 	//子弹开始跑动
-	Sequence* sequence = Sequence::create(actionMove, actionDone, NULL);
+	auto delayTime = DelayTime::create(1.0f);
+	Sequence* sequence = Sequence::create(delayTime,actionMove, actionDone, NULL);
 	spritebullet->runAction(sequence);
 
 
@@ -97,4 +112,10 @@ void Bullet::removeBullet(Node* bu) {
 */
 Vector <Sprite *>& Bullet::GetBullet(){
 	return vecBullet;
+}
+Rect Bullet::getBoundingBox() const
+{
+	 auto m_box = Rect(0, 0, this ->getContentSize().width, this ->getContentSize().height);
+	// m_box是m_pPic的contentSize
+	return RectApplyAffineTransform(m_box, this->getNodeToWorldAffineTransform());
 }

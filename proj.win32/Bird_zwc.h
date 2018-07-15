@@ -15,7 +15,7 @@ public:
 
 	void wanderAbout();//AI由你们写。我每帧都调用这个方法
 	void update(float dt);
-	void lockBirdWithinLandscape();
+	void pauseflagBirdWithinLandscape();
 
 	void getHurtByWind(int damage);//由我来调用
 	void getHurtByPaw(int damage);

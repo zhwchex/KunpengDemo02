@@ -31,7 +31,7 @@ void Bird_zwc::update(float dt){
 	/*
 	auto temp = (Stage1GameplayLayer*)this->getParent();
 	Point hero = temp->kunpeng->getPosition();
-	lockBirdWithinLandscape();
+	pauseflagBirdWithinLandscape();
 	if ((this->getPositionX() - hero.x) < alertThreshold || (this->getPositionX() - hero.x) > -alertThreshold){//进入警戒范围内开始攻击
 
 		float Duration = 1.0f;//实际飞行的时间
@@ -80,13 +80,13 @@ void Bird_zwc::update(float dt){
 				this->runAction(MoveBy::create(1.0f, Vec2(x_scope * bird_step, 0)));
 			else
 				this->runAction(MoveBy::create(1.0f, Vec2(x_scope * abs(x_change), y_scope * abs(y_change))));
-			lockBirdWithinLandscape();
+			pauseflagBirdWithinLandscape();
 
 
 		}
 		if (distance > battledistance){
 			this->runAction(MoveBy::create(1.0f, Vec2(x_scala*change, y_scala*change)));
-			lockBirdWithinLandscape();
+			pauseflagBirdWithinLandscape();
 
 		}
 
@@ -126,7 +126,7 @@ Bird_zwc * Bird_zwc::create(const std::string &filename){
 	return nullptr;
 }
 
-void Bird_zwc::lockBirdWithinLandscape(){
+void Bird_zwc::pauseflagBirdWithinLandscape(){
 
 	int BirdPositionInLayerX = this->getPositionX();
 	int BirdPositionInLayerY = this->getPositionY();

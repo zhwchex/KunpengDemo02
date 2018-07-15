@@ -73,15 +73,19 @@ void Stage1GameplayLayer::onEnter(){
 	enemyList.pushBack(fish);
 	*/
 	
-	/*
-	Bird_yyh* bird1 = Bird_yyh::create("characters/Bird_yyh/bird1.jpg");
+	
+	Bird_yyh* bird1 = Bird_yyh::create("characters/Bird_yyh/left1.png");
 	bird1->setPosition(300, 200);
 	this->addChild(bird1);
-	Bullet* bullet1 = Bullet::create(bird1);
-	this->addChild(bullet1, 1, "bu");
+	Bird_yyh* bird2 = Bird_yyh::create("characters/Bird_yyh/left1.png");
+	bird2->setPosition(800, 200);
+	this->addChild(bird2);
+	//Bullet* bullet1 = Bullet::create(bird1);
+	//this->addChild(bullet1, 1, "bu");
 	//bird1->wanderAbout();
 	enemyList.pushBack(bird1);
-
+	enemyList.pushBack(bird2);
+	/*
 	Bird_yyh* bird2 = Bird_yyh::create("characters/Bird_yyh/bird1.jpg");
 	bird2->setPosition(700, 200);
 	this->addChild(bird2);
@@ -185,7 +189,7 @@ void Stage1GameplayLayer::updateLayerPositionToMaintainHeroInCamera(){
 
 
 //需要主角不超出镜头范围的时候，调用它。如果主角在视野外，则将主角挪到镜头内。
-void Stage1GameplayLayer::lockHeroWithinCamera(){
+void Stage1GameplayLayer::pauseflagHeroWithinCamera(){
 	Stage1Scene * scene = (Stage1Scene *)this->getParent();
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 
@@ -211,7 +215,7 @@ void Stage1GameplayLayer::lockHeroWithinCamera(){
 }
 
 //当且仅当背景是长方形时，调用它可以让主角被限制在背景里
-void Stage1GameplayLayer::lockHeroWithinLandscape(){
+void Stage1GameplayLayer::pauseflagHeroWithinLandscape(){
 	int heroPositionInLayerX = kunpeng->getPositionX();
 	int heroPositionInLayerY = kunpeng->getPositionY();
 

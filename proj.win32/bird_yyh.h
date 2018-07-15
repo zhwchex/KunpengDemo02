@@ -1,4 +1,4 @@
-#ifndef __Bird_yyh_H__
+ï»¿#ifndef __Bird_yyh_H__
 #define __Bird_yyh_H__
 #include "GeneralUnit.h"
 class Bird_yyh :
@@ -8,8 +8,8 @@ public:
 	Animation * hoveringAnimation;
 	Animation * leftAnimation;
 	Animation * rightAnimation;
-	Animation * leftturnAnimation; //×ó×ªÓÒ
-	Animation * rightturnAnimation;//ÓÒ×ª×ó
+	Animation * leftturnAnimation; 
+	Animation * rightturnAnimation;//
 	Animation * lefthurtAnimation;
 	Animation * righthurtAnimation;
 	Animation * leftdieAnimation;
@@ -17,7 +17,7 @@ public:
 	Animation * leftfightAnimation;
 	Animation * rightfightAnimation;
 
-    
+
 	Bird_yyh();
 	~Bird_yyh();
 	int health = 100;
@@ -36,12 +36,13 @@ public:
 	void wanderAbout();
 	void lockBirdWithinLandscape();
 	//void getHurt();
-	//Ëø
 	void Lockright();
 	void Lockleft();
 	void Lockturnright(int type);
 	void Lockturnleft(int type);
 	void Lockhoving();
+	void Lockfightleft();
+	void Lockfightright();
 	void f();
 	void getHurtByWind(int damage);
 	void getHurtByPaw(int damage);
@@ -49,7 +50,7 @@ public:
 
 	void getHurtByWater(int damage);
 	void getHurtByFin(int damage);
-	
+
 
 };
 #endif

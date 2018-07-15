@@ -34,8 +34,8 @@ public:
 
 	void updateLayerPositionToMaintainHeroInCamera(float positionRatioLeft, float positionRatioRight, float screenScrollingSpeedRatio);
 	void updateLayerPositionToMaintainHeroInCamera();
-	void lockHeroWithinCamera();
-	void lockHeroWithinLandscape();
+	void pauseflagHeroWithinCamera();
+	void pauseflagHeroWithinLandscape();
 
 
 	Stage1GameplayLayer();

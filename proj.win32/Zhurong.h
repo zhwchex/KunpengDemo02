@@ -18,7 +18,7 @@ public:
 	float ANIMATION_FRAME_INTERVAL = 0.1f;
 
 
-	bool acceptCall = true;
+	bool acceptCall = true;///
 	bool facingRight = false;
 
 	//动画。只是动画，没有位移
