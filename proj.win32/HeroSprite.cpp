@@ -376,7 +376,7 @@ HeroSprite::HeroSprite()
 	this->blowingWindLeftAnimation->getFrames().at(4)->setUserInfo(blowingEndInfo);
 
 
-	//风弹的转圈动画。应当为所有帧添加碰到敌人就爆炸的动画TODO
+	//风弹的转圈动画。应当为所有帧添加碰到敌人就爆炸的动画
 	this->windBulletFlyingAnimation = Animation::create();
 	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_00.jpg");
 	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_01.jpg");
@@ -933,10 +933,12 @@ HeroSprite::HeroSprite()
 		if (*userData->userInfo == gettingHurtGeneralStartInfo){
 			//log("get hurt");
 			this->disableAllAbilities();
+			this->invincible = true;
 		}
 		if (*userData->userInfo == gettingHurtGeneralRecoverMovabilityInfo){
 			//log("get hurt");
 			this->enableAllAbilities();
+			this->invincible = false;
 			if (this->directionToMoveUpRight ||
 				this->directionToMoveRight ||
 				this->directionToMoveDownRight ||
@@ -952,6 +954,7 @@ HeroSprite::HeroSprite()
 		if (*userData->userInfo == gettingHurtGeneralEndInfo){
 			//log("recovering from getting hurt");
 			this->enableAllAbilities();
+			this->invincible = false;
 			if (this->isBird) this->hover();
 			else this->hover_kun();
 			if (this->directionToMoveUpRight ||
@@ -2372,6 +2375,9 @@ void HeroSprite::getHurtGeneral(){
 }
 
 void HeroSprite::getHurtGeneral(int damage){
+	if (this->invincible){
+		return;
+	}
 	this->health -= damage;
 	this->stopAllActions();
 	if (this->facingLeft){
