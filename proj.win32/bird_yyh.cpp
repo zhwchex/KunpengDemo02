@@ -155,9 +155,11 @@ void Bird_yyh::update(float dt){
 	
 	for (int i = 0; i<birdBullet.size(); i++){
 		Point t = birdBullet.at(i)->getPosition() + this->getPosition() - Vec2(50,50);
+		if (t.x <= 10)
+			temp_bullet->removeBullet(birdBullet.at(i));
 		//cout << t.x << ' ' << t.y << endl;
 		if (hero->boundingBox().containsPoint(t)){
-			//temp_bullet->removeBullet(birdBullet.at(i));
+			temp_bullet->removeBullet(birdBullet.at(i));
 			//cout << "bossshoushang" << endl;
 			temp->kunpeng->getHurtGeneral(10);
 		}
@@ -286,7 +288,7 @@ void Bird_yyh::wanderAbout(){
 
 	}
 	if (distance > battledistance){
-		cout << this->getPosition().x << ' '<<this->getPosition().y << endl;
+		//cout << this->getPosition().x << ' '<<this->getPosition().y << endl;
 		Lockhoving();
 		dir = 0;
 		this->runAction(MoveBy::create(1.0f, Vec2(x_scala*change, y_scala*change)));
