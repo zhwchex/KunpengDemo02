@@ -168,23 +168,49 @@ void Stage1GameplayLayer::updateLayerPositionToMaintainHeroInCamera(){
 		this->setPositionY(this->getPositionY() - this->screenScrollingSpeedRatio * heightDifference);
 	}
 
+	int backgroundPositionInLayerX = background->getPositionX();
+	int backgroundPositionInLayerY = background->getPositionY();
+
+	int backgroundWidth = background->getContentSize().width;
+	int backgroundHeight = background->getContentSize().height;
+
+	Vec2 backgroundAnchor = background->getAnchorPoint();
+	float backgroundAnchorX = backgroundAnchor.x;
+	float backgroundAnchorY = backgroundAnchor.y;
+
+	int backgroundLeftBoundaryInLayer = backgroundPositionInLayerX - backgroundWidth * backgroundAnchorX;
+	int backgroundRightBoundaryInLayer = backgroundPositionInLayerX + backgroundWidth *(1 - backgroundAnchorX);
+	int backgroundUpBoundaryInLayer = backgroundPositionInLayerY + backgroundHeight * (1 - backgroundAnchorY);
+	int backgroundDownBoundaryInLayer = backgroundPositionInLayerY - backgroundHeight *  backgroundAnchorY;
 
 
-	/*
-	if (this->getPositionX() > -20){
-		this->setPositionX(0);
+	int backgroundLeftBoundaryInCamera = backgroundLeftBoundaryInLayer + this->getPositionX();
+	int backgroundRightBoundaryInCamera = backgroundRightBoundaryInLayer + this->getPositionX();
+	int backgroundUpBoundaryInCamera = backgroundUpBoundaryInLayer + this->getPositionY();
+	int backgroundDownBoundaryInCamera = backgroundDownBoundaryInLayer + this->getPositionY();
+
+	
+
+
+	if (backgroundLeftBoundaryInCamera > -20){
+		int difference = backgroundLeftBoundaryInCamera + 20;
+		this->setPositionX(this->getPositionX() - difference);
 	}
-	else if (this->getPositionX() < visibleSize.width - this->getContentSize().width){
-		this->setPositionX(visibleSize.width - this->getContentSize().width);
+	else if (backgroundRightBoundaryInCamera < visibleSize.width+20){
+		int difference = backgroundRightBoundaryInCamera - visibleSize.width - 20;
+		this->setPositionX(this->getPositionX()  - difference);
 	}
 	
-	if (this->getPositionY() > this->getContentSize().height * 0.5){
-		this->setPositionY(this->getContentSize().height * 0.5);
+	
+	if (backgroundUpBoundaryInCamera < visibleSize.height +20){
+		int difference = backgroundUpBoundaryInCamera - visibleSize.height - 20;
+		this->setPositionY(this->getPositionY() - difference) ;
 	}
-	else if (this->getPositionY() < visibleSize.height - 0.5 * this->getContentSize().height){
-		this->setPositionY(visibleSize.height - 0.5 * this->getContentSize().height);
+	else if (backgroundDownBoundaryInCamera > - 20){
+		int difference = backgroundDownBoundaryInCamera + 20;
+		this->setPositionY(this->getPositionY() - difference);
 	}
-	*/
+	
 }
 
 
