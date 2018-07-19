@@ -84,11 +84,9 @@ public:
 	Animation * hoveringLeftAnimation;
 
 	//鸟普通移动的动画
-	Animation * movingUpAnimation;
 	Animation * movingUpRightAnimation;
 	Animation * movingRightAnimation;
 	Animation * movingDownRightAnimation;
-	Animation * movingDownAnimation;
 	Animation * movingDownLeftAnimation;
 	Animation * movingLeftAnimation;
 	Animation * movingUpLeftAnimation;

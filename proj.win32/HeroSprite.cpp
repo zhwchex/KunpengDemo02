@@ -25,7 +25,7 @@ HeroSprite::HeroSprite()
 
 	//初始化10个水弹，反复使用它们以节省资源
 	for (int i = 0; i < this->NUM_OF_WATER_BULLETS; i++){
-		WaterBullet * waterBullet = WaterBullet::create("characters/kunpeng/water_bullet.jpg");
+		WaterBullet * waterBullet = WaterBullet::create("characters/kunpeng/water_bullet_00.png");
 		//waterBullet->setPosition(wb->magazineX, wb->magazineY);
 		waterBullet->retain();
 		//this->getParent()->addChild(wb);
@@ -33,7 +33,7 @@ HeroSprite::HeroSprite()
 	}
 	//初始化10个水弹爆炸特效，反复使用它们以节省资源
 	for (int i = 0; i < this->NUM_OF_WATER_BULLET_EXPLOSIONS; i++){
-		Sprite * waterBulletExplosion = Sprite::create("characters/kunpeng/water_bullet_exploding.png");
+		Sprite * waterBulletExplosion = Sprite::create("characters/kunpeng/water_bullet_exploding_00.png");
 		//wb->setPosition(wb->magazineX, wb->magazineY);
 		waterBulletExplosion->retain();
 		//this->getParent()->addChild(wb);
@@ -77,13 +77,10 @@ HeroSprite::HeroSprite()
 	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_right_02.png");
 	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_right_03.png");
 	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_right_04.png");
+	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_right_04.png");
 	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_right_05.png");
-	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_right_06.png");
-	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_right_07.png");
-	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_right_08.png");
-	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_right_09.png");
-	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_right_10.png");
-	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_right_11.png");
+	//this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_right_06.png");
+
 	this->hoveringRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->hoveringRightAnimation->setRestoreOriginalFrame(true);
 	this->hoveringRightAnimation->retain();
@@ -158,23 +155,12 @@ HeroSprite::HeroSprite()
 
 
 	//Moving events won't need frame events. However, slight up-down swings during horizontal flights would be welcome.
-	this->movingUpAnimation = Animation::create();
-	this->movingUpAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_00.jpg");
-	this->movingUpAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_01.jpg");
-	this->movingUpAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_02.jpg");
-	this->movingUpAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_03.jpg");
-	this->movingUpAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
-	this->movingUpAnimation->setRestoreOriginalFrame(true);
-	this->movingUpAnimation->retain();
+
 
 	ValueMap movingCheckIfToTransferBTFInfo;
 
 	movingCheckIfToTransferBTFInfo["-2"] = Value(-2);
 
-	//this->movingUpAnimation->getFrames().at(0)->setUserInfo(movingCheckIfToTransferBTFInfo);
-	//this->movingUpAnimation->getFrames().at(1)->setUserInfo(movingCheckIfToTransferBTFInfo);
-	//this->movingUpAnimation->getFrames().at(2)->setUserInfo(movingCheckIfToTransferBTFInfo);
-	//this->movingUpAnimation->getFrames().at(3)->setUserInfo(movingCheckIfToTransferBTFInfo);
 
 	EventListenerCustom * movingAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, movingCheckIfToTransferBTFInfo](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
@@ -195,52 +181,35 @@ HeroSprite::HeroSprite()
 	_eventDispatcher->addEventListenerWithFixedPriority(movingAnimationFrameEventListener, -1);
 
 
-	this->movingDownAnimation = Animation::create();
-	this->movingDownAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_00.jpg");
-	this->movingDownAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_01.jpg");
-	this->movingDownAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_02.jpg");
-	this->movingDownAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_03.jpg");
-	this->movingDownAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
-	this->movingDownAnimation->setRestoreOriginalFrame(true);
-	this->movingDownAnimation->retain();
 
-	this->movingDownAnimation->getFrames().at(0)->setUserInfo(movingCheckIfToTransferBTFInfo);
-	this->movingDownAnimation->getFrames().at(1)->setUserInfo(movingCheckIfToTransferBTFInfo);
-	this->movingDownAnimation->getFrames().at(2)->setUserInfo(movingCheckIfToTransferBTFInfo);
-	this->movingDownAnimation->getFrames().at(3)->setUserInfo(movingCheckIfToTransferBTFInfo);
-
-	this->movingRightAnimation = Animation::create();
-	this->movingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_00.jpg");
-	this->movingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_01.jpg");
-	this->movingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_02.jpg");
-	this->movingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_03.jpg");
+	this->movingRightAnimation = Animation::create(); 
+	this->movingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_right_00.png");
+	this->movingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_right_01.png");
+	this->movingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_right_02.png");
+	this->movingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_right_03.png");
+	this->movingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_right_04.png");
 	this->movingRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingRightAnimation->setRestoreOriginalFrame(true);
 	this->movingRightAnimation->retain();
 
 	this->movingUpRightAnimation = Animation::create();
-	//this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_upright_00.png");
-	//this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_upright_01.png");
+	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_upright_00.png");
+	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_upright_01.png");
 	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_upright_02.png");
-	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_upright_03.png");
+	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_upright_03.png"); 
 	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_upright_04.png");
-	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_upright_05.png");
-	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_upright_06.png");
-	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_upright_07.png");
-	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_upright_08.png");
-	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_upright_09.png");
-	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_upright_10.png");
-	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_upright_11.png");
 
 	this->movingUpRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingUpRightAnimation->setRestoreOriginalFrame(true);
 	this->movingUpRightAnimation->retain();
 
 	this->movingDownRightAnimation = Animation::create();
-	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_00.jpg");
-	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_01.jpg");
-	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_02.jpg");
-	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_03.jpg");
+	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_downright_00.png");
+	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_downright_01.png");
+	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_downright_02.png");
+	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_downright_03.png");
+	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_downright_04.png");
+
 	this->movingDownRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingDownRightAnimation->setRestoreOriginalFrame(true);
 	this->movingDownRightAnimation->retain();
@@ -251,19 +220,19 @@ HeroSprite::HeroSprite()
 	this->movingDownRightAnimation->getFrames().at(3)->setUserInfo(movingCheckIfToTransferBTFInfo);
 
 	this->movingLeftAnimation = Animation::create();
-	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_00.jpg");
-	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_01.jpg");
-	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_02.jpg");
-	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_03.jpg");
+	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_left_00.png");
+	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_left_01.png");
+	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_left_02.png");
+	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_left_03.png");
 	this->movingLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingLeftAnimation->setRestoreOriginalFrame(true);
 	this->movingLeftAnimation->retain();
 
 	this->movingDownLeftAnimation = Animation::create();
-	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_00.jpg");
-	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_01.jpg");
-	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_02.jpg");
-	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_03.jpg");
+	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_downleft_00.png");
+	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_downleft_01.png");
+	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_downleft_02.png");
+	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_downleft_03.png");
 	this->movingDownLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingDownLeftAnimation->setRestoreOriginalFrame(true);
 	this->movingDownLeftAnimation->retain();
@@ -275,10 +244,10 @@ HeroSprite::HeroSprite()
 	this->movingDownLeftAnimation->getFrames().at(3)->setUserInfo(movingCheckIfToTransferBTFInfo);
 
 	this->movingUpLeftAnimation = Animation::create();
-	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_00.jpg");
-	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_01.jpg");
-	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_02.jpg");
-	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_03.jpg");
+	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_upleft_00.png");
+	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_upleft_01.png");
+	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_upleft_02.png");
+	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_upleft_03.png");
 	this->movingUpLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingUpLeftAnimation->setRestoreOriginalFrame(true);
 	this->movingUpLeftAnimation->retain();
@@ -378,12 +347,12 @@ HeroSprite::HeroSprite()
 
 	//风弹的转圈动画。应当为所有帧添加碰到敌人就爆炸的动画
 	this->windBulletFlyingAnimation = Animation::create();
-	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_00.jpg");
-	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_01.jpg");
-	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_02.jpg");
-	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_03.jpg");
-	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_03.jpg");
-	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_03.jpg");
+	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_00.png");
+	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_01.png");
+	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_02.png");
+	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_03.png");
+	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_00.png");
+	this->windBulletFlyingAnimation->addSpriteFrameWithFileName("characters/kunpeng/wind_bullet_01.png");
 	this->windBulletFlyingAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->windBulletFlyingAnimation->setRestoreOriginalFrame(true);
 	this->windBulletFlyingAnimation->retain();
@@ -489,10 +458,11 @@ HeroSprite::HeroSprite()
 
 	//dashing animations would need frame events.
 	this->dashingRightAnimation = Animation::create();
-	this->dashingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_right_00.jpg");
-	this->dashingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_right_01.jpg");
-	this->dashingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_right_02.jpg");
-	this->dashingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_right_03.jpg");
+	this->dashingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_right_00.png");
+	this->dashingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_right_01.png");
+	this->dashingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_right_02.png");
+	this->dashingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_right_03.png");
+	this->dashingRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_right_04.png");
 	this->dashingRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->dashingRightAnimation->setRestoreOriginalFrame(true);
 	this->dashingRightAnimation->retain();
@@ -554,10 +524,10 @@ HeroSprite::HeroSprite()
 	_eventDispatcher->addEventListenerWithFixedPriority(dashingRightAnimationFrameEventListener, -1);
 
 	this->dashingDownRightAnimation = Animation::create();
-	this->dashingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downright_00.jpg");
-	this->dashingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downright_01.jpg");
-	this->dashingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downright_02.jpg");
-	this->dashingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downright_03.jpg");
+	this->dashingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downright_00.png");
+	this->dashingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downright_01.png");
+	this->dashingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downright_02.png");
+	this->dashingDownRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downright_03.png");
 	this->dashingDownRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->dashingDownRightAnimation->setRestoreOriginalFrame(true);
 	this->dashingDownRightAnimation->retain();
@@ -570,10 +540,10 @@ HeroSprite::HeroSprite()
 
 
 	this->dashingUpRightAnimation = Animation::create();
-	this->dashingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upright_00.jpg");
-	this->dashingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upright_01.jpg");
-	this->dashingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upright_02.jpg");
-	this->dashingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upright_03.jpg");
+	this->dashingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upright_00.png");
+	this->dashingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upright_01.png");
+	this->dashingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upright_02.png");
+	this->dashingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upright_03.png");
 	this->dashingUpRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->dashingUpRightAnimation->setRestoreOriginalFrame(true);
 	this->dashingUpRightAnimation->retain();
@@ -586,10 +556,10 @@ HeroSprite::HeroSprite()
 
 
 	this->dashingLeftAnimation = Animation::create();
-	this->dashingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_left_00.jpg");
-	this->dashingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_left_01.jpg");
-	this->dashingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_left_02.jpg");
-	this->dashingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_left_03.jpg");
+	this->dashingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_left_00.png");
+	this->dashingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_left_01.png");
+	this->dashingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_left_02.png");
+	this->dashingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_left_03.png");
 	this->dashingLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->dashingLeftAnimation->setRestoreOriginalFrame(true);
 	this->dashingLeftAnimation->retain();
@@ -601,10 +571,10 @@ HeroSprite::HeroSprite()
 
 
 	this->dashingUpLeftAnimation = Animation::create();
-	this->dashingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upleft_00.jpg");
-	this->dashingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upleft_01.jpg");
-	this->dashingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upleft_02.jpg");
-	this->dashingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upleft_03.jpg");
+	this->dashingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upleft_00.png");
+	this->dashingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upleft_01.png");
+	this->dashingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upleft_02.png");
+	this->dashingUpLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_upleft_03.png");
 	this->dashingUpLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->dashingUpLeftAnimation->setRestoreOriginalFrame(true);
 	this->dashingUpLeftAnimation->retain();
@@ -615,10 +585,10 @@ HeroSprite::HeroSprite()
 
 
 	this->dashingDownLeftAnimation = Animation::create();
-	this->dashingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downleft_00.jpg");
-	this->dashingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downleft_03.jpg");
-	this->dashingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downleft_03.jpg");
-	this->dashingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downleft_03.jpg");
+	this->dashingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downleft_00.png");
+	this->dashingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downleft_03.png");
+	this->dashingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downleft_03.png");
+	this->dashingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_dashing_downleft_03.png");
 	this->dashingDownLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->dashingDownLeftAnimation->setRestoreOriginalFrame(true);
 	this->dashingDownLeftAnimation->retain();
@@ -1198,8 +1168,8 @@ HeroSprite::HeroSprite()
 	this->hoveringRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_right_01.png");
 	this->hoveringRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_right_02.png");
 	this->hoveringRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_right_03.png");
-	this->hoveringRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_right_04.png");
-	this->hoveringRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_right_05.png");
+	//this->hoveringRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_right_04.png");
+	//this->hoveringRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_right_05.png");
 	this->hoveringRightAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->hoveringRightAnimation_kun->setRestoreOriginalFrame(true);
 	this->hoveringRightAnimation_kun->retain();
@@ -1214,7 +1184,7 @@ HeroSprite::HeroSprite()
 
 	hoveringRightAnimation_kun->getFrames().at(0)->setUserInfo(hoveringAnimationCheckIfToTransformInfo_kun);
 	hoveringRightAnimation_kun->getFrames().at(1)->setUserInfo(hoveringAnimationFrame01Info_kun);
-	hoveringRightAnimation_kun->getFrames().at(4)->setUserInfo(hoveringAnimationFrame03Info_kun);
+	hoveringRightAnimation_kun->getFrames().at(3)->setUserInfo(hoveringAnimationFrame03Info_kun);
 
 
 	EventListenerCustom * hoveringKunAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, hoveringAnimationCheckIfToTransformInfo_kun, hoveringAnimationFrame01Info_kun, hoveringAnimationFrame03Info_kun](EventCustom * event){
@@ -1273,15 +1243,15 @@ HeroSprite::HeroSprite()
 	this->hoveringLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_left_01.png");
 	this->hoveringLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_left_02.png");
 	this->hoveringLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_left_03.png");
-	this->hoveringLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_left_04.png");
-	this->hoveringLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_left_05.png");
+	//this->hoveringLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_left_04.png");
+	//this->hoveringLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_hovering_left_05.png");
 	this->hoveringLeftAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->hoveringLeftAnimation_kun->setRestoreOriginalFrame(true);
 	this->hoveringLeftAnimation_kun->retain();
 
 	this->hoveringLeftAnimation_kun->getFrames().at(0)->setUserInfo(hoveringAnimationCheckIfToTransformInfo_kun);
 	this->hoveringLeftAnimation_kun->getFrames().at(1)->setUserInfo(hoveringAnimationFrame01Info_kun);
-	this->hoveringLeftAnimation_kun->getFrames().at(4)->setUserInfo(hoveringAnimationFrame03Info_kun);
+	this->hoveringLeftAnimation_kun->getFrames().at(3)->setUserInfo(hoveringAnimationFrame03Info_kun);
 
 	//鱼的普通移动动画，随时可进行另一个动作或被另一个动作打断
 	this->movingRightAnimation_kun = Animation::create();
@@ -1550,7 +1520,7 @@ HeroSprite::HeroSprite()
 	this->dashingUpLeftAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_dashing_upleft_03.png");
 	this->dashingUpLeftAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->dashingUpLeftAnimation_kun->setRestoreOriginalFrame(true);
-	this->dashingUpLeftAnimation_kun->retain();
+	this->dashingUpLeftAnimation_kun->retain(); 
 
 	this->dashingUpLeftAnimation_kun->getFrames().at(0)->setUserInfo(dashingStartFrameInfo_kun);
 	this->dashingUpLeftAnimation_kun->getFrames().at(2)->setUserInfo(dashingRecoverAllAbilitiesFrameInfo_kun);
@@ -1577,7 +1547,7 @@ HeroSprite::HeroSprite()
 	this->blowingVortexRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_right_01.png");
 	this->blowingVortexRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_right_02.png");
 	this->blowingVortexRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_right_03.png");
-	this->blowingVortexRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_right_04.png");
+	//this->blowingVortexRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_right_04.png");
 	this->blowingVortexRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->blowingVortexRightAnimation->setRestoreOriginalFrame(true);
 	this->blowingVortexRightAnimation->retain();
@@ -1595,7 +1565,7 @@ HeroSprite::HeroSprite()
 	this->blowingVortexRightAnimation->getFrames().at(0)->setUserInfo(blowingVortexStartInfo);
 	this->blowingVortexRightAnimation->getFrames().at(1)->setUserInfo(blowingVortexLaunchingWaterBulletInfo);
 	this->blowingVortexRightAnimation->getFrames().at(2)->setUserInfo(blowingVortexRecoverAllAbilitiesInfo);
-	this->blowingVortexRightAnimation->getFrames().at(4)->setUserInfo(blowingVortexEndInfo);
+	this->blowingVortexRightAnimation->getFrames().at(3)->setUserInfo(blowingVortexEndInfo);
 
 	EventListenerCustom * blowingVortexFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, blowingVortexStartInfo, blowingVortexLaunchingWaterBulletInfo, blowingVortexRecoverAllAbilitiesInfo, blowingVortexEndInfo](EventCustom* event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
@@ -1646,7 +1616,7 @@ HeroSprite::HeroSprite()
 	this->blowingVortexLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_left_01.png");
 	this->blowingVortexLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_left_02.png");
 	this->blowingVortexLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_left_03.png");
-	this->blowingVortexLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_left_04.png");
+	//this->blowingVortexLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/kun_blowing_vortex_left_04.png");
 	this->blowingVortexLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->blowingVortexLeftAnimation->setRestoreOriginalFrame(true);
 	this->blowingVortexLeftAnimation->retain();
@@ -1654,18 +1624,18 @@ HeroSprite::HeroSprite()
 	this->blowingVortexLeftAnimation->getFrames().at(0)->setUserInfo(blowingVortexStartInfo);
 	this->blowingVortexLeftAnimation->getFrames().at(1)->setUserInfo(blowingVortexLaunchingWaterBulletInfo);
 	this->blowingVortexLeftAnimation->getFrames().at(2)->setUserInfo(blowingVortexRecoverAllAbilitiesInfo);
-	this->blowingVortexLeftAnimation->getFrames().at(4)->setUserInfo(blowingVortexEndInfo);
+	this->blowingVortexLeftAnimation->getFrames().at(3)->setUserInfo(blowingVortexEndInfo);
 
 
-	//水弹动画。应当为所有帧添加碰到敌人就爆炸的帧事件TODO
+	//水弹动画。应当为所有帧添加碰到敌人就爆炸的帧事件
 	this->waterBulletMarchingAnimation = Animation::create();
-	this->waterBulletMarchingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_00.jpg");
-	this->waterBulletMarchingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_01.jpg");
-	this->waterBulletMarchingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_02.jpg");
-	this->waterBulletMarchingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_03.jpg");
-	this->waterBulletMarchingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_04.jpg");
-	this->waterBulletMarchingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_05.jpg");
-	this->waterBulletMarchingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_06.jpg");
+	this->waterBulletMarchingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_00.png");
+	this->waterBulletMarchingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_01.png");
+	this->waterBulletMarchingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_02.png");
+	this->waterBulletMarchingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_03.png");
+	this->waterBulletMarchingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_00.png");
+	this->waterBulletMarchingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_01.png");
+	this->waterBulletMarchingAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_02.png");
 	this->waterBulletMarchingAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->waterBulletMarchingAnimation->setRestoreOriginalFrame(true);
 	this->waterBulletMarchingAnimation->retain();
@@ -1734,7 +1704,6 @@ HeroSprite::HeroSprite()
 	this->waterBulletExplosionAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_exploding_03.png");
 	this->waterBulletExplosionAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_exploding_04.png");
 	this->waterBulletExplosionAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_exploding_05.png");
-	this->waterBulletExplosionAnimation->addSpriteFrameWithFileName("characters/kunpeng/water_bullet_exploding_06.png");
 	this->waterBulletExplosionAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->waterBulletExplosionAnimation->setRestoreOriginalFrame(true);
 	this->waterBulletExplosionAnimation->retain();
@@ -1746,7 +1715,7 @@ HeroSprite::HeroSprite()
 	waterBulletExplosionEndInfo["50"] = Value(50);
 
 	this->waterBulletExplosionAnimation->getFrames().at(0)->setUserInfo(waterBulletExplosionDealDamageInfo);
-	this->waterBulletExplosionAnimation->getFrames().at(6)->setUserInfo(waterBulletExplosionEndInfo);
+	this->waterBulletExplosionAnimation->getFrames().at(5)->setUserInfo(waterBulletExplosionEndInfo);
 
 	EventListenerCustom * waterBulletExplosionFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, waterBulletExplosionDealDamageInfo, waterBulletExplosionEndInfo](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
@@ -2932,12 +2901,23 @@ void HeroSprite::moveLeft(){
 void HeroSprite::moveUp(){
 	this->stopAllActions();
 	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, this->SPEED_FLYING_PIXEL_PER_SECOND))));
-	this->runAction(RepeatForever::create(Animate::create(this->movingUpAnimation)));
+	if (this->facingLeft){
+		this->runAction(RepeatForever::create(Animate::create(this->movingUpLeftAnimation)));
+	}
+	else{
+		this->runAction(RepeatForever::create(Animate::create(this->movingUpRightAnimation)));
+
+	}
 }
 void HeroSprite::moveDown(){
 	this->stopAllActions();
 	this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, -this->SPEED_FLYING_PIXEL_PER_SECOND))));
-	this->runAction(RepeatForever::create(Animate::create(this->movingDownAnimation)));
+	if (this->facingLeft){
+		this->runAction(RepeatForever::create(Animate::create(this->movingDownLeftAnimation)));
+	}
+	else{
+		this->runAction(RepeatForever::create(Animate::create(this->movingDownRightAnimation)));
+	}
 }
 void HeroSprite::moveUpRight(){
 	this->facingRight = true;

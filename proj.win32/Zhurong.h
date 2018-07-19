@@ -41,7 +41,7 @@ public:
 	int aoe_flag = 0;
 	int heat_flag = 0;
 	Sprite* s;
-	Vector <Sprite *>fireball = {};
+	Vector <Sprite *>fireball ;
 
 	//动画。只是动画，没有位移
 	Animation * walkingLeftWhileFacingLeftAnimation;//面向左边前进
