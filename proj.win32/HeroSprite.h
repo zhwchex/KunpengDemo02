@@ -8,6 +8,7 @@
 #include "cocos2d.h"
 #include "GeneralUnit.h"
 #include "WindBullet.h"
+#include "WaterBullet.h"
 
 USING_NS_CC;
 class HeroSprite :	public Sprite
@@ -16,18 +17,45 @@ class HeroSprite :	public Sprite
 public:
 
 
-
+	//十个风弹和对应的爆炸效果
 	const int NUM_OF_WIND_BULLETS = 10;
-	(WindBullet *) windBullets[10];
+	//(WindBullet *) windBullets[10];
+	WindBullet *windBullets[10];
 	int launchedWindBulletCount = 0;
 
+	const int NUM_OF_WIND_BULLET_EXPLOSIONS = 10;
+	//(Sprite *) windBulletExplosions[10];
+	Sprite *windBulletExplosions[10];
+	int windBulletExplosionCount = 0;
 
+	//十个水弹和对应的爆炸效果
+	const int NUM_OF_WATER_BULLETS = 10;
+	//(WaterBullet *)waterBullets[10];
+	WaterBullet *waterBullets[10];
+	int launchedWaterBulletCount = 0;
 
+	const int NUM_OF_WATER_BULLET_EXPLOSIONS = 10;
+	//(Sprite *) waterBulletExplosions[10];
+	Sprite *waterBulletExplosions[10];
+	int waterBulletExplosionCount = 0;
 
 
 	int health = 100;
 
 	int camp = 1;
+
+
+	int DAMAGE_WIND = 15;
+
+	int DAMAGE_SCRATCH = 50;
+
+	int DAMAGE_VORTEX = 20;
+
+	int DAMAGE_FIN = 40;
+
+	int DAMAGE_WATER_BALL = 80;
+
+	int DAMAGE_CRUSH = 100;
 
 	float TIME_FOR_ANIMATION_FRAME_INTERVAL = 0.1f;
 
@@ -38,14 +66,14 @@ public:
 
 	int DISTANCE_DURING_SCRATCHING = 20;
 
-	int DISTANCE_AIR_DASHING = 200;
-	int DISTANCE_AIR_DASHING_BRAKING = 20;
+	int DISTANCE_AIR_DASHING = 150;
+	int DISTANCE_AIR_DASHING_BRAKING = 70;
 	int DISTANCE_WATER_DASHING = 120;
 	int DISTANCE_WATER_DASHING_BRAKING = 60;
 
-	float TIME_FOR_AIR_DASHING = 0.3f;
-	float TIME_FOR_AIR_DASHING_BRAKING = 0.2f;
-	float TIME_FOR_WATER_DASHING = 0.2f;
+	float TIME_FOR_AIR_DASHING = 0.1f;
+	float TIME_FOR_AIR_DASHING_BRAKING = 0.3f;
+	float TIME_FOR_WATER_DASHING = 0.1f;
 	float TIME_FOR_WATER_DASHING_BRAKING = 0.3f;
 
 	int scratchingType = 1;
@@ -56,11 +84,9 @@ public:
 	Animation * hoveringLeftAnimation;
 
 	//鸟普通移动的动画
-	Animation * movingUpAnimation;
 	Animation * movingUpRightAnimation;
 	Animation * movingRightAnimation;
 	Animation * movingDownRightAnimation;
-	Animation * movingDownAnimation;
 	Animation * movingDownLeftAnimation;
 	Animation * movingLeftAnimation;
 	Animation * movingUpLeftAnimation;
@@ -106,13 +132,18 @@ public:
 	Animation * scratchingLeftAnimation;
 	Animation * scratchingLeftAnimation2;
 
-	Animation * tryCatchAnimation;//试图使用一下投技
+	Animation * scratchLeftBladeEffectAnimation;
+	Animation * scratchLeftBladeEffect2Animation;
+	Animation * scratchRightBladeEffectAnimation;
+	Animation * scratchRightBladeEffect2Animation;
+
+	Animation * tryCatchingAnimation;//试图使用一下投技
 	Animation * holdingObjectAnimation;//抓住物品不放的动画
 	Animation * holdingEnemyAnimation;//抓住敌人不放的动画
 	Animation * throwingObjectAnimation;//扔出物品的动画
-	Animation * throwingEnemyAnimationi;//对小兵使用投技的动画
+	Animation * slamDunkingEnemyAnimationi;//对小兵使用投技的动画
 
-	Animation * throwingBossAnimation;//对Boss使用投技的动画
+	Animation * slamDunkingBossAnimation;//对Boss使用投技的动画
 
 	//鱼技能动画
 	Animation * blowingVortexRightAnimation;
@@ -122,17 +153,44 @@ public:
 	Animation * finAttackLeftAnimation;
 	Animation * finAttackLeftAnimation2;
 
+	Animation * fallingFromSkyRightAnimation;//从空中掉入水中的过程动画。当自己是在空中的鱼时触发。掉落时每时每刻都要判断是否入水，因此需要做成无限循环动作，每帧都判断是否入水。掉落时只能变身为鸟或吐水泡。
+	Animation * fallingFromSkyLeftAnimation;//从空中掉入水中的过程动画。当自己是在空中的鱼时触发。掉落时每时每刻都要判断是否入水，因此需要做成无限循环动作，每帧都判断是否入水。掉落时只能变身为鸟或吐水泡。
+	Animation * enteringIntoWaterRightAnimation;//入水动画。第一帧开始禁掉全能力，播放到一半enable全能力并且如果有方向键就move_kun，最后一帧转入hover_kun。
+	Animation * enteringIntoWaterLeftAnimation;//入水动画。第一帧开始禁掉全能力，播放到一半enable全能力并且如果有方向键就move_kun，最后一帧转入hover_kun。
+
+	Animation * spittingRightAnimation;//名字非常nasty。该动作是在空中吐水球的动作，第一帧鼓起腮帮，第二帧释放水球，接下来是不受控制（可变鹏？）地掉回水里。
+	Animation * spittingLeftAnimation;//名字非常nasty。该动作是在空中吐水球的动作，第一帧鼓起腮帮，第二帧释放水球，接下来是不受控制（可变鹏？）地掉回水里。
+
+	Animation * finLeftBladeEffectAnimation;
+	Animation * finLeftBladeEffect2Animation;
+	Animation * finRightBladeEffectAnimation;
+	Animation * finRightBladeEffect2Animation;
+
+
+
+
+	//主角的招式特效
 	Animation * windBulletFlyingAnimation;
 	Animation * waterBulletMarchingAnimation;
+	
+	Animation * waterBallFlyingAnimation;//无限循环播放，落入水里算歇。每帧都判定一下是否攻击到敌人
 
+	Animation * windBulletExplosionAnimation;
+	Animation * waterBulletExplosionAnimation;
 
 
 	Animation * TransformingFromBirdToFishAnimation;
 	Animation * TransformingFromFishToBirdAnimation;
 
-
+	Animation * waterSplashingAnimation_big;
+	Animation * waterSplashingAnimation_small;
 
 	Animation * gettingHurtGeneralAnimation;
+	Animation * gettingHurtRightGeneralAnimation_peng;
+	Animation * gettingHurtLeftGeneralAnimation_peng;
+	Animation * gettingHurtRightGeneralAnimation_kun;
+	Animation * gettingHurtLeftGeneralAnimation_kun;
+
 
 	RepeatForever * moveRightWithoutAnimationAction;
 	RepeatForever * moveLeftWithoutAnimationAction;
@@ -153,12 +211,15 @@ public:
 	//主角的运动状态，这些状态与技能施放有关。例如，只有在飞行时才能施放风弹
 	bool facingRight = true;
 	bool facingLeft = false;
+
 	bool inTheAir = true;
 	//bool walking = false;//放弃主角降落在地面并欢快奔跑的构想
 	bool inTheWater = false;
 
 	//主角正在干嘛。
+	bool hovering = true;
 	bool moving = false;
+	bool dashing = false;
 	bool windAttacking = false;
 	bool scratching = false;
 	bool pawTryingCatch = false;
@@ -171,10 +232,15 @@ public:
 	bool moveable = true;//能自由移动
 	bool windAttackable = true;//翅膀未被占用，能发射风弹
 	bool scratchable = true;//爪子未被占用，能撕扯。例：当使用爪子提起物品或敌人时该项设为false，该项为false时即使敌人近身也无法触发近战爪子攻击
+	bool holdable = true;
+	bool slamDunkable = true;
+	
 	bool dashable = true;//能否冲刺。
+	
+	
 	bool catchable = true;//爪子能否抓东西。例：剧情安排或正在撕扯时该项为false。
 	bool throwable = true;//能否将爪子上的东西扔出。例：主角不能一心二用。如果当前正在使用翅膀发射风弹，则该项为false，该项为false时调用throw方法将不会触发敌人被扔下的动画，将触发敌人从爪下生还顺毛重新发动攻击的动画。
-
+	bool spittable = false;//能否吐口水（
 	bool vortexAttackable = true;
 
 	//逻辑上讲，这两者不能同时为真。
@@ -215,6 +281,10 @@ public:
 	
 
 
+
+	void tryCatch();
+	void tryHold();
+	void trySlamDunk();
 
 
 	void disableAllAbilities();
@@ -322,11 +392,18 @@ public:
 	void pawThrowBoss();//多个重载
 
 	void vortexAttack();
-	
+
+	void spitWaterballAttack();
+
+	void createWaterballAndFlyIt();
+
+	void fallFromSky_kun();
+	void enterWater_kun();
 
 
 	void getHurt();//多个重载
 	void getHurtGeneral();
+	void getHurtGeneral(int damage);
 	void getHurtByThunder();//被雷电击中，骨架闪烁+原地震颤
 	void getHurtByFire();//被火球击中，羽毛烧焦闪烁+后退
 	void getHurtByWater();//被水流击中，变落汤鸡+下落

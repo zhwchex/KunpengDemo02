@@ -18,7 +18,7 @@ public:
 
 	int speed;
 	int hurt;
-	int lockDist;
+	int pauseflagDist;
 	int attackDist;
 	float discoverProb; 
 	float attackProb;

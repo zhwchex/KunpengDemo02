@@ -15,7 +15,7 @@ FishEnemy1::FishEnemy1()
 	camp = 2; // 阵营
 	speed = 5; // 速度
 	hurt = 10; // 伤害
-	lockDist = 500; // 锁敌距离（离敌人这么远的时候才可能发现敌人）
+	pauseflagDist = 500; // 锁敌距离（离敌人这么远的时候才可能发现敌人）
 	attackDist = 100; // 攻击距离（离敌人这么远的时候才可能发动攻击）
 	discoverProb = 0.7; // 发现敌人的概率
 	attackProb = 0.4; // 发动攻击的概率
@@ -127,7 +127,7 @@ void FishEnemy1::wanderAbout()
 	Vec2 heroPos = hero->getPosition();
 	float dist = heroPos.distance(getPosition());
 	srand((unsigned int)time(0));
-	if (dist < lockDist) // 如果敌人进入了锁敌距离
+	if (dist < pauseflagDist) // 如果敌人进入了锁敌距离
 	{
 		if (dist < attackDist && rand() % 12 / 11.0 < attackProb) // 如果敌人进入了攻击距离且满足攻击概率
 		{

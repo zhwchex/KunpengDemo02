@@ -17,12 +17,12 @@ public:
 	virtual void wanderAbout() {}//AI由你们写。我每帧都调用这个方法
 	
 	virtual void getHurt(int damage) {}
-	void getHurtByWind(int damage);//由我来调用
+	virtual void getHurtByWind(int damage){}//由我来调用
 	virtual void getHurtByPaw(int damage){}
-	void getHurtByCrush(int damage);
+	//virtual void getHurtByCrush(int damage){}
 
-	void getHurtByWater(int damage);
-	void getHurtByFin(int damage);
+	//virtual void getHurtByWater(int damage){}
+	//virtual void getHurtByFin(int damage){}
 
 	virtual void die() {}
 

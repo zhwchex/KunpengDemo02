@@ -12,6 +12,7 @@ public:
 	Bullet(Bird_yyh* b);
 	~Bullet();
 	virtual bool init();
+	virtual Rect getBoundingBox() const override;
 
 	//根据英雄飞机创建子弹
 	static Bullet* create(Bird_yyh* b);
@@ -21,7 +22,7 @@ public:
 
 	//发射子弹，在其中进行子弹的渲染和子弹的飞行动作，默认为单子弹
 	void ShootBullet(float dt);
-	//void ShootBullet();
+	//v oid ShootBullet();
 	//返回子弹列表
 	Vector <Sprite *>& GetBullet();
 public:

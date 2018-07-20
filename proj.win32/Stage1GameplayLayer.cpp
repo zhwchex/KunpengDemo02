@@ -1,17 +1,19 @@
+#pragma once
 #include "Stage1GameplayLayer.h"
 #include "HeroSprite.h"
 #include "Stage1Scene.h"
-
+#include "EnemyFish.h"
 #include "Bullet.h"
+
 
 Stage1GameplayLayer::Stage1GameplayLayer()
 {
 	this->kunpeng = HeroSprite::create("characters/kunpeng/kunpeng.jpg");
-	this->background = Sprite::create("backgrounds/sky_and_water_small.jpg");
+	this->background = Sprite::create("backgrounds/background_wufan1.png");
 	this->background->setAnchorPoint(Vec2(0,0.5));
 
-	this->waterSurface = Sprite::create("landscapes/water_surface.png");
-	this->addChild(waterSurface,1);
+	this->waterSurface = WaterSurface::create("landscapes/water_surface.png");
+	
 }
 
 
@@ -64,32 +66,73 @@ void Stage1GameplayLayer::onEnter(){
 	this->addChild(enemyYYH);
 	*/
 
+	/*
 	GeneralUnit *fish = FishEnemy1::create("enemyfish/enemyfish.png");
 	fish->setPosition(Vec2(500, 0));
 	this->addChild(fish);
 	enemyList.pushBack(fish);
+	*/
 
+	/*
+	GeneralUnit *fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.jpg");
+	fishljj->setPosition(Vec2(500, 0));
+	this->addChild(fishljj);
+	enemyList.pushBack(fishljj);
+	*/
 	
-	Bird_yyh* bird1 = Bird_yyh::create("characters/Bird_yyh/bird1.jpg");
+	Bird_yyh* bird1 = Bird_yyh::create("characters/Bird_yyh/left1.png");
 	bird1->setPosition(300, 200);
 	this->addChild(bird1);
-	Bullet* bullet = Bullet::create(bird1);
-	this->addChild(bullet, 1, "bu");
+	Bird_yyh* bird2 = Bird_yyh::create("characters/Bird_yyh/left1.png");
+	bird2->setPosition(800, 200);
+	this->addChild(bird2);
+	//Bullet* bullet1 = Bullet::create(bird1);
+	//this->addChild(bullet1, 1, "bu");
 	//bird1->wanderAbout();
 	enemyList.pushBack(bird1);
+	enemyList.pushBack(bird2);
+	/*
+	Bird_yyh* bird2 = Bird_yyh::create("characters/Bird_yyh/bird1.jpg");
+	bird2->setPosition(700, 200);
+	this->addChild(bird2);
+	Bullet* bullet2 = Bullet::create(bird2);
+	this->addChild(bullet2, 1, "bu");
+	//bird1->wanderAbout();
+	enemyList.pushBack(bird2);
+
+	Bird_yyh* bird3 = Bird_yyh::create("characters/Bird_yyh/bird1.jpg");
+	bird3->setPosition(1100, 200);
+	this->addChild(bird3);
+	Bullet* bullet3 = Bullet::create(bird3);
+	this->addChild(bullet3, 1, "bu");
+	//bird1->wanderAbout();
+	enemyList.pushBack(bird3);
 	
-
-
+	Bird_yyh* bird4 = Bird_yyh::create("characters/Bird_yyh/bird1.jpg");
+	bird4->setPosition(1400, 200);
+	this->addChild(bird4);
+	Bullet* bullet4 = Bullet::create(bird3);
+	this->addChild(bullet4, 1, "bu");
+	//bird1->wanderAbout();
+	enemyList.pushBack(bird4);
+	*/
+	
+	Zhurong * zhurong = Zhurong::create("characters/zhurong/walking_left_while_facing_left_00.png");
+	zhurong->setPosition(1800, 100);
+	this->addChild(zhurong);
+	enemyList.pushBack(zhurong);
+	
 
 	this->kunpeng->setTag(2);
+	this->kunpeng->setPosition(Vec2(kunpeng->getContentSize().width ,kunpeng->getContentSize().height ));
 	this->addChild(this->kunpeng);
-	
+	this->addChild(waterSurface, 1);
 	Layer::onEnter();
 }
 
 //当地图增加纵向面积时，这里需要更改
 void Stage1GameplayLayer::updateLayerPositionToMaintainHeroInCamera(float positionRatioLeft,  float positionRatioRight, float screenScrollingSpeedRatio){
-	Stage1Scene * scene = (Stage1Scene *)this->getParent();
+	//Stage1Scene * scene = (Stage1Scene *)this->getParent();
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	int heroPositionInCameraX = this->getPositionX() + this->kunpeng->getPositionX();
 	if (heroPositionInCameraX > visibleSize.width * positionRatioRight){
@@ -105,7 +148,7 @@ void Stage1GameplayLayer::updateLayerPositionToMaintainHeroInCamera(float positi
 }
 
 void Stage1GameplayLayer::updateLayerPositionToMaintainHeroInCamera(){
-	Stage1Scene * scene = (Stage1Scene *)this->getParent();
+	//Stage1Scene * scene = (Stage1Scene *)this->getParent();
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	int heroPositionInCameraX = this->getPositionX() + this->kunpeng->getPositionX();
 	if (heroPositionInCameraX > visibleSize.width * this->positionRatioRight){
@@ -118,11 +161,67 @@ void Stage1GameplayLayer::updateLayerPositionToMaintainHeroInCamera(){
 		this->setPositionX(this->getPositionX() - this->screenScrollingSpeedRatio * difference);
 	}
 
+
+	int heroPositionInCameraY = this->getPositionY() + this->kunpeng->getPositionY();
+
+	if (heroPositionInCameraY > visibleSize.height * this->positionRatioUp){
+		int heightDifference = heroPositionInCameraY - visibleSize.height * this->positionRatioUp;
+		this->setPositionY(this->getPositionY() - this->screenScrollingSpeedRatio * heightDifference);
+	}
+
+	if (heroPositionInCameraY < visibleSize.height * this->positionRatioDown){
+		int heightDifference = heroPositionInCameraY - visibleSize.height * this->positionRatioDown;
+		this->setPositionY(this->getPositionY() - this->screenScrollingSpeedRatio * heightDifference);
+	}
+
+	int backgroundPositionInLayerX = background->getPositionX();
+	int backgroundPositionInLayerY = background->getPositionY();
+
+	int backgroundWidth = background->getContentSize().width;
+	int backgroundHeight = background->getContentSize().height;
+
+	Vec2 backgroundAnchor = background->getAnchorPoint();
+	float backgroundAnchorX = backgroundAnchor.x;
+	float backgroundAnchorY = backgroundAnchor.y;
+
+	int backgroundLeftBoundaryInLayer = backgroundPositionInLayerX - backgroundWidth * backgroundAnchorX;
+	int backgroundRightBoundaryInLayer = backgroundPositionInLayerX + backgroundWidth *(1 - backgroundAnchorX);
+	int backgroundUpBoundaryInLayer = backgroundPositionInLayerY + backgroundHeight * (1 - backgroundAnchorY);
+	int backgroundDownBoundaryInLayer = backgroundPositionInLayerY - backgroundHeight *  backgroundAnchorY;
+
+
+	int backgroundLeftBoundaryInCamera = backgroundLeftBoundaryInLayer + this->getPositionX();
+	int backgroundRightBoundaryInCamera = backgroundRightBoundaryInLayer + this->getPositionX();
+	int backgroundUpBoundaryInCamera = backgroundUpBoundaryInLayer + this->getPositionY();
+	int backgroundDownBoundaryInCamera = backgroundDownBoundaryInLayer + this->getPositionY();
+
+	
+
+
+	if (backgroundLeftBoundaryInCamera > -20){
+		int difference = backgroundLeftBoundaryInCamera + 20;
+		this->setPositionX(this->getPositionX() - difference);
+	}
+	else if (backgroundRightBoundaryInCamera < visibleSize.width+20){
+		int difference = backgroundRightBoundaryInCamera - visibleSize.width - 20;
+		this->setPositionX(this->getPositionX()  - difference);
+	}
+	
+	
+	if (backgroundUpBoundaryInCamera < visibleSize.height +20){
+		int difference = backgroundUpBoundaryInCamera - visibleSize.height - 20;
+		this->setPositionY(this->getPositionY() - difference) ;
+	}
+	else if (backgroundDownBoundaryInCamera > - 20){
+		int difference = backgroundDownBoundaryInCamera + 20;
+		this->setPositionY(this->getPositionY() - difference);
+	}
+	
 }
 
 
 //需要主角不超出镜头范围的时候，调用它。如果主角在视野外，则将主角挪到镜头内。
-void Stage1GameplayLayer::lockHeroWithinCamera(){
+void Stage1GameplayLayer::pauseflagHeroWithinCamera(){
 	Stage1Scene * scene = (Stage1Scene *)this->getParent();
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 
@@ -148,7 +247,7 @@ void Stage1GameplayLayer::lockHeroWithinCamera(){
 }
 
 //当且仅当背景是长方形时，调用它可以让主角被限制在背景里
-void Stage1GameplayLayer::lockHeroWithinLandscape(){
+void Stage1GameplayLayer::pauseflagHeroWithinLandscape(){
 	int heroPositionInLayerX = kunpeng->getPositionX();
 	int heroPositionInLayerY = kunpeng->getPositionY();
 
