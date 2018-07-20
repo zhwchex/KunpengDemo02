@@ -5,7 +5,9 @@
 #include "Bullet.h"
 #include "Stage1Scene.h"
 using namespace std;
-# define hitThreshold 250
+# define hitThreshold 150 //发起冲刺的距离阈值
+# define hurtThreshold 40 //受伤的距离阈值
+# define hitSpeed 20 //冲刺的速度
 
 Bird_zwc::Bird_zwc()
 {
@@ -174,26 +176,20 @@ void Bird_zwc::wanderAbout(){
 		else
 			y_scope = -1;
 
-		this->runAction(MoveBy::create(1.0f, Vec2(x_scope * abs(x_change), y_scope * abs(y_change))));
+		this->runAction(MoveBy::create(2.0f, Vec2(x_scope * abs(x_change), y_scope * abs(y_change))));
 	
 		
 		if (distance < hitThreshold){
 
 
 			if (((int)rand_0_1() * 7) == 0){//7分之一的概率进行冲刺攻击
-				this->runAction(MoveBy::create(distance / 50, Vec2(x_dis, y_dis)));
+				this->runAction(MoveBy::create(distance / hitSpeed, Vec2(x_dis, y_dis)));
 			}
 
-			if (distance < hitThreshold - 150){
+			if (distance < hurtThreshold){
 				temp->kunpeng->getHurtGeneral();
 			}
 
-			/*
-			auto delayTime = DelayTime::create(3.0f);
-			auto func = CallFunc::create([this](){pauseflag = 0; wanderAbout(); });
-			auto seq = Sequence::create(delayTime, func, nullptr);
-			this->runAction(seq);
-			*/
 		}
 
 	}
@@ -278,42 +274,6 @@ void Bird_zwc::lockBirdWithinLandscape(){
 			this->setPositionY(backgroundDownBoundary);
 		}
 		
-		/*
-	int BirdPositionInLayerX = this->getPositionX();
-	int BirdPositionInLayerY = this->getPositionY();
-	auto temp = (Stage1GameplayLayer*)this->getParent();
-	int backgroundPositionInLayerX = temp->background->getPositionX();
-	int backgroundPositionInLayerY = temp->background->getPositionY();
-
-	int backgroundWidth = getContentSize().width;
-	int backgroundHeight = temp->background->getContentSize().height;
-
-	Vec2 backgroundAnchor = temp->background->getAnchorPoint();
-	float backgroundAnchorX = backgroundAnchor.x;
-	float backgroundAnchorY = backgroundAnchor.y;
-
-	int backgroundLeftBoundary = backgroundPositionInLayerX - backgroundWidth * backgroundAnchorX + 10;
-	int backgroundRightBoundary = backgroundPositionInLayerX + backgroundWidth *(1 - backgroundAnchorX) - 10;
-	int backgroundUpBoundary = backgroundPositionInLayerY + backgroundHeight * (1 - backgroundAnchorY) - 10;
-	int backgroundDownBoundary = backgroundPositionInLayerY + 10;
-
-	if (BirdPositionInLayerX > backgroundRightBoundary){
-		int difference = BirdPositionInLayerX - backgroundRightBoundary;
-		this->setPositionX(this->getPositionX() - difference);
-	}
-	if (BirdPositionInLayerX < backgroundLeftBoundary){
-		int difference = BirdPositionInLayerX - backgroundLeftBoundary;
-		this->setPositionX(this->getPositionX() - difference);
-	}
-	if (BirdPositionInLayerY > backgroundUpBoundary){
-		int difference = BirdPositionInLayerY - backgroundUpBoundary;
-		this->setPositionY(this->getPositionY() - difference);
-	}
-	if (BirdPositionInLayerY < backgroundDownBoundary){
-		int difference = BirdPositionInLayerY - backgroundDownBoundary;
-		this->setPositionY(this->getPositionY() - difference);
-	}
-	*/
 }
 
 
