@@ -15,7 +15,6 @@ public:
 	void wander();
 	void attack(Vec2 pos);
 
-
 	int speed;
 	int hurt;
 	int pauseflagDist;

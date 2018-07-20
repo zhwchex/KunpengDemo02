@@ -7,6 +7,7 @@ const static int STATE_BE_ATTACKED = 2;
 const static int STATE_DEAD = 3;
 const static float FRAME_RATE = 0.2;
 const static float ANIMATION_DURATION = 0.3;
+const static float PADDING = 100;
 
 FishEnemy1::FishEnemy1()
 {
@@ -137,12 +138,36 @@ void FishEnemy1::wanderAbout()
 		if (rand() % 12 / 11.0 < discoverProb) // 如果满足发现敌人的概率
 		{
 			float angle = asin((heroPos.y - getPositionY()) / dist); // 计算与敌人之间的角度
+			int forward = heroPos.x > getPositionX() ? 1 : -1;
+
+			auto bg = ((Stage1GameplayLayer *) getParent())->background;
+			auto anchorPt = bg->getAnchorPoint();
+			auto contentSize = bg->getContentSize();
+			float deltaX = forward * speed * cos(angle);
+			float deltaY = speed * sin(angle);
+
+			if (getPositionX() + deltaX < -anchorPt.x * contentSize.width + PADDING
+				|| getPositionX() + deltaX > (1 - anchorPt.x) * contentSize.width - PADDING) deltaX = -deltaX;
+			if (getPositionY() + deltaY < -anchorPt.y * contentSize.height + PADDING
+				|| getPositionY() + deltaY >(1 - anchorPt.y) * contentSize.height - contentSize.height / 2 - PADDING)
+			{
+				deltaY = -deltaY;
+			}
+
 			runAction(Sequence::create(
-				MoveTo::create(ANIMATION_DURATION, // 然后朝敌人移动
-					Point(getPositionX() + (heroPos.x > getPositionX() ? 1 : -1) * speed * cos(angle),
-					getPositionY() + speed * sin(angle))),
-				CallFunc::create([this]() { this->state = STATE_DEFAULT; }), // 最后状态置为默认
-				NULL));
+				MoveTo::create(ANIMATION_DURATION,
+					Point(getPositionX() + deltaX, getPositionY() + deltaY)),
+				CallFunc::create([this, anchorPt, contentSize]() {
+				if (this->getPositionX() < -anchorPt.x * contentSize.width + PADDING)
+					this->setPositionX(-anchorPt.x * contentSize.width + PADDING);
+				if (this->getPositionX() >(1 - anchorPt.x) * contentSize.width - PADDING)
+					this->setPositionX((1 - anchorPt.x) * contentSize.width - PADDING);
+				if (this->getPositionY() < -anchorPt.y * contentSize.height + PADDING)
+					this->setPositionY(-anchorPt.y * contentSize.height + PADDING);
+				if (this->getPositionY() > (1 - anchorPt.y) * contentSize.height - contentSize.height / 2 - PADDING)
+					this->setPositionY((1 - anchorPt.y) * contentSize.height - contentSize.height / 2 - PADDING);
+				this->state = STATE_DEFAULT;
+			}), NULL));
 			return;
 		}
 	}
@@ -152,8 +177,6 @@ void FishEnemy1::wanderAbout()
 void FishEnemy1::getHurt(int h)
 {
 	if (STATE_DEAD == state) return;
-
-	log("be attacked");
 
 	state = STATE_BE_ATTACKED;
 	health -= h;
@@ -167,7 +190,6 @@ void FishEnemy1::getHurt(int h)
 
 void FishEnemy1::die()
 {
-	log("dead");
 	state = STATE_DEAD;
 	stopAllActions();
 	runAction(Animate::create(deadAnimation));
@@ -178,11 +200,35 @@ void FishEnemy1::wander()
 	if (rand() % 12 / 11.0 < runProb) // 如果满足走动的概率
 	{
 		float angle = (rand() % 361) * M_PI / 180; // 随机获取一个角度
+
+		auto bg = ((Stage1GameplayLayer *) getParent())->background;
+		auto anchorPt = bg->getAnchorPoint();
+		auto contentSize = bg->getContentSize();
+		float deltaX = speed * cos(angle);
+		float deltaY = speed * sin(angle);
+
+		if (getPositionX() + deltaX < -anchorPt.x * contentSize.width + PADDING
+			|| getPositionX() + deltaX >(1 - anchorPt.x) * contentSize.width - PADDING) deltaX = -deltaX;
+		if (getPositionY() + deltaY < -anchorPt.y * contentSize.height + PADDING
+			|| getPositionY() + deltaY >(1 - anchorPt.y) * contentSize.height - contentSize.height / 2 - PADDING)
+		{
+			deltaY = -deltaY;
+		}
+
 		runAction(Sequence::create(
-			MoveTo::create(ANIMATION_DURATION, // 走
-				Point(getPositionX() - speed * cos(angle), getPositionY() + speed * sin(angle))),
-			CallFunc::create([this]() { this->state = STATE_DEFAULT; }), // 状态置为默认
-			NULL));
+			MoveTo::create(ANIMATION_DURATION,
+				Point(getPositionX() + deltaX, getPositionY() + deltaY)),
+			CallFunc::create([this, anchorPt, contentSize]() {
+			if (this->getPositionX() < -anchorPt.x * contentSize.width + PADDING)
+				this->setPositionX(-anchorPt.x * contentSize.width + PADDING);
+			if (this->getPositionX() >(1 - anchorPt.x) * contentSize.width - PADDING)
+				this->setPositionX((1 - anchorPt.x) * contentSize.width - PADDING);
+			if (this->getPositionY() < -anchorPt.y * contentSize.height + PADDING)
+				this->setPositionY(-anchorPt.y * contentSize.height + PADDING);
+			if (this->getPositionY() > (1 - anchorPt.y) * contentSize.height - contentSize.height / 2 - PADDING)
+				this->setPositionY((1 - anchorPt.y) * contentSize.height - contentSize.height / 2 - PADDING);
+			this->state = STATE_DEFAULT;
+		}), NULL));
 	}
 }
 
