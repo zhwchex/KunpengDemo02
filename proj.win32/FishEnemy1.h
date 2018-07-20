@@ -3,14 +3,6 @@
 
 #include "GeneralUnit.h"
 
-const static int STATE_DEFAULT = 0;
-const static int STATE_ROTATE = 1;
-const static int STATE_ATTACK = 2;
-const static int STATE_BE_ATTACKED = 3;
-const static int STATE_DEAD = 4;
-const static float FRAME_RATE = 0.2;
-const static float ANIMATION_DURATION = 0.3;
-
 class FishEnemy1 : GeneralUnit
 {
 public:
