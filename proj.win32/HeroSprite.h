@@ -186,6 +186,11 @@ public:
 	Animation * waterSplashingAnimation_small;
 
 	Animation * gettingHurtGeneralAnimation;
+	Animation * gettingHurtRightGeneralAnimation_peng;
+	Animation * gettingHurtLeftGeneralAnimation_peng;
+	Animation * gettingHurtRightGeneralAnimation_kun;
+	Animation * gettingHurtLeftGeneralAnimation_kun;
+
 
 	RepeatForever * moveRightWithoutAnimationAction;
 	RepeatForever * moveLeftWithoutAnimationAction;

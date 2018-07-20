@@ -2,7 +2,7 @@
 #include "Stage1GameplayLayer.h"
 #include "HeroSprite.h"
 #include "Stage1Scene.h"
-
+#include "EnemyFish.h"
 #include "Bullet.h"
 
 
@@ -72,7 +72,13 @@ void Stage1GameplayLayer::onEnter(){
 	this->addChild(fish);
 	enemyList.pushBack(fish);
 	*/
-	
+
+	/*
+	GeneralUnit *fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.jpg");
+	fishljj->setPosition(Vec2(500, 0));
+	this->addChild(fishljj);
+	enemyList.pushBack(fishljj);
+	*/
 	
 	Bird_yyh* bird1 = Bird_yyh::create("characters/Bird_yyh/left1.png");
 	bird1->setPosition(300, 200);
