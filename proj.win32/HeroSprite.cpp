@@ -92,11 +92,11 @@ HeroSprite::HeroSprite()
 	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_left_03.png");
 	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_left_04.png");
 	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_left_05.png");
-	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_left_06.png");
-	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_left_07.png");
-	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_left_08.png");
-	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_left_09.png");
-	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_left_10.png");
+	//this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_left_06.png");
+	//this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_left_07.png");
+	//this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_left_08.png");
+	//this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_left_09.png");
+	//this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_hovering_facing_left_10.png");
 	this->hoveringLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->hoveringLeftAnimation->setRestoreOriginalFrame(true);
 	this->hoveringLeftAnimation->retain();
@@ -111,7 +111,7 @@ HeroSprite::HeroSprite()
 
 	hoveringAnimationFrame01info["1"] = Value(1);//除了让该info指向一个新地址外没有别的用处
 	hoveringAnimationFrame03info["2"] = Value(2);//除了让该info指向一个新地址外没有别的用处
-	hoveringAnimationChekcInTheWaterInfo["-1"] = Value(-1);
+	hoveringAnimationChekcInTheWaterInfo["-1ppp"] = Value(-1231231);
 	//log("here three = %s,", hoveringAnimationFrame04info["FrameId"].asString());//不知为什么不能输出string，string会变成？？，只能正确输出数字。
 
 	hoveringRightAnimation->getFrames().at(1)->setUserInfo(hoveringAnimationFrame01info);
@@ -133,6 +133,10 @@ HeroSprite::HeroSprite()
 		}
 		if (*userData->userInfo == hoveringAnimationFrame01info){
 			this->setPositionY(this->getPositionY() - 3);
+
+			if (this->getPositionY() < ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY()){
+				this->transformFromBirdToFish();
+			}
 		}
 		if (*userData->userInfo == hoveringAnimationChekcInTheWaterInfo){
 			if (this->getPositionY() < ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY()){
@@ -148,9 +152,6 @@ HeroSprite::HeroSprite()
 
 	this->stopAllActions();
 	this->runAction(RepeatForever::create(Animate::create(this->hoveringRightAnimation)));
-
-
-
 
 
 
@@ -192,6 +193,9 @@ HeroSprite::HeroSprite()
 	this->movingRightAnimation->setRestoreOriginalFrame(true);
 	this->movingRightAnimation->retain();
 
+	this->movingRightAnimation->getFrames().at(0)->setUserInfo(movingCheckIfToTransferBTFInfo);
+
+
 	this->movingUpRightAnimation = Animation::create();
 	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_upright_00.png");
 	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_upright_01.png");
@@ -227,6 +231,9 @@ HeroSprite::HeroSprite()
 	this->movingLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingLeftAnimation->setRestoreOriginalFrame(true);
 	this->movingLeftAnimation->retain();
+
+	this->movingLeftAnimation->getFrames().at(0)->setUserInfo(movingCheckIfToTransferBTFInfo);
+
 
 	this->movingDownLeftAnimation = Animation::create();
 	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_moving_downleft_00.png");
@@ -518,7 +525,13 @@ HeroSprite::HeroSprite()
 		}
 		if (*userData->userInfo == dashingRightFrame03Info){
 			log("Hitting last frame of dashing. Hovering.");
-			this->hover();
+			
+			if (this->getPositionY() < ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY()){
+				this->transformFromBirdToFish();
+			}
+			else{
+				this->hover();
+			}
 		}
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(dashingRightAnimationFrameEventListener, -1);

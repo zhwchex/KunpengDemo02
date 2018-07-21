@@ -36,9 +36,64 @@ Stage1GameplayLayer * Stage1GameplayLayer::create(){
 }
 
 void Stage1GameplayLayer::onEnter(){
-	
+
+
+
+	Sprite * tutorial_motion = Sprite::create("tutorial/tutorial_motion.png");
+	tutorial_motion->setPosition(700, 300);
+	this->addChild(tutorial_motion);
+
+	Sprite * tutorial_jk = Sprite::create("tutorial/tutorial_jk.png");
+	tutorial_jk->setPosition(700, -300);
+	this->addChild(tutorial_jk);
+
+	Sprite * tutorial_trans_btf = Sprite::create("tutorial/tutorial_trans_btf.png");
+	tutorial_trans_btf->setPosition(1400, 100);
+	this->addChild(tutorial_trans_btf);
+
+	Sprite * tutorial_trans_ftb = Sprite::create("tutorial/tutorial_trans_ftb.png");
+	tutorial_trans_ftb->setPosition(2400, -200);
+	this->addChild(tutorial_trans_ftb);
+
+	Sprite * tutorial_delegate_explore = Sprite::create("tutorial/tutorial_delegate_explore.png");
+	tutorial_delegate_explore->setPosition(3800, 0);
+	this->addChild(tutorial_delegate_explore);
+
+	/*
+	Sprite * kunzhidabuzhiqijiqianliye = Sprite::create("tutorial/kunzhidabuzhiqijiqianliye.png");
+	kunzhidabuzhiqijiqianliye->setPosition(2200,-250);
+	this->addChild(kunzhidabuzhiqijiqianliye);
+
+	Sprite * huaerwei = Sprite::create("tutorial/huaerwei.png");
+	huaerwei->setPosition(2600,-50);
+	this->addChild(huaerwei);
+
+	Sprite * ftb_transform_t = Sprite::create("tutorial/transform_ftb_tutorial.png");
+	ftb_transform_t->setPosition(3200,100);
+	this->addChild(ftb_transform_t);
+
+
+	Sprite * niao = Sprite::create("tutorial/niao.png");
+	niao->setPosition(3800,200);
+	this->addChild(niao);
+
+	Sprite * qimingweipeng = Sprite::create("tutorial/qimingweipeng.png");
+	qimingweipeng->setPosition(4000,200);
+	this->addChild(qimingweipeng);
+
+	Sprite * penzhibeibuzhiqijiqianliye = Sprite::create("tutorial/pengzhibeibuzhiqijiqianliye.png");
+	penzhibeibuzhiqijiqianliye->setPosition(4400,300);
+	this->addChild(penzhibeibuzhiqijiqianliye);
+
+	Sprite * nuerfei = Sprite::create("tutorial/pengzhibeibuzhiqijiqianliye.png");
+	nuerfei->setPosition(4800, 300);
+	this->addChild(nuerfei);
+	*/
+
+
+
 	//Sprite * backgroundSprite = Sprite::create("backgrounds/sky_and_water_small.jpg");
-	this->addChild(this->background);
+	this->addChild(this->background,-1);
 	//HeroSprite * kp = HeroSprite::create("characters/kunpeng/peng.jpg");
 	/*
 	GeneralUnit * enemy1ForTest = GeneralUnit::create("characters/general_unit/general_unit.jpg");
@@ -80,17 +135,21 @@ void Stage1GameplayLayer::onEnter(){
 	enemyList.pushBack(fishljj);
 	*/
 	
+
+	/*
 	Bird_yyh* bird1 = Bird_yyh::create("characters/Bird_yyh/left1.png");
 	bird1->setPosition(300, 200);
 	this->addChild(bird1);
 	Bird_yyh* bird2 = Bird_yyh::create("characters/Bird_yyh/left1.png");
 	bird2->setPosition(800, 200);
 	this->addChild(bird2);
-	//Bullet* bullet1 = Bullet::create(bird1);
-	//this->addChild(bullet1, 1, "bu");
-	//bird1->wanderAbout();
+
 	enemyList.pushBack(bird1);
 	enemyList.pushBack(bird2);
+	*/
+	
+	
+	
 	/*
 	Bird_yyh* bird2 = Bird_yyh::create("characters/Bird_yyh/bird1.jpg");
 	bird2->setPosition(700, 200);
@@ -117,14 +176,15 @@ void Stage1GameplayLayer::onEnter(){
 	enemyList.pushBack(bird4);
 	*/
 	
+	/*
 	Zhurong * zhurong = Zhurong::create("characters/zhurong/walking_left_while_facing_left_00.png");
 	zhurong->setPosition(1800, 100);
 	this->addChild(zhurong);
 	enemyList.pushBack(zhurong);
-	
+	*/
 
 	this->kunpeng->setTag(2);
-	this->kunpeng->setPosition(Vec2(kunpeng->getContentSize().width ,kunpeng->getContentSize().height ));
+	this->kunpeng->setPosition(400,200);
 	this->addChild(this->kunpeng);
 	this->addChild(waterSurface, 1);
 	Layer::onEnter();
