@@ -8,6 +8,7 @@
 
 #define FISHHEALTHY1 200
 #define ALARMDISTANCE1 300
+#define ATTACK_PROB 8
 
 class EnemyFish : public GeneralUnit
 {
