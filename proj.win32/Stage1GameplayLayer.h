@@ -18,6 +18,8 @@ public:
 	WaterSurface * waterSurface = nullptr;
 
 	HeroSprite * kunpeng = nullptr;
+	Zhurong * zhurong = nullptr;
+
 	Sprite * background = nullptr;
 	static Stage1GameplayLayer * create();
 

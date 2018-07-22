@@ -146,7 +146,7 @@ void Stage1GameplayLayer::onEnter(){
 	enemyList.pushBack(fishcw);
 
 
-	/*
+	
 	Bird_yyh* bird1 = Bird_yyh::create("characters/Bird_yyh/left1.png");
 	bird1->setPosition(300, 200);
 	this->addChild(bird1);
@@ -156,7 +156,7 @@ void Stage1GameplayLayer::onEnter(){
 
 	enemyList.pushBack(bird1);
 	enemyList.pushBack(bird2);
-	*/
+	
 
 	/*
 	Bird_yyh* bird2 = Bird_yyh::create("characters/Bird_yyh/bird1.jpg");
@@ -184,12 +184,12 @@ void Stage1GameplayLayer::onEnter(){
 	enemyList.pushBack(bird4);
 	*/
 	
-	/*
-	Zhurong * zhurong = Zhurong::create("characters/zhurong/walking_left_while_facing_left_00.png");
-	zhurong->setPosition(1800, 100);
+	
+	this->zhurong = Zhurong::create("characters/zhurong/walking_left_while_facing_left_00.png");
+	zhurong->setPosition(11500, 100);
 	this->addChild(zhurong);
 	enemyList.pushBack(zhurong);
-	*/
+	
 
 	
 	

@@ -40,7 +40,9 @@ public:
 	int waterBulletExplosionCount = 0;
 
 
-	int health = 100;
+	const int FULL_HP = 400;
+
+	int health = FULL_HP;
 
 	int camp = 1;
 
