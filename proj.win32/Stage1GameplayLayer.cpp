@@ -75,8 +75,8 @@ void Stage1GameplayLayer::onEnter(){
 
 	/**/
 	GeneralUnit *fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.jpg");
-	fishljj->setPosition(Vec2(500, 0));
-	fishljj->setScale(0.3);
+	fishljj->setPosition(Vec2(500, -200));
+	fishljj->setScale(0.2);
 	this->addChild(fishljj);
 	enemyList.pushBack(fishljj);
 	
