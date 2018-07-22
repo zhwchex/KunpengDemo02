@@ -37,12 +37,14 @@ void Stage1UILayer::onEnter(){
 	this->heroHPBar->setPosition(-visibleSize.width / 2  + 100 , visibleSize.height * 40 / 100);
 
 	this->bossHPBarShell->setPosition(0, -visibleSize.height *40 / 100);
+	this->bossHPBarShell->setOpacity(0);
 	this->bossHPBar->setAnchorPoint(Vec2(0, 0.5));
 	this->bossHPBar->setPosition(0 - bossHPBar->getContentSize().width / 2, -visibleSize.height * 40 / 100);
+	this->bossHPBar->setOpacity(0);
 
 	this->bossName->setAnchorPoint(Vec2(0, 0.5));
 	this->bossName->setPosition(0 - bossHPBar->getContentSize().width / 2, -visibleSize.height * 34 / 100);
-
+	this->bossName->setOpacity(0);
 
 	this->addChild(this->heroHPBar);
 	this->addChild(this->heroHPBarShell);
