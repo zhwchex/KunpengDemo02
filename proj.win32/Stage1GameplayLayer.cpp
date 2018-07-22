@@ -37,6 +37,10 @@ Stage1GameplayLayer * Stage1GameplayLayer::create(){
 
 void Stage1GameplayLayer::onEnter(){
 
+	this->kunpeng->setTag(2);
+	this->kunpeng->setPosition(400, 200);
+	this->addChild(this->kunpeng);
+	this->addChild(waterSurface, 1);
 
 
 	Sprite * tutorial_motion = Sprite::create("tutorial/tutorial_motion.png");
@@ -128,13 +132,19 @@ void Stage1GameplayLayer::onEnter(){
 	enemyList.pushBack(fish);
 	*/
 
-	/*
+	/**/
 	GeneralUnit *fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.jpg");
 	fishljj->setPosition(Vec2(500, 0));
+	fishljj->setScale(0.3);
 	this->addChild(fishljj);
 	enemyList.pushBack(fishljj);
-	*/
-	
+
+	GeneralUnit *fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.jpg");
+	fishcw->setPosition(Vec2(600, 0));
+	//fishljj->setScale(0.3);
+	this->addChild(fishcw);
+	enemyList.pushBack(fishcw);
+
 
 	/*
 	Bird_yyh* bird1 = Bird_yyh::create("characters/Bird_yyh/left1.png");
@@ -147,9 +157,7 @@ void Stage1GameplayLayer::onEnter(){
 	enemyList.pushBack(bird1);
 	enemyList.pushBack(bird2);
 	*/
-	
-	
-	
+
 	/*
 	Bird_yyh* bird2 = Bird_yyh::create("characters/Bird_yyh/bird1.jpg");
 	bird2->setPosition(700, 200);
@@ -183,10 +191,8 @@ void Stage1GameplayLayer::onEnter(){
 	enemyList.pushBack(zhurong);
 	*/
 
-	this->kunpeng->setTag(2);
-	this->kunpeng->setPosition(400,200);
-	this->addChild(this->kunpeng);
-	this->addChild(waterSurface, 1);
+	
+	
 	Layer::onEnter();
 }
 

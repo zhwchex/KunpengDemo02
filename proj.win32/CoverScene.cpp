@@ -79,16 +79,16 @@ bool CoverScene::init()
 	}
 
 
-	Sprite * coverSprite = Sprite::create("ui/cover2_small.png");
-	coverSprite->setPosition(visibleSize.width / 2, visibleSize.height * 70 / 100);
-	coverSprite->setScale(1.5);
+	Sprite * coverSprite = Sprite::create("ui/cover.png");
+	coverSprite->setPosition(visibleSize.width / 2, visibleSize.height * 50 / 100);
+	coverSprite->setScale(1);
 	this->addChild(coverSprite);
 
 
 	Label * skipLabel = Label::createWithTTF("Start the story", "fonts/Marker Felt.ttf", 48);
 	MenuItemLabel * menuItemSkip = MenuItemLabel::create(skipLabel, CC_CALLBACK_1(CoverScene::goToPrologueSceneCallback, this));
 	Menu * middleMenu = Menu::create(menuItemSkip, nullptr);
-	middleMenu->setPosition(visibleSize.width / 2, visibleSize.height * 30 / 100);
+	middleMenu->setPosition(visibleSize.width / 2, visibleSize.height * 20 / 100);
 	this->addChild(middleMenu);
 
 

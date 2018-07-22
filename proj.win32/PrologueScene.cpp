@@ -138,6 +138,11 @@ bool PrologueScene::init()
 	this->addChild(line3_1);
 	this->addChild(startGameMenu);
 
+
+	Sprite * epilogueBackground = Sprite::create("ui/epilogue.png");
+	epilogueBackground->setPosition(visibleSize.width / 2, visibleSize.height * 50 / 100);
+	this->addChild(epilogueBackground, -1);
+
 	return true;
 }
 

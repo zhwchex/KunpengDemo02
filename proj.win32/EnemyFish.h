@@ -52,6 +52,7 @@ public:
 	void wanderAbout();
 	void getHurt();
 	void getHurt(int damage);
+	void getHurtByWind(int damage);
 	void die();
 };
 

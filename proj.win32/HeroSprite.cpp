@@ -142,6 +142,7 @@ HeroSprite::HeroSprite()
 			if (this->getPositionY() < ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY()){
 				this->transformFromBirdToFish();
 			}
+			this->enableAllAbilities();
 		}
 
 	});
@@ -2510,6 +2511,10 @@ void HeroSprite::getHurtGeneral(int damage){
 			this->runAction(Animate::create(this->gettingHurtRightGeneralAnimation_kun));
 		}
 	}
+}
+
+void HeroSprite::getHurtByWater(int damage){
+	this->getHurtGeneral(damage);
 }
 
 void HeroSprite::disableAllAbilities(){
