@@ -133,13 +133,13 @@ void Stage1GameplayLayer::onEnter(){
 	*/
 
 	/**/
-	GeneralUnit *fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.jpg");
+	GeneralUnit *fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
 	fishljj->setPosition(Vec2(500, -200));
-	fishljj->setScale(0.2);
+	//fishljj->setScale(0.2);
 	this->addChild(fishljj);
 	enemyList.pushBack(fishljj);
 
-	GeneralUnit *fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.jpg");
+	GeneralUnit *fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
 	fishcw->setPosition(Vec2(600, 0));
 	//fishljj->setScale(0.3);
 	this->addChild(fishcw);
