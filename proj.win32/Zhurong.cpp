@@ -927,6 +927,7 @@ void Zhurong::getHurtByWind(int damage){
 			this->runAction(Animate::create(this->hurtleftAnimation));
 		}
 		*/
+		
 	}
 	else{
 		if (hero_x - zhu_x > 0)
