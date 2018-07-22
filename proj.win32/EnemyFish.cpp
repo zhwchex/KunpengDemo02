@@ -44,7 +44,7 @@ EnemyFish::EnemyFish()
 		}
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(hoveringLeftAnimationFrameEventListener, -1);
-	
+
 	//右悬停
 	this->hoveringRightAnimation = Animation::create();
 	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_facing_right_00.png");
@@ -118,7 +118,7 @@ EnemyFish::EnemyFish()
 		}
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(movingUpAnimationFrameEventListener, -1);
-	
+
 	//下移动
 	this->movingDownAnimation = Animation::create();
 	this->movingDownAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_down_00.png");
@@ -155,7 +155,7 @@ EnemyFish::EnemyFish()
 		}
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(movingDownAnimationFrameEventListener, -1);
-	
+
 	//左移动
 	this->movingLeftAnimation = Animation::create();
 	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_00.png");
@@ -192,7 +192,7 @@ EnemyFish::EnemyFish()
 		}
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(movingLeftAnimationFrameEventListener, -1);
-	
+
 	//右移动
 	this->movingRightAnimation = Animation::create();
 	this->movingRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_00.png");
@@ -206,7 +206,7 @@ EnemyFish::EnemyFish()
 	this->movingRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingRightAnimation->setRestoreOriginalFrame(true);
 	this->movingRightAnimation->retain();
-	
+
 	ValueMap movingRightAnimationReachesfirstFrameInfo;
 	ValueMap movingRightAnimationReachesLastFrameInfo;
 
@@ -243,7 +243,7 @@ EnemyFish::EnemyFish()
 	this->movingUpRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingUpRightAnimation->setRestoreOriginalFrame(true);
 	this->movingUpRightAnimation->retain();
-	
+
 	ValueMap movingUpRightAnimationReachesfirstFrameInfo;
 	ValueMap movingUpRightAnimationReachesLastFrameInfo;
 
@@ -303,7 +303,7 @@ EnemyFish::EnemyFish()
 		}
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(movingDownRightAnimationFrameEventListener, -1);
-	
+
 	//左上移动
 	this->movingUpLeftAnimation = Animation::create();
 	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_00.png");
@@ -340,7 +340,7 @@ EnemyFish::EnemyFish()
 		}
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(movingUpLeftAnimationFrameEventListener, -1);
-	
+
 	//左下移动
 	this->movingDownLeftAnimation = Animation::create();
 	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_00.png");
@@ -473,7 +473,7 @@ EnemyFish::EnemyFish()
 		if (*userData->userInfo == dieAnimationReachesLastFrameInfo) {
 			log("Last frame of dieAnimation reached.");
 			this->acceptCall = true;
-			this->setPosition(-1111,-1111);
+			this->setPosition(-1111, -1111);
 			this->removeFromParent();
 		}
 		if (*userData->userInfo == dieAnimationReachesfirstFrameInfo) {
@@ -506,8 +506,8 @@ void EnemyFish::wanderAbout() {
 		this->acceptCall = false;
 		this->getParent();
 
-		int herox =  ((Stage1GameplayLayer *)this->getParent())->kunpeng->getPositionX();
-		int heroy =  ((Stage1GameplayLayer *)this->getParent())->kunpeng->getPositionY();
+		int herox = ((Stage1GameplayLayer *)this->getParent())->kunpeng->getPositionX();
+		int heroy = ((Stage1GameplayLayer *)this->getParent())->kunpeng->getPositionY();
 
 		float waterfacey = ((Stage1GameplayLayer*)this->getParent())->waterSurface->getPositionY();
 
@@ -518,52 +518,56 @@ void EnemyFish::wanderAbout() {
 		distance = sqrt(distance);
 
 		if (distance < ALARMDISTANCE1 && heroy < waterfacey) {
-			//进入攻击距离 发起攻击
-			this->stopAllActions();
-			if ((herox - fishx) == 0 && (heroy - fishy) > 0) {
-			//上
-				this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, this->speed_flying_pixel_per_second))));
-				this->runAction(RepeatForever::create(Animate::create(this->movingUpAnimation)));
+			srand((unsigned)time(NULL));
+			int attckOrNot = rand() % (ATTACK_PROB);
+			//进入攻击距离 按概率发起攻击
+			if (attckOrNot == 0) {
+				this->stopAllActions();
+				if ((herox - fishx) == 0 && (heroy - fishy) > 0) {
+					//上
+					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, this->speed_flying_pixel_per_second))));
+					this->runAction(RepeatForever::create(Animate::create(this->movingUpAnimation)));
+				}
+				else if ((herox - fishx) == 0 && (heroy - fishy) < 0) {
+					//下
+					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, -this->speed_flying_pixel_per_second))));
+					this->runAction(RepeatForever::create(Animate::create(this->movingDownAnimation)));
+				}
+				else if ((herox - fishx) < 0 && (heroy - fishy) == 0) {
+					//左
+					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second, 0))));
+					this->runAction(RepeatForever::create(Animate::create(this->movingLeftAnimation)));
+				}
+				else if ((herox - fishx) > 0 && (heroy - fishy) == 0) {
+					//右
+					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.414, 0))));
+					this->runAction(RepeatForever::create(Animate::create(this->movingRightAnimation)));
+				}
+				else if ((herox - fishx) < 0 && (heroy - fishy) > 0) {
+					//左上
+					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second / 1.414, this->speed_flying_pixel_per_second / 1.414))));
+					this->runAction(RepeatForever::create(Animate::create(this->movingUpLeftAnimation)));
+				}
+				else if ((herox - fishx) < 0 && (heroy - fishy) < 0) {
+					//左下
+					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second / 1.414, -this->speed_flying_pixel_per_second / 1.414))));
+					this->runAction(RepeatForever::create(Animate::create(this->movingDownLeftAnimation)));
+				}
+				else if ((herox - fishx) > 0 && (heroy - fishy) > 0) {
+					//右上
+					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.414, this->speed_flying_pixel_per_second / 1.414))));
+					this->runAction(RepeatForever::create(Animate::create(this->movingUpRightAnimation)));
+				}
+				else {
+					//右下
+					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.414, -this->speed_flying_pixel_per_second / 1.414))));
+					this->runAction(RepeatForever::create(Animate::create(this->movingDownRightAnimation)));
+				}
+				//this->runAction(RepeatForever::create(MoveTo::create(0.5f, Vec2(0.5*herox, 0.5*heroy))));
+				int damage = 10;
+				((Stage1GameplayLayer *)this->getParent())->kunpeng->getHurtGeneral(damage);
+				this->runAction(RepeatForever::create(Animate::create(this->attackAnimation)));
 			}
-			else if ((herox - fishx) == 0 && (heroy - fishy) < 0) {
-			//下
-				this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, -this->speed_flying_pixel_per_second))));
-				this->runAction(RepeatForever::create(Animate::create(this->movingDownAnimation)));
-			}
-			else if ((herox - fishx) < 0 && (heroy - fishy) == 0) {
-			//左
-				this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second, 0))));
-				this->runAction(RepeatForever::create(Animate::create(this->movingLeftAnimation)));
-			}
-			else if ((herox - fishx) > 0 && (heroy - fishy) == 0) {
-			//右
-				this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.414, 0))));
-				this->runAction(RepeatForever::create(Animate::create(this->movingRightAnimation)));
-			}
-			else if ((herox - fishx) < 0 && (heroy - fishy) > 0) {
-			//左上
-				this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second / 1.414, this->speed_flying_pixel_per_second / 1.414))));
-				this->runAction(RepeatForever::create(Animate::create(this->movingUpLeftAnimation)));
-			}
-			else if ((herox - fishx) < 0 && (heroy - fishy) < 0) {
-			//左下
-				this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second / 1.414, -this->speed_flying_pixel_per_second / 1.414))));
-				this->runAction(RepeatForever::create(Animate::create(this->movingDownLeftAnimation)));
-			}
-			else if ((herox - fishx) > 0 && (heroy - fishy) > 0) {
-			//右上
-				this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.414, this->speed_flying_pixel_per_second / 1.414))));
-				this->runAction(RepeatForever::create(Animate::create(this->movingUpRightAnimation)));
-			}
-			else{
-			//右下
-				this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.414, -this->speed_flying_pixel_per_second / 1.414))));
-				this->runAction(RepeatForever::create(Animate::create(this->movingDownRightAnimation)));
-			}
-			//this->runAction(RepeatForever::create(MoveTo::create(0.5f, Vec2(0.5*herox, 0.5*heroy))));
-			int damage = 10;
-			((Stage1GameplayLayer *)this->getParent())->kunpeng->getHurtGeneral(damage);
-			this->runAction(RepeatForever::create(Animate::create(this->attackAnimation)));
 		}
 		else {
 			//生成随机数 朝八个方向闲逛
@@ -575,7 +579,7 @@ void EnemyFish::wanderAbout() {
 			case 0:
 				//上
 				this->stopAllActions();
-				if(this->getPositionY()+this->speed_flying_pixel_per_second > waterfacey)
+				if (this->getPositionY() + this->speed_flying_pixel_per_second > waterfacey)
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, waterfacey))));
 				else
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, this->speed_flying_pixel_per_second))));
@@ -603,7 +607,7 @@ void EnemyFish::wanderAbout() {
 				//左上
 				this->stopAllActions();
 				if (this->getPositionY() + this->speed_flying_pixel_per_second > waterfacey)
-					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-waterfacey/1.414, waterfacey/1.414))));
+					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-waterfacey / 1.414, waterfacey / 1.414))));
 				else
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second / 1.414, this->speed_flying_pixel_per_second / 1.414))));
 				this->runAction(RepeatForever::create(Animate::create(this->movingUpLeftAnimation)));
@@ -618,7 +622,7 @@ void EnemyFish::wanderAbout() {
 				//右上
 				this->stopAllActions();
 				if (this->getPositionY() + this->speed_flying_pixel_per_second > waterfacey)
-					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(waterfacey/1.414, waterfacey/1.414))));
+					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(waterfacey / 1.414, waterfacey / 1.414))));
 				else
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.414, this->speed_flying_pixel_per_second / 1.414))));
 				this->runAction(RepeatForever::create(Animate::create(this->movingUpRightAnimation)));
@@ -650,7 +654,7 @@ void EnemyFish::getHurt(int damage) {
 	else {
 		this->health -= damage;
 
-		if (this->health < 0)	{
+		if (this->health < 0) {
 			die();
 		}
 		else {
@@ -662,7 +666,7 @@ void EnemyFish::getHurt(int damage) {
 	}
 }
 
-void EnemyFish::getHurtByWind(int damage){
+void EnemyFish::getHurtByWind(int damage) {
 	this->getHurt(damage);
 }
 
