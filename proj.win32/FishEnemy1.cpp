@@ -47,9 +47,6 @@ FishEnemy1::FishEnemy1()
 	attackAnimation->setDelayPerUnit(FRAME_RATE);
 	attackAnimation->setRestoreOriginalFrame(true);
 	attackAnimation->retain();
-	ValueMap attackEndInfo;
-	attackEndInfo["1"] = Value(120);
-	attackAnimation->getFrames().at(7)->setUserInfo(attackEndInfo);
 
 	beAttackedAnimation = Animation::create();
 	beAttackedAnimation->addSpriteFrameWithFileName("crab/beattacked0.png");
@@ -59,9 +56,6 @@ FishEnemy1::FishEnemy1()
 	beAttackedAnimation->setDelayPerUnit(FRAME_RATE);
 	beAttackedAnimation->setRestoreOriginalFrame(true);
 	beAttackedAnimation->retain();
-	ValueMap beAttackedInfo;
-	beAttackedInfo["1"] = Value(121);
-	beAttackedAnimation->getFrames().at(3)->setUserInfo(beAttackedInfo);
 
 	deadAnimation = Animation::create();
 	deadAnimation->addSpriteFrameWithFileName("crab/dead0.png");
@@ -71,36 +65,6 @@ FishEnemy1::FishEnemy1()
 	deadAnimation->setDelayPerUnit(FRAME_RATE);
 	deadAnimation->setRestoreOriginalFrame(true);
 	deadAnimation->retain();
-	ValueMap deadInfo;
-	deadInfo["1"] = Value(122);
-	deadAnimation->getFrames().at(3)->setUserInfo(deadInfo);
-
-	EventListenerCustom *animationListener = EventListenerCustom::create(AnimationFrameDisplayedNotification,
-		[this, attackEndInfo, beAttackedInfo, deadInfo](EventCustom *event) {
-		auto userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
-		if (*userData->userInfo == attackEndInfo || *userData->userInfo == beAttackedInfo)
-		{
-			if (*userData->userInfo == attackEndInfo)
-			{
-				Stage1GameplayLayer *gamePlayer = (Stage1GameplayLayer *)getParent();
-				Sprite *hero = gamePlayer->kunpeng;
-				if (hero->getPosition().distance(getPosition()) <= attackDist)
-				{
-					// 主角被攻击
-				}
-			}
-			this->state = STATE_DEFAULT;
-			this->stopAllActions();
-			this->runAction(RepeatForever::create(Animate::create(this->defaultAnimation)));
-		}
-
-		if (*userData->userInfo == deadInfo)
-		{
-			this->runAction(Sequence::create(FadeOut::create(ANIMATION_DURATION),
-				CallFunc::create([this]() { this->setPosition(-1111, -1111); this->removeFromParent();  }), NULL));
-		}
-	});
-	_eventDispatcher->addEventListenerWithFixedPriority(animationListener, -1);
 
 	runAction(RepeatForever::create(Animate::create(defaultAnimation)));
 }
@@ -184,7 +148,11 @@ void FishEnemy1::getHurt(int h)
 	else
 	{
 		stopAllActions();
-		runAction(Animate::create(beAttackedAnimation));
+		runAction(Sequence::create(Animate::create(attackAnimation), CallFunc::create([this]() {
+			this->state = STATE_DEFAULT;
+			this->stopAllActions();
+			this->runAction(RepeatForever::create(Animate::create(this->defaultAnimation)));
+		}), NULL));
 	}
 }
 
@@ -197,7 +165,10 @@ void FishEnemy1::die()
 {
 	state = STATE_DEAD;
 	stopAllActions();
-	runAction(Animate::create(deadAnimation));
+	runAction(Sequence::create(Animate::create(attackAnimation), CallFunc::create([this]() {
+		this->runAction(Sequence::create(FadeOut::create(ANIMATION_DURATION),
+			CallFunc::create([this]() { this->removeFromParent(); }), NULL));
+	}), NULL));
 }
 
 void FishEnemy1::wander()
@@ -243,5 +214,15 @@ void FishEnemy1::attack(Vec2 pos)
 
 	state = STATE_ATTACK;
 	stopAllActions();
-	runAction(Animate::create(attackAnimation));
+	runAction(Sequence::create(Animate::create(attackAnimation), CallFunc::create([this]() {
+		Stage1GameplayLayer *gamePlayer = (Stage1GameplayLayer *) this->getParent();
+		Sprite *hero = gamePlayer->kunpeng;
+		if (hero->getPosition().distance(this->getPosition()) <= this->attackDist)
+		{
+			// 主角被攻击
+		}
+		this->state = STATE_DEFAULT;
+		this->stopAllActions();
+		this->runAction(RepeatForever::create(Animate::create(this->defaultAnimation)));
+	}), NULL));
 }
