@@ -8,6 +8,7 @@ using namespace std;
 # define hitThreshold 150 //发起冲刺的距离阈值
 # define hurtThreshold 40 //受伤的距离阈值
 # define hitSpeed 20 //冲刺的速度
+# define moveOutside 200 //允许出镜头的阈值
 
 Bird_zwc::Bird_zwc()
 {
@@ -187,7 +188,7 @@ void Bird_zwc::wanderAbout(){
 			}
 
 			if (distance < hurtThreshold){
-				temp->kunpeng->getHurtGeneral(40);
+				temp->kunpeng->getHurtGeneral();
 			}
 
 		}
@@ -251,20 +252,20 @@ void Bird_zwc::lockBirdWithinLandscape(){
 		int heroPositionInCameraX = this->getParent()->getPositionX() + this->getPositionX();
 		int heroPositionInCameraY = this->getParent()->getPositionY() + this->getPositionY();
 
-		if (heroPositionInCameraX > visibleSize.width){
-			int difference = heroPositionInCameraX - visibleSize.width;
+		if (heroPositionInCameraX > visibleSize.width + moveOutside){
+			int difference = heroPositionInCameraX - visibleSize.width - moveOutside;
 			this->setPositionX(this->getPositionX() - difference);
 		}
-		if (heroPositionInCameraX < 0){
-			int difference = heroPositionInCameraX;
+		if (heroPositionInCameraX < 0 - moveOutside){
+			int difference = heroPositionInCameraX + moveOutside;
 			this->setPositionX(this->getPositionX() - difference);
 		}
-		if (heroPositionInCameraY > visibleSize.height){
-			int difference = heroPositionInCameraY - visibleSize.height;
+		if (heroPositionInCameraY > visibleSize.height + moveOutside){
+			int difference = heroPositionInCameraY - visibleSize.height - moveOutside;
 			this->setPositionY(this->getPositionY() - difference);
 		}
-		if (heroPositionInCameraY < 0){
-			int difference = heroPositionInCameraY;
+		if (heroPositionInCameraY < 0 - moveOutside){
+			int difference = heroPositionInCameraY + moveOutside;
 			this->setPositionY(this->getPositionY() - difference);
 		}
 
