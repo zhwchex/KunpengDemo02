@@ -39,7 +39,7 @@ void Stage1GameplayLayer::onEnter(){
 
 	this->kunpeng->setTag(2);
 	this->kunpeng->setPosition(400, 200);
-	this->addChild(this->kunpeng);
+	this->addChild(this->kunpeng,2);
 	this->addChild(waterSurface, 1);
 
 
@@ -140,12 +140,12 @@ void Stage1GameplayLayer::onEnter(){
 	this->addChild(fishljj);
 	enemyList.pushBack(fishljj);
 
-	/*
+	
 	GeneralUnit *fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
 	fishcw->setPosition(Vec2(600, 0));
 	this->addChild(fishcw);
 	enemyList.pushBack(fishcw);
-	*/
+	
 
 	/*
 	Bird_yyh* bird1 = Bird_yyh::create("characters/Bird_yyh/left1.png");
