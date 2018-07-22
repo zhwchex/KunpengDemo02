@@ -6,7 +6,7 @@
 //author£∫¿Óº—Ω‹
 //–°π÷£∫”„
 
-#define FISHHEALTHY1 200
+#define FISHHEALTHY1 100
 #define ALARMDISTANCE1 300
 #define ATTACK_PROB 8
 
