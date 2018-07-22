@@ -254,4 +254,13 @@ void Stage1Scene::myUpdate(float dt){
 		uiLayer->bossHPBar->runAction(FadeIn::create(1));
 		gameplayLayer->heroHasTriggeredDetectBoss = true;
 	}
+
+	if (kp->isBird){
+		uiLayer->head_kun->setVisible(false);
+		uiLayer->head_peng->setVisible(true);
+	}
+	else{
+		uiLayer->head_kun->setVisible(true);
+		uiLayer->head_peng->setVisible(false);
+	}
 }
