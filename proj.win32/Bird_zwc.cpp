@@ -156,7 +156,7 @@ void Bird_zwc::wanderAbout(){
 		x_change = bird_step*(cos(atan(x_dis / y_dis)));
 		y_change = bird_step*(sin(atan(x_dis / y_dis)));
 
-	if (pauseflag == 0){
+		if (pauseflag == 0 && distance < Director::getInstance()->getVisibleSize().width * 1.5){
 
 	
 
@@ -252,6 +252,7 @@ void Bird_zwc::lockBirdWithinLandscape(){
 		int heroPositionInCameraX = this->getParent()->getPositionX() + this->getPositionX();
 		int heroPositionInCameraY = this->getParent()->getPositionY() + this->getPositionY();
 
+		/*
 		if (heroPositionInCameraX > visibleSize.width + moveOutside){
 			int difference = heroPositionInCameraX - visibleSize.width - moveOutside;
 			this->setPositionX(this->getPositionX() - difference);
@@ -260,6 +261,8 @@ void Bird_zwc::lockBirdWithinLandscape(){
 			int difference = heroPositionInCameraX + moveOutside;
 			this->setPositionX(this->getPositionX() - difference);
 		}
+		*/
+
 		if (heroPositionInCameraY > visibleSize.height + moveOutside){
 			int difference = heroPositionInCameraY - visibleSize.height - moveOutside;
 			this->setPositionY(this->getPositionY() - difference);
