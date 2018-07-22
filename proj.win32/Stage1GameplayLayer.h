@@ -18,6 +18,11 @@ public:
 	WaterSurface * waterSurface = nullptr;
 
 	HeroSprite * kunpeng = nullptr;
+	Zhurong * zhurong = nullptr;
+
+	const int detectBossX = 10500;
+	bool heroHasTriggeredDetectBoss = false;
+
 	Sprite * background = nullptr;
 	static Stage1GameplayLayer * create();
 

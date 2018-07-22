@@ -162,7 +162,15 @@ Zhurong::Zhurong()
 			this->acceptCall = false;//在动画开始的第一帧禁止外面调用wanderAbout()
 		}
 		if (*userData->userInfo == dieleftEndInfo){
-			this->acceptCall = true;//动画结束时，允许祝融接受外面调用wanderAbout()
+			Animation * iamhereleftanimation = Animation::create();
+			iamhereleftanimation->addSpriteFrameWithFileName("characters/zhurong/iamhereleft.png");
+
+			iamhereleftanimation->setDelayPerUnit(this->ANIMATION_FRAME_INTERVAL);
+			iamhereleftanimation->setRestoreOriginalFrame(true);
+			iamhereleftanimation->retain();
+			//this->acceptCall = true;//动画结束时，允许祝融接受外面调用wanderAbout()
+			this->runAction(RepeatForever::create(Animate::create(iamhereleftanimation)));
+			
 		}
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(dieleftFrameEventListener, -1);
@@ -196,7 +204,14 @@ Zhurong::Zhurong()
 			this->acceptCall = false;//在动画开始的第一帧禁止外面调用wanderAbout()
 		}
 		if (*userData->userInfo == dierightEndInfo){
-			this->acceptCall = true;//动画结束时，允许祝融接受外面调用wanderAbout()
+			Animation * iamhererightanimation = Animation::create();
+			iamhererightanimation->addSpriteFrameWithFileName("characters/zhurong/iamhereright.png");
+
+			iamhererightanimation->setDelayPerUnit(this->ANIMATION_FRAME_INTERVAL);
+			iamhererightanimation->setRestoreOriginalFrame(true);
+			iamhererightanimation->retain();
+			//this->acceptCall = true;//动画结束时，允许祝融接受外面调用wanderAbout()
+			this->runAction(RepeatForever::create(Animate::create(iamhererightanimation)));
 		}
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(dierightFrameEventListener, -1);
@@ -360,8 +375,8 @@ Zhurong::Zhurong()
 
 		if (*userData->userInfo == seacolorAnimation){
 			Sprite* sea1 = Sprite::create("characters/zhurong/red-3.png");
-			sea1->setAnchorPoint(Point(0, 1));
-			sea1->setPosition(Vec2(0, 0));
+			sea1->setAnchorPoint(Point(0.5, 1));
+			sea1->setPosition(Vec2(this->getPositionX(), 0));
 			sea = sea1;
 			//auto layer = (Stage1GameplayLayer *)this->getParent();
 			this->getParent()->addChild(sea1);
@@ -747,6 +762,7 @@ void Zhurong::wanderAbout(){
 				{
 					heat_flag = heat_flag + 1;
 					//if (heat_flag % 400 == 0)
+					if(kun_x >= 10890)
 						heatwater();
 				}
 					
@@ -771,7 +787,7 @@ void Zhurong::wanderAbout(){
 					}
 					else{
 						romote_flag = romote_flag + 1;
-						if (romote_flag % 100 == 0)
+						if (romote_flag % 100 == 0 &&kun_x >= 10890)
 							prepareAndLaunchAFireballWhileFacingLeft();
 					}
 				}
@@ -899,7 +915,7 @@ void Zhurong::firerain(){
 void Zhurong::heatwater(){
 	this->stopAllActions();
 	this->acceptCall = false;
-	if (heatwater_flag == 0)
+	if (heatwater_flag == 0) 
 	{
 		this->runAction(Animate::create(this->heatupAnimation));
 	}
@@ -911,34 +927,43 @@ void Zhurong::getHurt(int damage){
 
 }
 void Zhurong::getHurtByWind(int damage){
-	this->stopAllActions();
-	auto temp = (Stage1GameplayLayer*)this->getParent();
-	auto hero = temp->kunpeng;
-	float hero_x = hero->getPosition().x;
-	float zhu_x = this->getPosition().x;
-	health = health - damage;
-	if (health >= 0)
-	{	/*
-		if (hero_x - zhu_x > 0)
-		{
-			this->runAction(Animate::create(this->hurtrightAnimation));
-		}
-		else{
-			this->runAction(Animate::create(this->hurtleftAnimation));
-		}
-		*/
-		
-	}
-	else{
-		if (hero_x - zhu_x > 0)
-		{
-			this->runAction(Animate::create(this->dierightAnimation));
-		}
-		else{
-			this->runAction(Animate::create(this->dieleftAnimation));
-		}
+	//this->stopAllActions();
+	if (dieflagforzhongrong == 0){
 
+		auto temp = (Stage1GameplayLayer*)this->getParent();
+		auto hero = temp->kunpeng;
+		float hero_x = hero->getPosition().x;
+		float zhu_x = this->getPosition().x;
+		health = health - damage;
+		if (health >= 0)
+		{	/*
+			if (hero_x - zhu_x > 0)
+			{
+			this->runAction(Animate::create(this->hurtrightAnimation));
+			}
+			else{
+			this->runAction(Animate::create(this->hurtleftAnimation));
+			}
+
+			*/
+
+		}
+		else{
+			
+			this->stopAllActions();
+			this->acceptCall = false;
+			dieflagforzhongrong = 1;
+			if (hero_x - zhu_x > 0)
+			{
+				this->runAction(Animate::create(this->dierightAnimation));
+			}
+			else{
+				this->runAction(Animate::create(this->dieleftAnimation));
+			}
+
+		}
 	}
+	
 
 
 }

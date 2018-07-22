@@ -1,6 +1,8 @@
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
 #include "Stage1Scene.h"
+#include "CoverScene.h"
+#include "AudioManager.h"
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -95,10 +97,12 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     // create a scene. it's an autorelease object
-    auto scene = Stage1Scene::createScene();
+    auto scene = CoverScene::createScene();
 
     // run
     director->runWithScene(scene);
+	
+	AudioManager::getInstance()->play(BGM_FILE_NAME, true);
 
     return true;
 }

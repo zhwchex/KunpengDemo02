@@ -1,5 +1,6 @@
 #include "Stage1Scene.h"
 #include "Stage1GameplayLayer.h"
+#include "Stage1UILayer.h"
 #include "HeroSprite.h"
 #include <iostream>
 
@@ -34,10 +35,17 @@ bool Stage1Scene::init(){
 
 
 	Size visibleSize = Director::getInstance()->getVisibleSize();
+
+
 	Stage1GameplayLayer * gameplayLayer = Stage1GameplayLayer::create();
 	gameplayLayer->setPosition(visibleSize.width/2,visibleSize.height/2);
 	gameplayLayer->setTag(1);
 	this->addChild(gameplayLayer);
+
+	Stage1UILayer * uiLayer = Stage1UILayer::create();
+	uiLayer->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+	uiLayer->setTag(2);
+	this->addChild(uiLayer);
 
 	HeroSprite * kp = (HeroSprite*)gameplayLayer->getChildByTag(2);
 
@@ -213,6 +221,9 @@ void Stage1Scene::updateHeroDirectionAndSetHimMoving(){
 void Stage1Scene::myUpdate(float dt){
 	Stage1GameplayLayer * gameplayLayer = (Stage1GameplayLayer*)this->getChildByTag(1);
 	HeroSprite * kp = gameplayLayer->kunpeng;
+	Zhurong * zhurong = gameplayLayer->zhurong;
+
+	Stage1UILayer * uiLayer = (Stage1UILayer*)this->getChildByTag(2);
 	
 	Vector <GeneralUnit*> enemyList = gameplayLayer->enemyList;
 	for (GeneralUnit * enemy1 : enemyList){
@@ -223,4 +234,24 @@ void Stage1Scene::myUpdate(float dt){
 	gameplayLayer->updateLayerPositionToMaintainHeroInCamera();
 	gameplayLayer->pauseflagHeroWithinCamera();
 	gameplayLayer->pauseflagHeroWithinLandscape();
+
+	double heroHPScale = 1.0 * kp->health / kp->FULL_HP;
+	if (heroHPScale < 0) heroHPScale = 0;
+	uiLayer->heroHPBar->setScaleX(heroHPScale);
+
+	double bossHPScale = 1.0 * zhurong->health / 10000;//0.5;//TODO. Need modification.
+	if (bossHPScale < 0) bossHPScale = 0;
+	uiLayer->bossHPBar->setScaleX(bossHPScale);
+
+
+	if (!gameplayLayer->heroHasTriggeredDetectBoss && kp->getPositionX() > gameplayLayer->detectBossX){
+		//uiLayer->bossName->setOpacity(128);
+		//uiLayer->bossHPBarShell->setOpacity(128);
+		//uiLayer->bossHPBar->setOpacity(128);
+
+		uiLayer->bossName->runAction(FadeIn::create(1));
+		uiLayer->bossHPBarShell->runAction(FadeIn::create(1));
+		uiLayer->bossHPBar->runAction(FadeIn::create(1));
+		gameplayLayer->heroHasTriggeredDetectBoss = true;
+	}
 }

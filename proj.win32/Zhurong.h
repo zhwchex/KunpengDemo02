@@ -7,9 +7,9 @@ class Zhurong :public GeneralUnit
 {
 public:
 
-	float ground_left = 1650;//地面的最左边
-	float ground_right = 1850;//地面的最右边（我觉得这一段距离很短，所以只有向右走和近身攻击有右边，其他都是向左攻击）
-	int health = 10000;
+	float ground_left = 11500;//地面的最左边
+	float ground_right = 11997;//地面的最右边（我觉得这一段距离很短，所以只有向右走和近身攻击有右边，其他都是向左攻击）
+	int health = 10000;//10000
 
 	int awake = 5000;
 
@@ -25,6 +25,7 @@ public:
 	Sprite* sea;
 	Sprite* fire_con;//一个指针，会不会有问题呢目前没看出来
 	int time_flag = 0;
+	int dieflagforzhongrong = 0;
 
 	//受伤扣的血量
 	int hockblood = 20;//挥砍时
@@ -41,8 +42,8 @@ public:
 	int romote_flag = 0;
 	int aoe_flag = 0;
 	int heat_flag = 0;
-	Sprite* s;
-	Vector <Sprite *>fireball = {};
+	Sprite* s; 
+	Vector <Sprite *>fireball;// = {};
 
 	//动画。只是动画，没有位移
 	Animation * walkingLeftWhileFacingLeftAnimation;//面向左边前进

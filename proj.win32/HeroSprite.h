@@ -40,7 +40,9 @@ public:
 	int waterBulletExplosionCount = 0;
 
 
-	int health = 100;
+	const int FULL_HP = 400;
+
+	int health = FULL_HP;
 
 	int camp = 1;
 
@@ -84,11 +86,9 @@ public:
 	Animation * hoveringLeftAnimation;
 
 	//鸟普通移动的动画
-	Animation * movingUpAnimation;
 	Animation * movingUpRightAnimation;
 	Animation * movingRightAnimation;
 	Animation * movingDownRightAnimation;
-	Animation * movingDownAnimation;
 	Animation * movingDownLeftAnimation;
 	Animation * movingLeftAnimation;
 	Animation * movingUpLeftAnimation;
@@ -188,6 +188,11 @@ public:
 	Animation * waterSplashingAnimation_small;
 
 	Animation * gettingHurtGeneralAnimation;
+	Animation * gettingHurtRightGeneralAnimation_peng;
+	Animation * gettingHurtLeftGeneralAnimation_peng;
+	Animation * gettingHurtRightGeneralAnimation_kun;
+	Animation * gettingHurtLeftGeneralAnimation_kun;
+
 
 	RepeatForever * moveRightWithoutAnimationAction;
 	RepeatForever * moveLeftWithoutAnimationAction;
@@ -404,6 +409,7 @@ public:
 	void getHurtByThunder();//被雷电击中，骨架闪烁+原地震颤
 	void getHurtByFire();//被火球击中，羽毛烧焦闪烁+后退
 	void getHurtByWater();//被水流击中，变落汤鸡+下落
+	void getHurtByWater(int damage);//被水流击中，变落汤鸡+下落
 	void getHurtByHammer();//被锤，被吹飞，扑闪翅膀挣扎一番恢复稳定
 	void getHurtByHammer(double direction);//吹飞方向为direction。0代表往上吹飞，90代表往右吹飞，180代表往下吹飞，270代表往左吹飞。
 	void getHurtByWind();//被吹风击中，羽毛变凌乱

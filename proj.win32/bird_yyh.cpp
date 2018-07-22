@@ -171,14 +171,15 @@ void Bird_yyh::update(float dt){
 void Bird_yyh::wanderAbout(){
 	if (dieflag == 0 && pauseflag == 0){
 	//scheduleUpdate();
-	AllocConsole();                                          // 开辟控制台
-	freopen("CONOUT$", "w", stdout);
+	//AllocConsole();                                          // 开辟控制台
+	//freopen("CONOUT$", "w", stdout);
 	/*Point p = this->getPosition();
 	p.x = p.x + 1;
 	p.y = p.y + 1;
 	this->setPosition(p);*/
 	auto temp = (Stage1GameplayLayer*)this->getParent();
 	Point hero = temp->kunpeng->getPosition();
+	//cout << "hero.x:" << hero.x << " y:" << hero.y << endl;
 	Point bird = this->getPosition();
 	float distance = sqrt(pow(hero.x - bird.x, 2) + pow(hero.y - bird.y, 2));
 	//cout << distance << endl;
