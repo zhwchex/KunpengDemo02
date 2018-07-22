@@ -360,8 +360,8 @@ Zhurong::Zhurong()
 
 		if (*userData->userInfo == seacolorAnimation){
 			Sprite* sea1 = Sprite::create("characters/zhurong/red-3.png");
-			sea1->setAnchorPoint(Point(0, 1));
-			sea1->setPosition(Vec2(0, 0));
+			sea1->setAnchorPoint(Point(0.5, 1));
+			sea1->setPosition(Vec2(this->getPositionX(), 0));
 			sea = sea1;
 			//auto layer = (Stage1GameplayLayer *)this->getParent();
 			this->getParent()->addChild(sea1);
@@ -445,11 +445,46 @@ Zhurong::Zhurong()
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == shootingFireBallStartAnimation){
 			this->acceptCall = false;//在动画开始的第0帧开始禁止外面调用wanderAbout()
+			Sprite * fireball = Sprite::create("characters/zhurong/fire_ball_00.png");
+			Sprite * hero = ((Stage1GameplayLayer *)this->getParent())->kunpeng;
+			Point zhu = this->getPosition();
+			Point bigfireball = Vec2(zhu.x - 120, zhu.y + 150);
+			fireball->setPosition(bigfireball);
+			fire_con = fireball;
+			this->getParent()->addChild(fireball);
+			int deltax = hero->getPositionX() - fireball->getPositionX();
+			int deltay = hero->getPositionY() - fireball->getPositionY();
+			Animation * fireanimation = Animation::create();
+			fireanimation->addSpriteFrameWithFileName("characters/zhurong/fire1.png");
+			fireanimation->addSpriteFrameWithFileName("characters/zhurong/fire2.png");
+			fireanimation->addSpriteFrameWithFileName("characters/zhurong/fire3.png");
+			fireanimation->addSpriteFrameWithFileName("characters/zhurong/fire4.png");
+
+			fireanimation->setDelayPerUnit(this->ANIMATION_FRAME_INTERVAL);
+			fireanimation->setRestoreOriginalFrame(true);
+			fireanimation->retain();
+			fireball->runAction(Animate::create(fireanimation));
+			auto delayTime = DelayTime::create(this->ANIMATION_FRAME_INTERVAL * 4);
+			auto func = CallFunc::create([this](){ 
+				
+				Sprite * hero = ((Stage1GameplayLayer *)this->getParent())->kunpeng;
+				Point zhu = this->getPosition();
+				Point bigfireball = Vec2(zhu.x - 120, zhu.y + 150);
+				
+				int deltax = hero->getPositionX() - fire_con->getPositionX();
+				int deltay = hero->getPositionY() - fire_con->getPositionY();
+				double distance = sqrt(pow(deltax, 2) + pow(deltax, 2));
+				fire_con->runAction(RepeatForever::create(MoveBy::create(distance / 200, Vec2(deltax, deltay))));
+				fire_con->runAction(RepeatForever::create(Animate::create(this->fireballSpinningAnimation))); });
+			auto seq = Sequence::create(delayTime, func, nullptr);
+			fireball->runAction(seq);
+
+			
 		}
 		
 		if (*userData->userInfo == shootingFireBallLaunchingAnimation){
 			//创造一个火球，脱手飞向主角。 不妨令火球的飞行速度为200像素/秒。
-			Sprite * fireball = Sprite::create("characters/zhurong/fire_ball_00.png");
+			/*Sprite * fireball = Sprite::create("characters/zhurong/fire_ball_00.png");
 			Sprite * hero = ((Stage1GameplayLayer *)this->getParent())->kunpeng;
 			Point zhu = this->getPosition();
 			Point bigfireball = Vec2(zhu.x - 120, zhu.y + 150);
@@ -460,7 +495,7 @@ Zhurong::Zhurong()
 
 			double distance = sqrt(pow(deltax, 2) + pow(deltax, 2));
 			fireball->runAction(RepeatForever::create(MoveBy::create(distance / 200, Vec2(deltax, deltay))));
-			fireball->runAction(RepeatForever::create(Animate::create(this->fireballSpinningAnimation)));
+			fireball->runAction(RepeatForever::create(Animate::create(this->fireballSpinningAnimation)));*/
 
 		}
 		
@@ -607,7 +642,7 @@ void Zhurong::update(float dt){
 		{
 			yyh = yyh + 1;
 			if (yyh%100==0)
-				temp->kunpeng->getHurtGeneral(firerainblood);
+				temp->kunpeng->getHurtGeneral(firerainblood);//因为hero一受伤就会stopallactions
 		}
 		else{
 			if (time_flag == 0){
@@ -789,21 +824,35 @@ void Zhurong::firerainsmall(float dt){
 	float f = kun_x - firerain_scope / 2;
 	float te = firerain_scope / 6;
 	int fireballbeginheight = 800;
-	fire1->setPosition(Vec2(f + 1 * te, fireballbeginheight));
+	srand((unsigned)time(NULL));
+	int r1 = rand() % int(firerain_scope);
+	int r2 = rand() % int(firerain_scope);
+	int r3 = rand() % int(firerain_scope);
+	int r4 = rand() % int(firerain_scope);
+	int r5 = rand() % int(firerain_scope);
+	int r6 = rand() % int(firerain_scope);
+	/*fire1->setPosition(Vec2(f + 1 * te, fireballbeginheight));
 	fire2->setPosition(Vec2(f + 2 * te, fireballbeginheight));
 	fire3->setPosition(Vec2(f + 3 * te, fireballbeginheight));
 	fire4->setPosition(Vec2(f + 4 * te, fireballbeginheight));
 	fire5->setPosition(Vec2(f + 5 * te, fireballbeginheight));
-	fire6->setPosition(Vec2(f + 6 * te, fireballbeginheight));
+	fire6->setPosition(Vec2(f + 6 * te, fireballbeginheight));*/
 	
-	int height = -200;
+	int height = -10;
 	auto time = 10.0f;
-	auto actionMove1 = MoveTo::create(time, Vec2(f - 1 * te, height));
-	auto actionMove2 = MoveTo::create(time, Vec2(f + 0 * te, height));
-	auto actionMove3 = MoveTo::create(time, Vec2(f + 1 * te, height));
-	auto actionMove4 = MoveTo::create(time, Vec2(f + 2 * te, height));
-	auto actionMove5 = MoveTo::create(time, Vec2(f + 3 * te, height));
-	auto actionMove6 = MoveTo::create(time, Vec2(f + 4 * te, height));
+	fire1->setPosition(Vec2(f + r1, fireballbeginheight));
+	fire2->setPosition(Vec2(f + r2, fireballbeginheight));
+	fire3->setPosition(Vec2(f + r3, fireballbeginheight));
+	fire4->setPosition(Vec2(f + r4, fireballbeginheight));
+	fire5->setPosition(Vec2(f + r5, fireballbeginheight));
+	fire6->setPosition(Vec2(f + r6, fireballbeginheight));
+
+	auto actionMove1 = MoveTo::create(time, Vec2(f + r1 - 50, height));
+	auto actionMove2 = MoveTo::create(time, Vec2(f + r2 - 50, height));
+	auto actionMove3 = MoveTo::create(time, Vec2(f + r3 - 50, height));
+	auto actionMove4 = MoveTo::create(time, Vec2(f + r4 - 50, height));
+	auto actionMove5 = MoveTo::create(time, Vec2(f + r5 - 50, height));
+	auto actionMove6 = MoveTo::create(time, Vec2(f + r6 - 50, height));
 	
 
 	fire1->runAction(actionMove1);
@@ -850,7 +899,7 @@ void Zhurong::firerain(){
 void Zhurong::heatwater(){
 	this->stopAllActions();
 	this->acceptCall = false;
-	if (heatwater_flag == 0)
+	if (heatwater_flag == 0) 
 	{
 		this->runAction(Animate::create(this->heatupAnimation));
 	}
@@ -869,22 +918,23 @@ void Zhurong::getHurtByWind(int damage){
 	float zhu_x = this->getPosition().x;
 	health = health - damage;
 	if (health >= 0)
-	{
+	{	/*
 		if (hero_x - zhu_x > 0)
 		{
-			this->runAction(Animate::create(this->hurtleftAnimation));
-		}
-		else{
 			this->runAction(Animate::create(this->hurtrightAnimation));
 		}
+		else{
+			this->runAction(Animate::create(this->hurtleftAnimation));
+		}
+		*/
 	}
 	else{
 		if (hero_x - zhu_x > 0)
 		{
-			this->runAction(Animate::create(this->dieleftAnimation));
+			this->runAction(Animate::create(this->dierightAnimation));
 		}
 		else{
-			this->runAction(Animate::create(this->dierightAnimation));
+			this->runAction(Animate::create(this->dieleftAnimation));
 		}
 
 	}

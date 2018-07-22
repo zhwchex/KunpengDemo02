@@ -4,6 +4,7 @@
 #include "Stage1Scene.h"
 #include "EnemyFish.h"
 #include "Bullet.h"
+#include "Bird_zwc.h"
 
 
 Stage1GameplayLayer::Stage1GameplayLayer()
@@ -37,10 +38,7 @@ Stage1GameplayLayer * Stage1GameplayLayer::create(){
 
 void Stage1GameplayLayer::onEnter(){
 
-	this->kunpeng->setTag(2);
-	this->kunpeng->setPosition(400, 200);
-	this->addChild(this->kunpeng,2);
-	this->addChild(waterSurface, 1);
+
 
 
 	Sprite * tutorial_motion = Sprite::create("tutorial/tutorial_motion.png");
@@ -142,22 +140,22 @@ void Stage1GameplayLayer::onEnter(){
 
 	
 	GeneralUnit *fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
-	fishcw->setPosition(Vec2(600, 0));
+	fishcw->setPosition(Vec2(6600, 0));
 	this->addChild(fishcw);
 	enemyList.pushBack(fishcw);
 	
 
-	/*
+	
 	Bird_yyh* bird1 = Bird_yyh::create("characters/Bird_yyh/left1.png");
-	bird1->setPosition(300, 200);
+	bird1->setPosition(7200, 200);
 	this->addChild(bird1);
-	Bird_yyh* bird2 = Bird_yyh::create("characters/Bird_yyh/left1.png");
-	bird2->setPosition(800, 200);
+	Bird_zwc* bird2 = Bird_zwc::create("characters/Bird_yyh/left1.png");
+	bird2->setPosition(7200, 200);
 	this->addChild(bird2);
 
 	enemyList.pushBack(bird1);
 	enemyList.pushBack(bird2);
-	*/
+	
 
 	/*
 	Bird_yyh* bird2 = Bird_yyh::create("characters/Bird_yyh/bird1.jpg");
@@ -193,6 +191,12 @@ void Stage1GameplayLayer::onEnter(){
 	
 
 	
+
+	this->kunpeng->setTag(2);
+	this->kunpeng->setPosition(400, 200);
+	this->addChild(this->kunpeng);
+	this->addChild(waterSurface, 1);
+
 	
 	Layer::onEnter();
 }

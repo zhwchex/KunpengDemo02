@@ -427,13 +427,10 @@ EnemyFish::EnemyFish()
 	ValueMap getHurtAnimationReachesfirstFrameInfo;
 	ValueMap  getHurtAnimationReachesLastFrameInfo;
 
-<<<<<<< HEAD
-	getHurtAnimationReachesfirstFrameInfo["asd"] = Value(2);
-	getHurtAnimationReachesLastFrameInfo["ljjfish0"] = Value("ljjfish0");
-=======
+
 	getHurtAnimationReachesfirstFrameInfo["ljjFish"] = Value(222);
 	getHurtAnimationReachesLastFrameInfo["0"] = Value(223);
->>>>>>> 28fbcddbdc8808ba0bc1e2e1ab44862f593e4d6d
+
 
 	this->getHurtAnimation->getFrames().at(0)->setUserInfo(getHurtAnimationReachesfirstFrameInfo);
 

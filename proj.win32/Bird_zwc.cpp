@@ -187,7 +187,7 @@ void Bird_zwc::wanderAbout(){
 			}
 
 			if (distance < hurtThreshold){
-				temp->kunpeng->getHurtGeneral();
+				temp->kunpeng->getHurtGeneral(40);
 			}
 
 		}
