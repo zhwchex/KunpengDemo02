@@ -509,13 +509,15 @@ void EnemyFish::wanderAbout() {
 		int herox =  ((Stage1GameplayLayer *)this->getParent())->kunpeng->getPositionX();
 		int heroy =  ((Stage1GameplayLayer *)this->getParent())->kunpeng->getPositionY();
 
+		float waterfacey = ((Stage1GameplayLayer*)this->getParent())->waterSurface->getPositionY();
+
 		float fishx = this->getPositionX();
 		float fishy = this->getPositionY();
 
 		double distance = (herox - fishx)*(herox - fishx) + (heroy - fishy)*(herox - fishy);
 		distance = sqrt(distance);
 
-		if (distance < ALARMDISTANCE1) {
+		if (distance < ALARMDISTANCE1 && heroy < waterfacey) {
 			//进入攻击距离 发起攻击
 			this->stopAllActions();
 			if ((herox - fishx) == 0 && (heroy - fishy) > 0) {
@@ -559,19 +561,24 @@ void EnemyFish::wanderAbout() {
 				this->runAction(RepeatForever::create(Animate::create(this->movingDownRightAnimation)));
 			}
 			//this->runAction(RepeatForever::create(MoveTo::create(0.5f, Vec2(0.5*herox, 0.5*heroy))));
+			int damage = 10;
+			((Stage1GameplayLayer *)this->getParent())->kunpeng->getHurtGeneral(damage);
 			this->runAction(RepeatForever::create(Animate::create(this->attackAnimation)));
 		}
 		else {
 			//生成随机数 朝八个方向闲逛
 			srand((unsigned)time(NULL));
 			int direction = rand() % 8;
-			//direction = 3;
+			//direction = 0;
 			switch (direction)
 			{
 			case 0:
 				//上
 				this->stopAllActions();
-				this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, this->speed_flying_pixel_per_second))));
+				if(this->getPositionY()+this->speed_flying_pixel_per_second > waterfacey)
+					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, waterfacey))));
+				else
+					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, this->speed_flying_pixel_per_second))));
 				this->runAction(RepeatForever::create(Animate::create(this->movingUpAnimation)));
 				break;
 			case 1:
@@ -595,7 +602,10 @@ void EnemyFish::wanderAbout() {
 			case 4:
 				//左上
 				this->stopAllActions();
-				this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second / 1.414, this->speed_flying_pixel_per_second / 1.414))));
+				if (this->getPositionY() + this->speed_flying_pixel_per_second > waterfacey)
+					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-waterfacey/1.414, waterfacey/1.414))));
+				else
+					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second / 1.414, this->speed_flying_pixel_per_second / 1.414))));
 				this->runAction(RepeatForever::create(Animate::create(this->movingUpLeftAnimation)));
 				break;
 			case 5:
@@ -607,7 +617,10 @@ void EnemyFish::wanderAbout() {
 			case 6:
 				//右上
 				this->stopAllActions();
-				this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.414, this->speed_flying_pixel_per_second / 1.414))));
+				if (this->getPositionY() + this->speed_flying_pixel_per_second > waterfacey)
+					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(waterfacey/1.414, waterfacey/1.414))));
+				else
+					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.414, this->speed_flying_pixel_per_second / 1.414))));
 				this->runAction(RepeatForever::create(Animate::create(this->movingUpRightAnimation)));
 				break;
 			case 7:
