@@ -242,4 +242,16 @@ void Stage1Scene::myUpdate(float dt){
 	double bossHPScale = 1.0 * zhurong->health / 10000;//0.5;//TODO. Need modification.
 	if (bossHPScale < 0) bossHPScale = 0;
 	uiLayer->bossHPBar->setScaleX(bossHPScale);
+
+
+	if (!gameplayLayer->heroHasTriggeredDetectBoss && kp->getPositionX() > gameplayLayer->detectBossX){
+		//uiLayer->bossName->setOpacity(128);
+		//uiLayer->bossHPBarShell->setOpacity(128);
+		//uiLayer->bossHPBar->setOpacity(128);
+
+		uiLayer->bossName->runAction(FadeIn::create(1));
+		uiLayer->bossHPBarShell->runAction(FadeIn::create(1));
+		uiLayer->bossHPBar->runAction(FadeIn::create(1));
+		gameplayLayer->heroHasTriggeredDetectBoss = true;
+	}
 }
