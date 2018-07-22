@@ -41,24 +41,27 @@ void Stage1GameplayLayer::onEnter(){
 	this->addChild(this->background, -1);
 
 
-	Sprite * tutorial_motion = Sprite::create("tutorial/tutorial_motion.png");
-	tutorial_motion->setPosition(700, 300);
+	this->tutorial_motion = Sprite::create("tutorial/tutorial_motion.png");
+	this->tutorial_motion->setPosition(700, 300);
 	this->addChild(tutorial_motion);
 
-	Sprite * tutorial_jk = Sprite::create("tutorial/tutorial_jk.png");
-	tutorial_jk->setPosition(700, -300);
+	this->tutorial_jk = Sprite::create("tutorial/tutorial_jk.png");
+	this->tutorial_jk->setPosition(700, -300);
 	this->addChild(tutorial_jk);
 
-	Sprite * tutorial_trans_btf = Sprite::create("tutorial/tutorial_trans_btf.png");
-	tutorial_trans_btf->setPosition(1400, 100);
+	this->tutorial_trans_btf = Sprite::create("tutorial/tutorial_trans_btf.png");
+	this->tutorial_trans_btf->setPosition(1400, 100);
+	this->tutorial_trans_btf->setOpacity(0);
 	this->addChild(tutorial_trans_btf);
 
-	Sprite * tutorial_trans_ftb = Sprite::create("tutorial/tutorial_trans_ftb.png");
-	tutorial_trans_ftb->setPosition(2400, -200);
+	this->tutorial_trans_ftb = Sprite::create("tutorial/tutorial_trans_ftb.png");
+	this->tutorial_trans_ftb->setPosition(2400, -200);
+	this->tutorial_trans_ftb->setOpacity(0);
 	this->addChild(tutorial_trans_ftb);
 
-	Sprite * tutorial_delegate_explore = Sprite::create("tutorial/tutorial_delegate_explore.png");
-	tutorial_delegate_explore->setPosition(3500, 0);
+	this->tutorial_delegate_explore = Sprite::create("tutorial/tutorial_delegate_explore.png");
+	this->tutorial_delegate_explore->setPosition(3500, 0);	
+	this->tutorial_delegate_explore->setOpacity(0);
 	this->addChild(tutorial_delegate_explore);
 
 	/*
