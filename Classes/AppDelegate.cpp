@@ -2,6 +2,7 @@
 #include "HelloWorldScene.h"
 #include "Stage1Scene.h"
 #include "CoverScene.h"
+#include "AudioManager.h"
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -100,6 +101,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // run
     director->runWithScene(scene);
+	
+	AudioManager::getInstance()->play(BGM_FILE_NAME, true);
 
     return true;
 }
