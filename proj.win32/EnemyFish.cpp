@@ -443,7 +443,7 @@ EnemyFish::EnemyFish()
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == getHurtAnimationReachesLastFrameInfo) {
 			log("Last ljjFrame of getHurtAnimation reached.");
-			//this->acceptCall = true;
+			this->acceptCall = true;
 		}
 		if (*userData->userInfo == getHurtAnimationReachesfirstFrameInfo) {
 			log("First ljjFrame of getHurtAnimation reached.");
@@ -577,7 +577,7 @@ void EnemyFish::wanderAbout() {
 		else {
 			//生成随机数 朝八个方向闲逛
 			srand((unsigned)time(NULL));
-			int direction = rand() % 24;
+			int direction = rand() % 12;
 			//direction = 0;
 			switch (direction)
 			{
@@ -669,6 +669,7 @@ void EnemyFish::getHurt(int damage) {
 			stopAllActions();
 			log("%d",this->health);
 			this->runAction(Animate::create(this->getHurtAnimation));
+			//this->acceptCall = true;
 		}
 	}
 }
