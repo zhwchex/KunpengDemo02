@@ -3,8 +3,8 @@
 #include <time.h> 
 #include "GeneralUnit.h"
 
-//author£ºÀî¼Ñ½Ü
-//Ğ¡¹Ö£ºÓã
+//authorï¼šæä½³æ°
+//å°æ€ªï¼šé±¼
 
 #define FISHHEALTHY1 100
 #define ALARMDISTANCE1 300
@@ -17,16 +17,16 @@ public:
 	float speed_flying_pixel_per_second = 100;
 	
 	bool acceptCall = true;
-	//Ğ¡¹Ö×´Ì¬
+	//å°æ€ªçŠ¶æ€
 	bool facingRight = true;
 	bool facingLeft = false;
 	bool moving = false;
 
-	//ĞüÍ£¶¯»­
+	//æ‚¬åœåŠ¨ç”»
 	Animation * hoveringRightAnimation;
 	Animation * hoveringLeftAnimation;
 
-	//ÆÕÍ¨ÒÆ¶¯µÄ¶¯»­
+	//æ™®é€šç§»åŠ¨çš„åŠ¨ç”»
 	Animation * movingUpAnimation;
 	Animation * movingUpRightAnimation;
 	Animation * movingRightAnimation;
@@ -36,13 +36,13 @@ public:
 	Animation * movingLeftAnimation;
 	Animation * movingUpLeftAnimation;
 
-	//¹¥»÷¶¯»­
+	//æ”»å‡»åŠ¨ç”»
 	Animation * attackAnimation;
 
-	//ÊÜÉË¶¯»­
+	//å—ä¼¤åŠ¨ç”»
 	Animation *getHurtAnimation;
 
-	//ËÀÍö¶¯»­
+	//æ­»äº¡åŠ¨ç”»
 	Animation *dieAnimation;
 
 	EnemyFish();
@@ -56,4 +56,3 @@ public:
 	void getHurtByWind(int damage);
 	void die();
 };
-
