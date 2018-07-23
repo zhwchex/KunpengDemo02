@@ -53,6 +53,8 @@ public:
 
 
 	Sprite * background = nullptr;
+
+	Sprite * waterBody = nullptr;
 	static Stage1GameplayLayer * create();
 
 

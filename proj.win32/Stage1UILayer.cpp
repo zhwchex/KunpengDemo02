@@ -11,6 +11,10 @@ Stage1UILayer::Stage1UILayer()
 
 	this->head_kun = Sprite::create("ui/head_kun.png");
 	this->head_peng = Sprite::create("ui/head_peng.png");
+
+	this->blackCurtain = Sprite::create("ui/black_curtain.png");
+	this->missionComplete = Sprite::create("ui/mission_complete.png");
+	this->invincibleHint = Sprite::create("ui/invincible_hint.png");
 }
 
 
@@ -53,7 +57,9 @@ void Stage1UILayer::onEnter(){
 	this->bossName->setPosition(0 - bossHPBar->getContentSize().width / 2, -visibleSize.height * 34 / 100);
 	this->bossName->setOpacity(0);
 
-
+	this->invincibleHint->setOpacity(0);
+	this->blackCurtain->setOpacity(0);
+	this->missionComplete->setOpacity(0);
 
 
 
@@ -64,6 +70,10 @@ void Stage1UILayer::onEnter(){
 	this->addChild(this->bossHPBar);
 	this->addChild(this->bossHPBarShell);
 	this->addChild(this->bossName);
+	this->addChild(this->invincibleHint);
+	this->addChild(this->missionComplete);
+	this->addChild(this->blackCurtain);
+
 
 	Layer::onEnter();
 }

@@ -19,6 +19,15 @@ public:
 	Sprite * head_kun = nullptr;
 	Sprite * head_peng = nullptr;
 
+
+	Sprite * invincibleHint = nullptr;
+	Sprite * blackCurtain = nullptr;
+	Sprite * missionComplete = nullptr;
+
+	bool invincibleHintHasBeenDisplayed = false;
+	bool blackCurtainHasBeenDisplayed = false;
+	bool missionCompleteHasBeenDiaplayed = false;
+
 	static Stage1UILayer * create();
 	Stage1UILayer();
 	~Stage1UILayer();

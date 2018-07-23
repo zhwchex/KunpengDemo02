@@ -9,7 +9,7 @@ public:
 
 	float ground_left = 11500;//地面的最左边
 	float ground_right = 11997;//地面的最右边（我觉得这一段距离很短，所以只有向右走和近身攻击有右边，其他都是向左攻击）
-	int health = 10000;//10000
+	int health = 1000;//10000
 
 	int awake = 5000;
 

@@ -15,6 +15,7 @@ Stage1GameplayLayer::Stage1GameplayLayer()
 
 	this->waterSurface = WaterSurface::create("landscapes/water_surface.png");
 	
+	this->waterBody = Sprite::create("landscapes/water_body.png");
 }
 
 
@@ -42,11 +43,11 @@ void Stage1GameplayLayer::onEnter(){
 
 
 	this->tutorial_motion = Sprite::create("tutorial/tutorial_motion.png");
-	this->tutorial_motion->setPosition(700, 300);
+	this->tutorial_motion->setPosition(700, 200);
 	this->addChild(tutorial_motion);
 
 	this->tutorial_jk = Sprite::create("tutorial/tutorial_jk.png");
-	this->tutorial_jk->setPosition(700, -300);
+	this->tutorial_jk->setPosition(700, -200);
 	this->addChild(tutorial_jk);
 
 	this->tutorial_trans_btf = Sprite::create("tutorial/tutorial_trans_btf.png");
@@ -238,6 +239,11 @@ void Stage1GameplayLayer::onEnter(){
 	this->kunpeng->setPosition(400, 200);
 	this->addChild(this->kunpeng);
 	this->addChild(waterSurface, 1);
+
+	this->waterBody->setAnchorPoint(Vec2(0, 1));
+	this->waterBody->setScaleX(10);
+	this->waterBody->setOpacity(64);
+	this->addChild(this->waterBody);
 
 	
 	Layer::onEnter();

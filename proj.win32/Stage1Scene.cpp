@@ -1,6 +1,7 @@
 #include "Stage1Scene.h"
 #include "Stage1GameplayLayer.h"
 #include "Stage1UILayer.h"
+#include "EpilogueScene.h"
 #include "HeroSprite.h"
 #include <iostream>
 
@@ -278,5 +279,18 @@ void Stage1Scene::myUpdate(float dt){
 		gameplayLayer->heroHasTriggeredHint3 = true;
 	}
 
-	
+	if (!uiLayer->invincibleHintHasBeenDisplayed && kp->health < kp->FULL_HP / 2){
+		uiLayer->invincibleHint->runAction(Repeat::create(Sequence::create(FadeIn::create(0.5),DelayTime::create(1),FadeOut::create(0.5),nullptr),3));
+		uiLayer->invincibleHintHasBeenDisplayed = true;
+	}
+
+	if (!uiLayer->missionCompleteHasBeenDiaplayed && zhurong->health <= 0){
+		uiLayer->missionCompleteHasBeenDiaplayed = true;
+		uiLayer->invincibleHint->setVisible(false);
+		Action * curtainFadeIn = TargetedAction::create(uiLayer->blackCurtain, FadeIn::create(5));
+		uiLayer->missionComplete->runAction(Sequence::create(DelayTime::create(1), FadeIn::create(1.5), curtainFadeIn, CallFunc::create([]{
+			log("now jumping to next scene");
+			Director::getInstance()->replaceScene(EpilogueScene::createScene());
+		}), nullptr));
+	}
 }
