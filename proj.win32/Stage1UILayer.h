@@ -1,6 +1,7 @@
 #pragma once
 //#include "D:\cocos_workspace\KunpengDemo02\cocos2d\cocos\2d\CCLayer.h"
 #include "cocos2d.h"
+#include "AudioManager.h"
 
 USING_NS_CC;
 class Stage1UILayer :	public Layer

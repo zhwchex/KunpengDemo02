@@ -136,6 +136,8 @@ bool EpilogueScene::init()
 	Sequence * sequence = Sequence::create(thankUFadeIn, line4FadeIn, NULL);
 	this->runAction(sequence);
 
+	AudioManager::getInstance()->pause("audios/fybl_cut.mp3");
+	AudioManager::getInstance()->play("audios/qhf.mp3",false);
 
 	return true;
 }

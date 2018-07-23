@@ -240,7 +240,7 @@ void Stage1Scene::myUpdate(float dt){
 	if (heroHPScale < 0) heroHPScale = 0;
 	uiLayer->heroHPBar->setScaleX(heroHPScale);
 
-	double bossHPScale = 1.0 * zhurong->health / 10000;//0.5;//TODO. Need modification.
+	double bossHPScale = 1.0 * zhurong->health / zhurong->FULL_HP;
 	if (bossHPScale < 0) bossHPScale = 0;
 	uiLayer->bossHPBar->setScaleX(bossHPScale);
 
@@ -264,6 +264,9 @@ void Stage1Scene::myUpdate(float dt){
 		uiLayer->bossHPBarShell->runAction(FadeIn::create(1));
 		uiLayer->bossHPBar->runAction(FadeIn::create(1));
 		gameplayLayer->heroHasTriggeredDetectBoss = true;
+
+		AudioManager::getInstance()->stop("audios/ccb_cut.mp3");
+		AudioManager::getInstance()->play("audios/fybl_cut.mp3",true);
 	}
 
 	if ( !gameplayLayer->heroHasTriggeredHint1 && kp->getPositionX() > gameplayLayer->detectHint1){
@@ -279,7 +282,7 @@ void Stage1Scene::myUpdate(float dt){
 		gameplayLayer->heroHasTriggeredHint3 = true;
 	}
 
-	if (!uiLayer->invincibleHintHasBeenDisplayed && kp->health < kp->FULL_HP / 2){
+	if (!uiLayer->invincibleHintHasBeenDisplayed && kp->health < kp->FULL_HP){
 		uiLayer->invincibleHint->runAction(Repeat::create(Sequence::create(FadeIn::create(0.5),DelayTime::create(1),FadeOut::create(0.5),nullptr),3));
 		uiLayer->invincibleHintHasBeenDisplayed = true;
 	}
@@ -287,8 +290,8 @@ void Stage1Scene::myUpdate(float dt){
 	if (!uiLayer->missionCompleteHasBeenDiaplayed && zhurong->health <= 0){
 		uiLayer->missionCompleteHasBeenDiaplayed = true;
 		uiLayer->invincibleHint->setVisible(false);
-		Action * curtainFadeIn = TargetedAction::create(uiLayer->blackCurtain, FadeIn::create(5));
-		uiLayer->missionComplete->runAction(Sequence::create(DelayTime::create(1), FadeIn::create(1.5), curtainFadeIn, CallFunc::create([]{
+		Action * curtainFadeIn = TargetedAction::create(uiLayer->blackCurtain, FadeIn::create(3));
+		uiLayer->missionComplete->runAction(Sequence::create(DelayTime::create(1), FadeIn::create(1.5), DelayTime::create(2),curtainFadeIn, CallFunc::create([]{
 			log("now jumping to next scene");
 			Director::getInstance()->replaceScene(EpilogueScene::createScene());
 		}), nullptr));

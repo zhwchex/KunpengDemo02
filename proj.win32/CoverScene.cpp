@@ -119,5 +119,12 @@ void CoverScene::restartGameCallBack(Ref* pSender){
 }
 
 void CoverScene::goToPrologueSceneCallback(Ref * pSender){
-	Director::getInstance()->replaceScene(PrologueScene::createScene());
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	Sprite * blackCurtain = Sprite::create("ui/black_curtain.png");
+	blackCurtain->setPosition(visibleSize / 2);
+	blackCurtain->setOpacity(0);
+	this->addChild(blackCurtain);
+	TargetedAction * curtainFadeIn = TargetedAction::create(blackCurtain, FadeIn::create(3));
+	this->runAction(Sequence::create(curtainFadeIn, CallFunc::create([]{ Director::getInstance()->replaceScene(PrologueScene::createScene()); }), nullptr));
+	
 }

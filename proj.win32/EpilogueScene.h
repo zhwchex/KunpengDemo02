@@ -1,5 +1,6 @@
 #pragma once
 #include "cocos2d.h"
+#include "AudioManager.h"
 USING_NS_CC;
 class EpilogueScene :public Scene
 {

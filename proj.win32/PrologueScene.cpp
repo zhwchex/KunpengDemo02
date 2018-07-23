@@ -91,13 +91,13 @@ bool PrologueScene::init()
 	this->addChild(topRightMenu);
 
 
-	Label * line1 = Label::createWithTTF("beimingyouyu, qimingweikun", "fonts/Marker Felt.ttf", 36);
-	Label * line2 = Label::createWithTTF("kunzhida, buzhiqijiqianliye", "fonts/Marker Felt.ttf", 36);
-	Label * line3 = Label::createWithTTF("huaerweiniao, qimingweipeng", "fonts/Marker Felt.ttf", 36);
-	Label * line3_1 = Label::createWithTTF("pengzhibei, buzhiqijiqianliye", "fonts/Marker Felt.ttf", 36);
+	//Label * line1 = Label::createWithTTF("beimingyouyu, qimingweikun", "fonts/Marker Felt.ttf", 36);
+	//Label * line2 = Label::createWithTTF("kunzhida, buzhiqijiqianliye", "fonts/Marker Felt.ttf", 36);
+	//Label * line3 = Label::createWithTTF("huaerweiniao, qimingweipeng", "fonts/Marker Felt.ttf", 36);
+	//Label * line3_1 = Label::createWithTTF("pengzhibei, buzhiqijiqianliye", "fonts/Marker Felt.ttf", 36);
 	Label * line4 = Label::createWithTTF("Start the journey south!", "fonts/Marker Felt.ttf", 48);
 
-
+	/*
 	line1->setPosition(visibleSize.width / 2, visibleSize.height * 70 / 100);
 	line1->setOpacity(0);
 	FadeIn * line1FadeInAction = FadeIn::create(3);
@@ -119,6 +119,8 @@ bool PrologueScene::init()
 	FadeIn * line3_1FadeInAction = FadeIn::create(3);
 	TargetedAction * line3_1FadeIn = TargetedAction::create(line3_1, line3_1FadeInAction);
 
+	*/
+
 	//line4->setPosition(visibleSize.width / 2 , visibleSize.height * 30 / 100);
 	line4->setOpacity(0);
 
@@ -129,19 +131,34 @@ bool PrologueScene::init()
 	TargetedAction * line4FadeIn = TargetedAction::create(line4, line4FadeInAction);
 
 
-	Sequence * sequence = Sequence::create(line1FadeIn, line2FadeIn, line3FadeIn,line3_1FadeIn, line4FadeIn, NULL);
-	this->runAction(sequence);
-
+	
+	/*
 	this->addChild(line1);
 	this->addChild(line2);
 	this->addChild(line3);
 	this->addChild(line3_1);
+	*/
+	
 	this->addChild(startGameMenu);
 
 
-	Sprite * epilogueBackground = Sprite::create("ui/epilogue.png");
+	Sprite * epilogueBackground = Sprite::create("ui/black_curtain.png");
 	epilogueBackground->setPosition(visibleSize.width / 2, visibleSize.height * 50 / 100);
 	this->addChild(epilogueBackground, -1);
+
+	Sprite * introduction = Sprite::create("ui/introduction.png");
+	introduction->setPosition(visibleSize.width / 2, visibleSize.height * 60 / 100);
+	introduction->setOpacity(0);
+
+	FadeIn * introductionFadeInAction = FadeIn::create(5);
+	TargetedAction* introductionFadeIn = TargetedAction::create(introduction, introductionFadeInAction);
+	
+
+
+	this->addChild(introduction);
+
+	Sequence * sequence = Sequence::create(introductionFadeIn, line4FadeIn, NULL);
+	this->runAction(sequence);
 
 	return true;
 }

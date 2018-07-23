@@ -60,7 +60,7 @@ void Stage1UILayer::onEnter(){
 	this->invincibleHint->setOpacity(0);
 	this->invincibleHint->setPosition(-visibleSize.width / 2 + heroHPBar->getContentSize().width / 2 + 110, visibleSize.height * 30 / 100);
 
-	this->blackCurtain->setOpacity(0);
+	this->blackCurtain->setOpacity(255);
 	this->missionComplete->setOpacity(0);
 	
 
@@ -76,6 +76,12 @@ void Stage1UILayer::onEnter(){
 	this->addChild(this->missionComplete);
 	this->addChild(this->blackCurtain);
 
+
+	this->blackCurtain->runAction(FadeOut::create(1));
+
+	AudioManager::getInstance()->stop("audios/bgm.mp3");
+	AudioManager::getInstance()->play("audios/ccb_cut.mp3", true);
+	AudioManager::getInstance()->release();
 
 	Layer::onEnter();
 }

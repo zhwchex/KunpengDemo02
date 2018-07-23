@@ -167,7 +167,7 @@ void FishEnemy1::die()
 	stopAllActions();
 	runAction(Sequence::create(Animate::create(attackAnimation), CallFunc::create([this]() {
 		this->runAction(Sequence::create(FadeOut::create(ANIMATION_DURATION),
-			CallFunc::create([this]() { this->removeFromParent(); }), NULL));
+			CallFunc::create([this]() { this->setPositionY(-11111); this->removeFromParent(); }), NULL));
 	}), NULL));
 }
 

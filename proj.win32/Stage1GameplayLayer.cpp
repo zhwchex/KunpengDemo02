@@ -134,7 +134,7 @@ void Stage1GameplayLayer::onEnter(){
 	enemyList.pushBack(fish);
 	*/
 
-	/**/
+	/*
 	GeneralUnit *fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
 	fishljj->setPosition(Vec2(3876, -208));
 	this->addChild(fishljj);
@@ -149,7 +149,7 @@ void Stage1GameplayLayer::onEnter(){
 	fishljj3->setPosition(Vec2(4486, -267));
 	this->addChild(fishljj3);
 	enemyList.pushBack(fishljj3);
-
+	*/
 	
 /*
 	GeneralUnit *fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
@@ -170,35 +170,242 @@ void Stage1GameplayLayer::onEnter(){
 
 	
 	Bird_yyh* bird1 = Bird_yyh::create("characters/Bird_yyh/left1.png");
-	bird1->setPosition(4500, 200);
+	bird1->setPosition(4500, 100);
 	this->addChild(bird1);
 	enemyList.pushBack(bird1);
 
 	Bird_yyh* bird2 = Bird_yyh::create("characters/Bird_yyh/left1.png");
-	bird2->setPosition(4600, 200);
+	bird2->setPosition(4600, 100);
 	this->addChild(bird2);
 	enemyList.pushBack(bird2);
 
 	bird2 = Bird_yyh::create("characters/Bird_yyh/left1.png");
-	bird2->setPosition(4700, 200);
+	bird2->setPosition(4700, 100);
 	this->addChild(bird2);
 	enemyList.pushBack(bird2);
 
 	bird2 = Bird_yyh::create("characters/Bird_yyh/left1.png");
-	bird2->setPosition(4800, 200);
+	bird2->setPosition(4800, 100);
 	this->addChild(bird2);
 	enemyList.pushBack(bird2);
 
 	bird2 = Bird_yyh::create("characters/Bird_yyh/left1.png");
-	bird2->setPosition(4900, 200);
+	bird2->setPosition(4900, 100);
 	this->addChild(bird2);
 	enemyList.pushBack(bird2);
 
 	bird2 = Bird_yyh::create("characters/Bird_yyh/left1.png");
-	bird2->setPosition(5000, 200);
+	bird2->setPosition(5000, 100);
 	this->addChild(bird2);
 	enemyList.pushBack(bird2);
 	
+
+	GeneralUnit *fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishljj->setPosition(Vec2(6750, -200));
+	this->addChild(fishljj);
+	enemyList.pushBack(fishljj);
+
+
+	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishljj->setPosition(Vec2(6850, -200));
+	this->addChild(fishljj);
+	enemyList.pushBack(fishljj);
+
+	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishljj->setPosition(Vec2(6950, -200));
+	this->addChild(fishljj);
+	enemyList.pushBack(fishljj);
+
+	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishljj->setPosition(Vec2(6850, -100));
+	this->addChild(fishljj);
+	enemyList.pushBack(fishljj);
+
+	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishljj->setPosition(Vec2(6950, -100));
+	this->addChild(fishljj);
+	enemyList.pushBack(fishljj);
+
+	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishljj->setPosition(Vec2(6750, -100));
+	this->addChild(fishljj);
+	enemyList.pushBack(fishljj);
+
+
+	Bird_zwc * enemyZWC = Bird_zwc::create("characters/monster/peng_hovering_00.jpg");
+	enemyZWC->setPosition(8400, 100);
+	enemyList.pushBack(enemyZWC);
+	this->addChild(enemyZWC);
+
+	enemyZWC = Bird_zwc::create("characters/monster/peng_hovering_00.jpg");
+	enemyZWC->setPosition(8450, 100);
+	enemyList.pushBack(enemyZWC);
+	this->addChild(enemyZWC);
+
+	enemyZWC = Bird_zwc::create("characters/monster/peng_hovering_00.jpg");
+	enemyZWC->setPosition(8500, 100);
+	enemyList.pushBack(enemyZWC);
+	this->addChild(enemyZWC);
+
+	enemyZWC = Bird_zwc::create("characters/monster/peng_hovering_00.jpg");
+	enemyZWC->setPosition(8550, 100);
+	enemyList.pushBack(enemyZWC);
+	this->addChild(enemyZWC);
+
+	enemyZWC = Bird_zwc::create("characters/monster/peng_hovering_00.jpg");
+	enemyZWC->setPosition(8550, 100);
+	enemyList.pushBack(enemyZWC);
+	this->addChild(enemyZWC);
+
+	enemyZWC = Bird_zwc::create("characters/monster/peng_hovering_00.jpg");
+	enemyZWC->setPosition(8600, 100);
+	enemyList.pushBack(enemyZWC);
+	this->addChild(enemyZWC);
+
+	enemyZWC = Bird_zwc::create("characters/monster/peng_hovering_00.jpg");
+	enemyZWC->setPosition(8650, 100);
+	enemyList.pushBack(enemyZWC);
+	this->addChild(enemyZWC);
+
+	enemyZWC = Bird_zwc::create("characters/monster/peng_hovering_00.jpg");
+	enemyZWC->setPosition(8700, 100);
+	enemyList.pushBack(enemyZWC);
+	this->addChild(enemyZWC);
+
+
+
+
+	GeneralUnit *fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishcw->setPosition(Vec2(10250, -100));
+	this->addChild(fishcw);
+	enemyList.pushBack(fishcw);
+
+	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishcw->setPosition(Vec2(10350, -100));
+	this->addChild(fishcw);
+	enemyList.pushBack(fishcw);
+
+	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishcw->setPosition(Vec2(10450, -100));
+	this->addChild(fishcw);
+	enemyList.pushBack(fishcw);
+
+	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishcw->setPosition(Vec2(10550, -100));
+	this->addChild(fishcw);
+	enemyList.pushBack(fishcw);
+
+	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishcw->setPosition(Vec2(10650, -100));
+	this->addChild(fishcw);
+	enemyList.pushBack(fishcw);
+
+	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishcw->setPosition(Vec2(10750, -100));
+	this->addChild(fishcw);
+	enemyList.pushBack(fishcw);
+
+
+
+
+
+
+	
+	
+
+
+	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishcw->setPosition(Vec2(11850, -100));
+	this->addChild(fishcw);
+	enemyList.pushBack(fishcw);
+
+	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishcw->setPosition(Vec2(11750, -100));
+	this->addChild(fishcw);
+	enemyList.pushBack(fishcw);
+
+	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishcw->setPosition(Vec2(11850, -200));
+	this->addChild(fishcw);
+	enemyList.pushBack(fishcw);
+
+	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishcw->setPosition(Vec2(11750, -200));
+	this->addChild(fishcw);
+	enemyList.pushBack(fishcw);
+
+	enemyZWC = Bird_zwc::create("characters/monster/peng_hovering_00.jpg");
+	enemyZWC->setPosition(11800, 100);
+	enemyList.pushBack(enemyZWC);
+	this->addChild(enemyZWC);
+
+	enemyZWC = Bird_zwc::create("characters/monster/peng_hovering_00.jpg");
+	enemyZWC->setPosition(11700, 100);
+	enemyList.pushBack(enemyZWC);
+	this->addChild(enemyZWC);
+
+	enemyZWC = Bird_zwc::create("characters/monster/peng_hovering_00.jpg");
+	enemyZWC->setPosition(11800, 200);
+	enemyList.pushBack(enemyZWC);
+	this->addChild(enemyZWC);
+
+	enemyZWC = Bird_zwc::create("characters/monster/peng_hovering_00.jpg");
+	enemyZWC->setPosition(11700, 200);
+	enemyList.pushBack(enemyZWC);
+	this->addChild(enemyZWC);
+
+	enemyZWC = Bird_zwc::create("characters/monster/peng_hovering_00.jpg");
+	enemyZWC->setPosition(11800, 300);
+	enemyList.pushBack(enemyZWC);
+	this->addChild(enemyZWC);
+
+	enemyZWC = Bird_zwc::create("characters/monster/peng_hovering_00.jpg");
+	enemyZWC->setPosition(11700, 300);
+	enemyList.pushBack(enemyZWC);
+	this->addChild(enemyZWC);
+
+
+	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishljj->setPosition(Vec2(11800, -100));
+	this->addChild(fishljj);
+	enemyList.pushBack(fishljj);
+
+	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishljj->setPosition(Vec2(11700, -100));
+	this->addChild(fishljj);
+	enemyList.pushBack(fishljj);
+
+	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishljj->setPosition(Vec2(11800, -200));
+	this->addChild(fishljj);
+	enemyList.pushBack(fishljj);
+
+	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishljj->setPosition(Vec2(11700, -200));
+	this->addChild(fishljj);
+	enemyList.pushBack(fishljj);
+
+	bird2 = Bird_yyh::create("characters/Bird_yyh/left1.png");
+	bird2->setPosition(11800, 100);
+	this->addChild(bird2);
+	enemyList.pushBack(bird2);
+
+	bird2 = Bird_yyh::create("characters/Bird_yyh/left1.png");
+	bird2->setPosition(11700, 100);
+	this->addChild(bird2);
+	enemyList.pushBack(bird2);
+
+	bird2 = Bird_yyh::create("characters/Bird_yyh/left1.png");
+	bird2->setPosition(11800, 200);
+	this->addChild(bird2);
+	enemyList.pushBack(bird2);
+
+	bird2 = Bird_yyh::create("characters/Bird_yyh/left1.png");
+	bird2->setPosition(11800, 200);
+	this->addChild(bird2);
+	enemyList.pushBack(bird2);
+
+
 
 	/*
 	Bird_yyh* bird2 = Bird_yyh::create("characters/Bird_yyh/bird1.jpg");
@@ -242,8 +449,9 @@ void Stage1GameplayLayer::onEnter(){
 
 	this->waterBody->setAnchorPoint(Vec2(0, 1));
 	this->waterBody->setScaleX(10);
+	this->waterBody->setScaleY(2);
 	this->waterBody->setOpacity(64);
-	this->addChild(this->waterBody);
+	this->addChild(this->waterBody,2);
 
 	
 	Layer::onEnter();
@@ -400,6 +608,12 @@ void Stage1GameplayLayer::pauseflagHeroWithinLandscape(){
 	if (heroPositionInLayerY < backgroundDownBoundary){
 		int difference = heroPositionInLayerY - backgroundDownBoundary;
 		kunpeng->setPositionY(kunpeng->getPositionY() - difference);
+	}
+
+
+	if (this->zhurong->getPositionX() > backgroundRightBoundary){
+		int difference = this->zhurong->getPositionX() - backgroundRightBoundary;
+		this->zhurong->setPositionX(zhurong->getPositionX() - difference);
 	}
 }
 

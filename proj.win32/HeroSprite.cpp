@@ -133,6 +133,8 @@ HeroSprite::HeroSprite()
 		}
 		if (*userData->userInfo == hoveringAnimationFrame01info){
 			this->setPositionY(this->getPositionY() - 3);
+			this->invincible = false;
+
 
 			if (this->getPositionY() < ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY()){
 				this->transformFromBirdToFish();
@@ -143,6 +145,7 @@ HeroSprite::HeroSprite()
 				this->transformFromBirdToFish();
 			}
 			this->enableAllAbilities();
+			this->invincible = false;
 		}
 
 	});
@@ -174,6 +177,8 @@ HeroSprite::HeroSprite()
 				
 
 			}
+			this->invincible = false;
+
 		}
 
 
@@ -384,6 +389,19 @@ HeroSprite::HeroSprite()
 			WindBullet*  wb = (WindBullet *)(userData->target);
 			int windBulletPositionX = wb->getPositionX();
 			int windBulletPositionY = wb->getPositionY();
+
+
+
+			int heightDifference = windBulletPositionY - ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY();
+			if (-wb->getContentSize().height / 2 < heightDifference && heightDifference < wb->getContentSize().height / 2){
+				Sprite * bigSplash = Sprite::create("landscapes/splash_big_00.png");
+				bigSplash->setPositionX(windBulletPositionX);
+				bigSplash->setPositionY(((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY());
+				this->getParent()->addChild(bigSplash);
+				bigSplash->runAction(Animate::create(this->waterSplashingAnimation_big));
+			}
+
+
 			//log("Here is windbullet running 1st frame of windbulletflyinganimation. Some data from wb = %d",wb->magazineX);
 			Vector < GeneralUnit * > elist = ((Stage1GameplayLayer *)(this->getParent()))->enemyList;
 			for (GeneralUnit * enemy : elist){
@@ -1312,6 +1330,9 @@ HeroSprite::HeroSprite()
 			else if (heightDifference > -this->getContentSize().height * 25 / 100){
 				this->runAction(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, heightDifference)));
 			}
+
+			this->invincible = false;
+
 		}
 		if (*userData->userInfo == hoveringAnimationFrame03Info_kun){
 			this->setPositionY(this->getPositionY() - 3);
@@ -1805,6 +1826,19 @@ HeroSprite::HeroSprite()
 			WaterBullet*  waterBullet = (WaterBullet *)(userData->target);
 			int waterBulletPositionX = waterBullet->getPositionX();
 			int waterBulletPositionY = waterBullet->getPositionY();
+
+
+			int heightDifference = waterBulletPositionY - ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY();
+			if (-waterBullet->getContentSize().height / 2 < heightDifference && heightDifference < waterBullet->getContentSize().height / 2){
+				Sprite * bigSplash = Sprite::create("landscapes/splash_big_00.png");
+				bigSplash->setPositionX(waterBulletPositionX);
+				bigSplash->setPositionY(((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY());
+				this->getParent()->addChild(bigSplash);
+				bigSplash->runAction(Animate::create(this->waterSplashingAnimation_big));
+			}
+
+
+
 			//log("Here is windbullet running 1st frame of windbulletflyinganimation. Some data from wb = %d",wb->magazineX);
 			Vector < GeneralUnit * > elist = ((Stage1GameplayLayer *)(this->getParent()))->enemyList;
 			for (GeneralUnit * enemy : elist){
