@@ -8,7 +8,7 @@ EnemyFish::EnemyFish()
 	this->camp = 2;
 
 
-	//×óÐüÍ£
+	//å·¦æ‚¬åœ
 	this->hoveringLeftAnimation = Animation::create();
 	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
 	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_facing_left_01.png");
@@ -45,7 +45,7 @@ EnemyFish::EnemyFish()
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(hoveringLeftAnimationFrameEventListener, -1);
 
-	//ÓÒÐüÍ£
+	//å³æ‚¬åœ
 	this->hoveringRightAnimation = Animation::create();
 	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_facing_right_00.png");
 	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_facing_right_01.png");
@@ -82,7 +82,7 @@ EnemyFish::EnemyFish()
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(hoveringRightAnimationFrameEventListener, -1);
 
-	//ÉÏÒÆ¶¯
+	//ä¸Šç§»åŠ¨
 	this->movingUpAnimation = Animation::create();
 	this->movingUpAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_up_00.png");
 	this->movingUpAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_up_01.png");
@@ -119,7 +119,7 @@ EnemyFish::EnemyFish()
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(movingUpAnimationFrameEventListener, -1);
 
-	//ÏÂÒÆ¶¯
+	//ä¸‹ç§»åŠ¨
 	this->movingDownAnimation = Animation::create();
 	this->movingDownAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_down_00.png");
 	this->movingDownAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_down_01.png");
@@ -156,7 +156,7 @@ EnemyFish::EnemyFish()
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(movingDownAnimationFrameEventListener, -1);
 
-	//×óÒÆ¶¯
+	//å·¦ç§»åŠ¨
 	this->movingLeftAnimation = Animation::create();
 	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_00.png");
 	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_01.png");
@@ -193,7 +193,7 @@ EnemyFish::EnemyFish()
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(movingLeftAnimationFrameEventListener, -1);
 
-	//ÓÒÒÆ¶¯
+	//å³ç§»åŠ¨
 	this->movingRightAnimation = Animation::create();
 	this->movingRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_00.png");
 	this->movingRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_01.png");
@@ -230,7 +230,7 @@ EnemyFish::EnemyFish()
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(movingRightAnimationFrameEventListener, -1);
 
-	//ÓÒÉÏÒÆ¶¯
+	//å³ä¸Šç§»åŠ¨
 	this->movingUpRightAnimation = Animation::create();
 	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_00.png");
 	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_01.png");
@@ -267,7 +267,7 @@ EnemyFish::EnemyFish()
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(movingUpRightAnimationFrameEventListener, -1);
 
-	//ÓÒÏÂÒÆ¶¯
+	//å³ä¸‹ç§»åŠ¨
 	this->movingDownRightAnimation = Animation::create();
 	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_00.png");
 	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_01.png");
@@ -304,7 +304,7 @@ EnemyFish::EnemyFish()
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(movingDownRightAnimationFrameEventListener, -1);
 
-	//×óÉÏÒÆ¶¯
+	//å·¦ä¸Šç§»åŠ¨
 	this->movingUpLeftAnimation = Animation::create();
 	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_00.png");
 	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_01.png");
@@ -341,7 +341,7 @@ EnemyFish::EnemyFish()
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(movingUpLeftAnimationFrameEventListener, -1);
 
-	//×óÏÂÒÆ¶¯
+	//å·¦ä¸‹ç§»åŠ¨
 	this->movingDownLeftAnimation = Animation::create();
 	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_00.png");
 	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_01.png");
@@ -378,7 +378,7 @@ EnemyFish::EnemyFish()
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(movingDownLeftAnimationFrameEventListener, -1);
 
-	//¹¥»÷
+	//æ”»å‡»
 	this->attackAnimation = Animation::create();
 	this->attackAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_attack_00.png");
 	this->attackAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_attack_01.png");
@@ -412,7 +412,7 @@ EnemyFish::EnemyFish()
 	_eventDispatcher->addEventListenerWithFixedPriority(attackAnimationFrameEventListener, -1);
 
 
-	//ÊÜÉË
+	//å—ä¼¤
 	this->getHurtAnimation = Animation::create();
 	this->getHurtAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_get_hurt_00.png");
 	this->getHurtAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_get_hurt_01.png");
@@ -444,12 +444,12 @@ EnemyFish::EnemyFish()
 		}
 		if (*userData->userInfo == getHurtAnimationReachesfirstFrameInfo) {
 			log("First ljjFrame of getHurtAnimation reached.");
-			//this->acceptCall = false;
+			this->acceptCall = false;
 		}
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(getHurtAnimationFrameEventListener, -1);
 
-	//ËÀÍö
+	//æ­»äº¡
 	this->dieAnimation = Animation::create();
 	this->dieAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_die_00.png");
 	this->dieAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_die_01.png");
@@ -459,7 +459,7 @@ EnemyFish::EnemyFish()
 	this->dieAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->dieAnimation->setRestoreOriginalFrame(true);
 	this->dieAnimation->retain();
-
+	/*
 	ValueMap dieAnimationReachesfirstFrameInfo;
 	ValueMap  dieAnimationReachesLastFrameInfo;
 
@@ -476,14 +476,15 @@ EnemyFish::EnemyFish()
 			log("Last ljjFrame of dieAnimation reached.");
 			//this->acceptCall = true;
 			this->setPosition(-1111, -1111);
-			this->removeFromParent();
+			//this->removeFromParent();
 		}
 		if (*userData->userInfo == dieAnimationReachesfirstFrameInfo) {
 			log("First ljjFrame of dieAnimation reached.");
-			//this->acceptCall = false;
+			this->acceptCall = false;
 		}
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(dieAnimationFrameEventListener, -1);
+	*/
 }
 
 
@@ -504,7 +505,7 @@ EnemyFish* EnemyFish::create(const std::string & filename) {
 
 
 void EnemyFish::wanderAbout() {
-	if (this->acceptCall) {
+	if (this->acceptCall && this->health > 0) {
 		this->acceptCall = false;
 		this->getParent();
 
@@ -522,46 +523,46 @@ void EnemyFish::wanderAbout() {
 		if (distance < ALARMDISTANCE1 && heroy < waterfacey) {
 			srand((unsigned)time(NULL));
 			int attckOrNot = rand() % (ATTACK_PROB);
-			//½øÈë¹¥»÷¾àÀë °´¸ÅÂÊ·¢Æð¹¥»÷
+			//è¿›å…¥æ”»å‡»è·ç¦» æŒ‰æ¦‚çŽ‡å‘èµ·æ”»å‡»
 			if (attckOrNot == 0) {
 				this->stopAllActions();
 				if ((herox - fishx) == 0 && (heroy - fishy) > 0) {
-					//ÉÏ
+					//ä¸Š
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, this->speed_flying_pixel_per_second))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingUpAnimation)));
 				}
 				else if ((herox - fishx) == 0 && (heroy - fishy) < 0) {
-					//ÏÂ
+					//ä¸‹
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, -this->speed_flying_pixel_per_second))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingDownAnimation)));
 				}
 				else if ((herox - fishx) < 0 && (heroy - fishy) == 0) {
-					//×ó
+					//å·¦
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second, 0))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingLeftAnimation)));
 				}
 				else if ((herox - fishx) > 0 && (heroy - fishy) == 0) {
-					//ÓÒ
+					//å³
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.414, 0))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingRightAnimation)));
 				}
 				else if ((herox - fishx) < 0 && (heroy - fishy) > 0) {
-					//×óÉÏ
+					//å·¦ä¸Š
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second / 1.414, this->speed_flying_pixel_per_second / 1.414))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingUpLeftAnimation)));
 				}
 				else if ((herox - fishx) < 0 && (heroy - fishy) < 0) {
-					//×óÏÂ
+					//å·¦ä¸‹
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second / 1.414, -this->speed_flying_pixel_per_second / 1.414))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingDownLeftAnimation)));
 				}
 				else if ((herox - fishx) > 0 && (heroy - fishy) > 0) {
-					//ÓÒÉÏ
+					//å³ä¸Š
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.414, this->speed_flying_pixel_per_second / 1.414))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingUpRightAnimation)));
 				}
 				else {
-					//ÓÒÏÂ
+					//å³ä¸‹
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.414, -this->speed_flying_pixel_per_second / 1.414))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingDownRightAnimation)));
 				}
@@ -572,14 +573,14 @@ void EnemyFish::wanderAbout() {
 			}
 		}
 		else {
-			//Éú³ÉËæ»úÊý ³¯°Ë¸ö·½ÏòÏÐ¹ä
+			//ç”Ÿæˆéšæœºæ•° æœå…«ä¸ªæ–¹å‘é—²é€›
 			srand((unsigned)time(NULL));
 			int direction = rand() % 12;
 			//direction = 0;
 			switch (direction)
 			{
 			case 0:
-				//ÉÏ
+				//ä¸Š
 				this->stopAllActions();
 				if (this->getPositionY() + this->speed_flying_pixel_per_second > waterfacey)
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, waterfacey))));
@@ -588,25 +589,25 @@ void EnemyFish::wanderAbout() {
 				this->runAction(RepeatForever::create(Animate::create(this->movingUpAnimation)));
 				break;
 			case 1:
-				//ÏÂ
+				//ä¸‹
 				this->stopAllActions();
 				this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, -this->speed_flying_pixel_per_second))));
 				this->runAction(RepeatForever::create(Animate::create(this->movingDownAnimation)));
 				break;
 			case 2:
-				//×ó
+				//å·¦
 				this->stopAllActions();
 				this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second, 0))));
 				this->runAction(RepeatForever::create(Animate::create(this->movingLeftAnimation)));
 				break;
 			case 3:
-				//ÓÒ
+				//å³
 				this->stopAllActions();
 				this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.414, 0))));
 				this->runAction(RepeatForever::create(Animate::create(this->movingRightAnimation)));
 				break;
 			case 4:
-				//×óÉÏ
+				//å·¦ä¸Š
 				this->stopAllActions();
 				if (this->getPositionY() + this->speed_flying_pixel_per_second > waterfacey)
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-waterfacey / 1.414, waterfacey / 1.414))));
@@ -615,13 +616,13 @@ void EnemyFish::wanderAbout() {
 				this->runAction(RepeatForever::create(Animate::create(this->movingUpLeftAnimation)));
 				break;
 			case 5:
-				//×óÏÂ
+				//å·¦ä¸‹
 				this->stopAllActions();
 				this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second / 1.414, -this->speed_flying_pixel_per_second / 1.414))));
 				this->runAction(RepeatForever::create(Animate::create(this->movingDownLeftAnimation)));
 				break;
 			case 6:
-				//ÓÒÉÏ
+				//å³ä¸Š
 				this->stopAllActions();
 				if (this->getPositionY() + this->speed_flying_pixel_per_second > waterfacey)
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(waterfacey / 1.414, waterfacey / 1.414))));
@@ -630,7 +631,7 @@ void EnemyFish::wanderAbout() {
 				this->runAction(RepeatForever::create(Animate::create(this->movingUpRightAnimation)));
 				break;
 			case 7:
-				//ÓÒÏÂ
+				//å³ä¸‹
 				this->stopAllActions();
 				this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.414, -this->speed_flying_pixel_per_second / 1.414))));
 				this->runAction(RepeatForever::create(Animate::create(this->movingDownRightAnimation)));
@@ -676,6 +677,13 @@ void EnemyFish::getHurtByWind(int damage) {
 }
 
 void EnemyFish::die() {
-		this->stopAllActions();
-		this->runAction((Animate::create(this->dieAnimation)));
+	this->stopAllActions();
+	//this->runAction(Animate::create(this->dieAnimation));
+	//this->removeFromParent();
+	this->acceptCall = false;
+	this->runAction(Sequence::create(Repeat::create(Animate::create(dieAnimation), 1), CallFunc::create([this] {
+		this->removeFromParent();
+	}), nullptr));
+
+
 }
