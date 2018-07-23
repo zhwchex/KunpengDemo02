@@ -243,6 +243,16 @@ void Stage1Scene::myUpdate(float dt){
 	if (bossHPScale < 0) bossHPScale = 0;
 	uiLayer->bossHPBar->setScaleX(bossHPScale);
 
+	if (kp->isBird){
+		uiLayer->head_kun->setVisible(false);
+		uiLayer->head_peng->setVisible(true);
+	}
+	else{
+		uiLayer->head_kun->setVisible(true);
+		uiLayer->head_peng->setVisible(false);
+	}
+
+
 
 	if (!gameplayLayer->heroHasTriggeredDetectBoss && kp->getPositionX() > gameplayLayer->detectBossX){
 		//uiLayer->bossName->setOpacity(128);
@@ -254,4 +264,19 @@ void Stage1Scene::myUpdate(float dt){
 		uiLayer->bossHPBar->runAction(FadeIn::create(1));
 		gameplayLayer->heroHasTriggeredDetectBoss = true;
 	}
+
+	if ( !gameplayLayer->heroHasTriggeredHint1 && kp->getPositionX() > gameplayLayer->detectHint1){
+		gameplayLayer->tutorial_trans_btf->runAction(FadeIn::create(1));
+		gameplayLayer->heroHasTriggeredHint1 = true;
+	}
+	if (!gameplayLayer->heroHasTriggeredHint2 && kp->getPositionX() > gameplayLayer->detectHint2){
+		gameplayLayer->tutorial_trans_ftb->runAction(FadeIn::create(1));
+		gameplayLayer->heroHasTriggeredHint2 = true;
+	}
+	if (!gameplayLayer->heroHasTriggeredHint3 && kp->getPositionX() > gameplayLayer->detectHint3){
+		gameplayLayer->tutorial_delegate_explore->runAction(FadeIn::create(1));
+		gameplayLayer->heroHasTriggeredHint3 = true;
+	}
+
+	
 }

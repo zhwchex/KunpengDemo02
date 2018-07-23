@@ -16,6 +16,9 @@ public:
 	Sprite * bossHPBarShell = nullptr;
 	Sprite * bossName = nullptr;
 
+	Sprite * head_kun = nullptr;
+	Sprite * head_peng = nullptr;
+
 	static Stage1UILayer * create();
 	Stage1UILayer();
 	~Stage1UILayer();

@@ -20,8 +20,37 @@ public:
 	HeroSprite * kunpeng = nullptr;
 	Zhurong * zhurong = nullptr;
 
+
+	//检测主角是否接近boss的旗子
 	const int detectBossX = 10500;
 	bool heroHasTriggeredDetectBoss = false;
+
+	//检测主角是否接近第一个提示的旗子
+	const int detectHint1 = 1100;
+	bool heroHasTriggeredHint1 = false;
+
+	//检测主角是否接近第二个提示的旗子
+	const int detectHint2 = 2000;
+	bool heroHasTriggeredHint2 = false;
+
+	//检测主角是否接近第三个提示的旗子
+	const int detectHint3 = 3000;
+	bool heroHasTriggeredHint3 = false;
+
+
+
+	Sprite * tutorial_motion ;
+
+	Sprite * tutorial_jk ;
+
+	Sprite * tutorial_trans_btf ;
+
+	Sprite * tutorial_trans_ftb;
+
+	Sprite * tutorial_delegate_explore;
+
+
+
 
 	Sprite * background = nullptr;
 	static Stage1GameplayLayer * create();
