@@ -96,33 +96,12 @@ bool EpilogueScene::init()
 	//this->addChild(topRightMenu);
 
 
-	Label * line1 = Label::createWithTTF("Thank", "fonts/Marker Felt.ttf", 36);
-	Label * line2 = Label::createWithTTF("You", "fonts/Marker Felt.ttf", 36);
-	Label * line3 = Label::createWithTTF("For", "fonts/Marker Felt.ttf", 36);
-	Label * line3_1 = Label::createWithTTF("Playing", "fonts/Marker Felt.ttf", 36);
+	
 	Label * line4 = Label::createWithTTF("Go to Stage 2", "fonts/Marker Felt.ttf", 48);
 
 
-	line1->setPosition(visibleSize.width / 2, visibleSize.height * 70 / 100);
-	line1->setOpacity(0);
-	FadeIn * line1FadeInAction = FadeIn::create(3);
-	TargetedAction * line1FadeIn = TargetedAction::create(line1, line1FadeInAction);
 
-	line2->setPosition(visibleSize.width / 2, visibleSize.height * 60 / 100);
-	line2->setOpacity(0);
-	FadeIn * line2FadeInAction = FadeIn::create(3);
-	TargetedAction * line2FadeIn = TargetedAction::create(line2, line2FadeInAction);
-
-	line3->setPosition(visibleSize.width / 2, visibleSize.height * 50 / 100);
-	line3->setOpacity(0);
-	FadeIn * line3FadeInAction = FadeIn::create(3);
-	TargetedAction * line3FadeIn = TargetedAction::create(line3, line3FadeInAction);
-
-
-	line3_1->setPosition(visibleSize.width / 2, visibleSize.height * 50 / 100);
-	line3_1->setOpacity(0);
-	FadeIn * line3_1FadeInAction = FadeIn::create(3);
-	TargetedAction * line3_1FadeIn = TargetedAction::create(line3_1, line3_1FadeInAction);
+	
 
 	//line4->setPosition(visibleSize.width / 2 , visibleSize.height * 30 / 100);
 	line4->setOpacity(0);
@@ -134,12 +113,6 @@ bool EpilogueScene::init()
 	TargetedAction * line4FadeIn = TargetedAction::create(line4, line4FadeInAction);
 
 
-	
-
-	this->addChild(line1);
-	this->addChild(line2);
-	this->addChild(line3);
-	this->addChild(line3_1);
 	this->addChild(startGameMenu);
 
 
@@ -160,8 +133,6 @@ bool EpilogueScene::init()
 	FadeIn * thankUFadeInAction = FadeIn::create(3);
 	TargetedAction * thankUFadeIn = TargetedAction::create(this->thankU, thankUFadeInAction);
 
-
-	//Sequence * sequence = Sequence::create(line1FadeIn, line2FadeIn, line3FadeIn, line3_1FadeIn, line4FadeIn, NULL);
 	Sequence * sequence = Sequence::create(thankUFadeIn, line4FadeIn, NULL);
 	this->runAction(sequence);
 

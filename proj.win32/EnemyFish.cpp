@@ -8,7 +8,7 @@ EnemyFish::EnemyFish()
 	this->camp = 2;
 
 
-	//左悬停
+	//左悬�?
 	this->hoveringLeftAnimation = Animation::create();
 	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
 	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_facing_left_01.png");
@@ -45,7 +45,7 @@ EnemyFish::EnemyFish()
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(hoveringLeftAnimationFrameEventListener, -1);
 
-	//右悬停
+	//右悬�?
 	this->hoveringRightAnimation = Animation::create();
 	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_facing_right_00.png");
 	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_facing_right_01.png");
@@ -82,7 +82,7 @@ EnemyFish::EnemyFish()
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(hoveringRightAnimationFrameEventListener, -1);
 
-	//上移动
+	//上移�?
 	this->movingUpAnimation = Animation::create();
 	this->movingUpAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_up_00.png");
 	this->movingUpAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_up_01.png");
@@ -119,7 +119,7 @@ EnemyFish::EnemyFish()
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(movingUpAnimationFrameEventListener, -1);
 
-	//下移动
+	//下移�?
 	this->movingDownAnimation = Animation::create();
 	this->movingDownAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_down_00.png");
 	this->movingDownAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_down_01.png");
@@ -156,7 +156,7 @@ EnemyFish::EnemyFish()
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(movingDownAnimationFrameEventListener, -1);
 
-	//左移动
+	//左移�?
 	this->movingLeftAnimation = Animation::create();
 	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_00.png");
 	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_01.png");
@@ -193,7 +193,7 @@ EnemyFish::EnemyFish()
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(movingLeftAnimationFrameEventListener, -1);
 
-	//右移动
+	//右移�?
 	this->movingRightAnimation = Animation::create();
 	this->movingRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_00.png");
 	this->movingRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_01.png");
@@ -505,6 +505,7 @@ EnemyFish* EnemyFish::create(const std::string & filename) {
 
 
 void EnemyFish::wanderAbout() {
+
 	if (this->acceptCall && this->health > 0) {
 		this->acceptCall = false;
 		this->getParent();
@@ -523,26 +524,26 @@ void EnemyFish::wanderAbout() {
 		if (distance < ALARMDISTANCE1 && heroy < waterfacey) {
 			srand((unsigned)time(NULL));
 			int attckOrNot = rand() % (ATTACK_PROB);
-			//进入攻击距离 按概率发起攻击
+			//进入攻击距离 按概率发起攻�?
 			if (attckOrNot == 0) {
 				this->stopAllActions();
 				if ((herox - fishx) == 0 && (heroy - fishy) > 0) {
-					//上
+					//�?
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, this->speed_flying_pixel_per_second))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingUpAnimation)));
 				}
 				else if ((herox - fishx) == 0 && (heroy - fishy) < 0) {
-					//下
+					//�?
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, -this->speed_flying_pixel_per_second))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingDownAnimation)));
 				}
 				else if ((herox - fishx) < 0 && (heroy - fishy) == 0) {
-					//左
+					//�?
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second, 0))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingLeftAnimation)));
 				}
 				else if ((herox - fishx) > 0 && (heroy - fishy) == 0) {
-					//右
+					//�?
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.414, 0))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingRightAnimation)));
 				}
@@ -573,14 +574,14 @@ void EnemyFish::wanderAbout() {
 			}
 		}
 		else {
-			//生成随机数 朝八个方向闲逛
+			//生成随机�?朝八个方向闲�?
 			srand((unsigned)time(NULL));
 			int direction = rand() % 12;
 			//direction = 0;
 			switch (direction)
 			{
 			case 0:
-				//上
+				//�?
 				this->stopAllActions();
 				if (this->getPositionY() + this->speed_flying_pixel_per_second > waterfacey)
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, waterfacey))));
@@ -589,19 +590,19 @@ void EnemyFish::wanderAbout() {
 				this->runAction(RepeatForever::create(Animate::create(this->movingUpAnimation)));
 				break;
 			case 1:
-				//下
+				//�?
 				this->stopAllActions();
 				this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, -this->speed_flying_pixel_per_second))));
 				this->runAction(RepeatForever::create(Animate::create(this->movingDownAnimation)));
 				break;
 			case 2:
-				//左
+				//�?
 				this->stopAllActions();
 				this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second, 0))));
 				this->runAction(RepeatForever::create(Animate::create(this->movingLeftAnimation)));
 				break;
 			case 3:
-				//右
+				//�?
 				this->stopAllActions();
 				this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.414, 0))));
 				this->runAction(RepeatForever::create(Animate::create(this->movingRightAnimation)));
@@ -643,6 +644,11 @@ void EnemyFish::wanderAbout() {
 
 		}
 	}
+	else if (this->acceptCall && this->health<=0){
+		this->acceptCall = false;
+		this->stopAllActions();
+		this->die();
+	}
 	else {
 		return;
 	}
@@ -682,6 +688,7 @@ void EnemyFish::die() {
 	//this->removeFromParent();
 	this->acceptCall = false;
 	this->runAction(Sequence::create(Repeat::create(Animate::create(dieAnimation), 1), CallFunc::create([this] {
+		this->setPositionY(-11111);
 		this->removeFromParent();
 	}), nullptr));
 

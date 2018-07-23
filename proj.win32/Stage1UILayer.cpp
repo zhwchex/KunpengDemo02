@@ -58,9 +58,11 @@ void Stage1UILayer::onEnter(){
 	this->bossName->setOpacity(0);
 
 	this->invincibleHint->setOpacity(0);
+	this->invincibleHint->setPosition(-visibleSize.width / 2 + heroHPBar->getContentSize().width / 2 + 110, visibleSize.height * 30 / 100);
+
 	this->blackCurtain->setOpacity(0);
 	this->missionComplete->setOpacity(0);
-
+	
 
 
 	this->addChild(head_kun);
