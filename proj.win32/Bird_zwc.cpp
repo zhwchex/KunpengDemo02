@@ -156,7 +156,7 @@ void Bird_zwc::wanderAbout(){
 		x_change = bird_step*(cos(atan(x_dis / y_dis)));
 		y_change = bird_step*(sin(atan(x_dis / y_dis)));
 
-		if (pauseflag == 0 && distance < Director::getInstance()->getVisibleSize().width * 1.5){
+		if (pauseflag == 0 && distance < Director::getInstance()->getVisibleSize().width ){
 
 	
 
@@ -188,7 +188,7 @@ void Bird_zwc::wanderAbout(){
 			}
 
 			if (distance < hurtThreshold){
-				temp->kunpeng->getHurtGeneral();
+				temp->kunpeng->getHurtGeneral(10);
 			}
 
 		}
