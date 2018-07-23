@@ -6,9 +6,9 @@
 #include "Stage1Scene.h"
 using namespace std;
 # define hitThreshold 150 //发起冲刺的距离阈值
-# define hurtThreshold 40 //受伤的距离阈值
+# define hurtThreshold 40 //判定主角受伤的距离阈值
 # define hitSpeed 20 //冲刺的速度
-# define moveOutside 200 //允许出镜头的阈值
+# define battledistance 500 //进入攻击的范围阈值
 
 Bird_zwc::Bird_zwc()
 {
@@ -156,42 +156,49 @@ void Bird_zwc::wanderAbout(){
 		x_change = bird_step*(cos(atan(x_dis / y_dis)));
 		y_change = bird_step*(sin(atan(x_dis / y_dis)));
 
-		if (pauseflag == 0 && distance < Director::getInstance()->getVisibleSize().width ){
+		if (pauseflag == 0){
 
-	
+			if (distance <= battledistance){
+			if (x_dis >= 0)//小怪在主角的左方
+			{
+				x_scope = 1;
+				Lockright();
+			}
+			else
+			{
+				x_scope = -1;
+				Lockleft();
 
-		if (x_dis >= 0)//小怪在主角的左方
-		{
-			x_scope = 1;
-			Lockright();
-		}
-		else
-		{
-			x_scope = -1;
-			Lockleft();
-
-		}
-
-		if (y_dis >= 0)
-			y_scope = 1;
-		else
-			y_scope = -1;
-
-		this->runAction(MoveBy::create(2.0f, Vec2(x_scope * abs(x_change), y_scope * abs(y_change))));
-	
-		
-		if (distance < hitThreshold){
-
-
-			if (((int)rand_0_1() * 7) == 0){//7分之一的概率进行冲刺攻击
-				this->runAction(MoveBy::create(distance / hitSpeed, Vec2(x_dis, y_dis)));
 			}
 
-			if (distance < hurtThreshold){
-				temp->kunpeng->getHurtGeneral(10);
-			}
+			if (y_dis >= 0)
+				y_scope = 1;
+			else
+				y_scope = -1;
 
+			this->runAction(MoveBy::create(2.0f, Vec2(x_scope * abs(x_change), y_scope * abs(y_change))));
+
+
+			if (distance < hitThreshold){
+
+
+				if (((int)rand_0_1() * 7) == 0){//7分之一的概率进行冲刺攻击
+					this->runAction(MoveBy::create(distance / hitSpeed, Vec2(x_dis, y_dis)));
+				}
+
+				if (distance < hurtThreshold){
+					temp->kunpeng->getHurtGeneral(10);
+				}
+
+			}
 		}
+
+			if (distance > battledistance){
+				Lockleft();
+				float x_scala = (rand() % 201 - 100) / 100.0;
+				float y_scala = (rand() % 201 - 100) / 100.0;
+				this->runAction(MoveBy::create(1.0f, Vec2(x_scala, y_scala)));
+			}
 
 	}
 
@@ -246,34 +253,43 @@ void Bird_zwc::Lockleft(){
 
 void Bird_zwc::lockBirdWithinLandscape(){
 
-	Stage1Scene * scene = (Stage1Scene *)this->getParent()->getParent();
-		Size visibleSize = Director::getInstance()->getVisibleSize();
+	int BirdPositionInLayerX = this->getPositionX();
+	int BirdPositionInLayerY = this->getPositionY();
+	auto temp = (Stage1GameplayLayer*)this->getParent();
+	int backgroundPositionInLayerX = temp->background->getPositionX();
+	int backgroundPositionInLayerY = temp->background->getPositionY();
 
-		int heroPositionInCameraX = this->getParent()->getPositionX() + this->getPositionX();
-		int heroPositionInCameraY = this->getParent()->getPositionY() + this->getPositionY();
+	int backgroundWidth = temp->background->getContentSize().width;
+	int backgroundHeight = temp->background->getContentSize().height;
 
-		/*
-		if (heroPositionInCameraX > visibleSize.width + moveOutside){
-			int difference = heroPositionInCameraX - visibleSize.width - moveOutside;
-			this->setPositionX(this->getPositionX() - difference);
-		}
-		if (heroPositionInCameraX < 0 - moveOutside){
-			int difference = heroPositionInCameraX + moveOutside;
-			this->setPositionX(this->getPositionX() - difference);
-		}
-		*/
+	Vec2 backgroundAnchor = temp->background->getAnchorPoint();
+	float backgroundAnchorX = backgroundAnchor.x;
+	float backgroundAnchorY = backgroundAnchor.y;
 
-		if (heroPositionInCameraY > visibleSize.height + moveOutside){
-			int difference = heroPositionInCameraY - visibleSize.height - moveOutside;
-			this->setPositionY(this->getPositionY() - difference);
-		}
-		if (heroPositionInCameraY < 0 - moveOutside){
-			int difference = heroPositionInCameraY + moveOutside;
-			this->setPositionY(this->getPositionY() - difference);
-		}
+	int backgroundLeftBoundary = backgroundPositionInLayerX - backgroundWidth * backgroundAnchorX + 10;
+	int backgroundRightBoundary = backgroundPositionInLayerX + backgroundWidth *(1 - backgroundAnchorX) - 10;
+	int backgroundUpBoundary = backgroundPositionInLayerY + backgroundHeight * (1 - backgroundAnchorY) - 80;
+	int backgroundDownBoundary = backgroundPositionInLayerY + 10;
+
+	if (BirdPositionInLayerX > backgroundRightBoundary){
+		int difference = BirdPositionInLayerX - backgroundRightBoundary;
+		this->setPositionX(this->getPositionX() - difference);
+	}
+	if (BirdPositionInLayerX < backgroundLeftBoundary){
+		int difference = BirdPositionInLayerX - backgroundLeftBoundary;
+		this->setPositionX(this->getPositionX() - difference);
+	}
+	if (BirdPositionInLayerY > backgroundUpBoundary){
+		int difference = BirdPositionInLayerY - backgroundUpBoundary;
+		this->setPositionY(this->getPositionY() - difference);
+	}
+	if (BirdPositionInLayerY < backgroundDownBoundary){
+		int difference = BirdPositionInLayerY - backgroundDownBoundary;
+		this->setPositionY(this->getPositionY() - difference);
+	}
 
 		//防止鸟入水
-		int backgroundDownBoundary = ((Stage1GameplayLayer*)this->getParent())->background->getPositionY() + 10;	
+		//int backgroundDownBoundary = ((Stage1GameplayLayer*)this->getParent())->background->getPositionY() + 10;	
 		if (this->getPositionY() < backgroundDownBoundary){
 			this->setPositionY(backgroundDownBoundary);
 		}
