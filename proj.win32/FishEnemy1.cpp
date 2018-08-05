@@ -148,7 +148,7 @@ void FishEnemy1::getHurt(int h)
 	else
 	{
 		stopAllActions();
-		runAction(Sequence::create(Animate::create(attackAnimation), CallFunc::create([this]() {
+		runAction(Sequence::create(Animate::create(beAttackedAnimation), CallFunc::create([this]() {
 			this->state = STATE_DEFAULT;
 			this->stopAllActions();
 			this->runAction(RepeatForever::create(Animate::create(this->defaultAnimation)));
@@ -165,7 +165,7 @@ void FishEnemy1::die()
 {
 	state = STATE_DEAD;
 	stopAllActions();
-	runAction(Sequence::create(Animate::create(attackAnimation), CallFunc::create([this]() {
+	runAction(Sequence::create(Animate::create(deadAnimation), CallFunc::create([this]() {
 		this->runAction(Sequence::create(FadeOut::create(ANIMATION_DURATION),
 			CallFunc::create([this]() { this->setPositionY(-11111); this->removeFromParent(); }), NULL));
 	}), NULL));
