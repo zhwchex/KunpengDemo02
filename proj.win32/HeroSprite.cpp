@@ -15,7 +15,7 @@ HeroSprite::HeroSprite()
 	}
 	//初始化10个风弹爆炸效果，反复使用以节省资源
 	for (int i = 0; i < NUM_OF_WIND_BULLET_EXPLOSIONS; i++){
-		Sprite * wbe = Sprite::create("characters/kunpeng/wind_bullet_explosion.png");
+		Sprite * wbe = Sprite::create("characters/kunpeng/wind_bullet_exploding_00.png");
 		//wb->setPosition(wb->magazineX, wb->magazineY);
 		wbe->retain();
 		//this->getParent()->addChild(wb);
