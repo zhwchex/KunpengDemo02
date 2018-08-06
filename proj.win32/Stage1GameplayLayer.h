@@ -15,6 +15,12 @@ class Stage1GameplayLayer :	public Layer
 {
 public:
 
+
+	bool enableHorizontalMotion = true;
+	bool enableVerticalMotion = true;
+
+	
+
 	WaterSurface * waterSurface = nullptr;
 
 	HeroSprite * kunpeng = nullptr;
@@ -37,20 +43,11 @@ public:
 	const int detectHint3 = 3000;
 	bool heroHasTriggeredHint3 = false;
 
-
-
 	Sprite * tutorial_motion ;
-
 	Sprite * tutorial_jk ;
-
 	Sprite * tutorial_trans_btf ;
-
 	Sprite * tutorial_trans_ftb;
-
 	Sprite * tutorial_delegate_explore;
-
-
-
 
 	Sprite * background = nullptr;
 
@@ -59,6 +56,11 @@ public:
 
 
 	Vector<GeneralUnit * > enemyList = Vector<GeneralUnit *>();
+	Vector<Sprite * > stoneList = Vector<Sprite *>();
+	Vector<Sprite * > windList = Vector<Sprite *>();
+	Vector<Sprite * > thunderCloudList = Vector<Sprite *>();
+	Vector<Sprite * > vortexList = Vector<Sprite *>();
+
 
 	void onEnter();
 	
@@ -73,6 +75,9 @@ public:
 	void pauseflagHeroWithinCamera();
 	void pauseflagHeroWithinLandscape();
 
+	void cameraShake_slight();
+	void cameraShake_significant();
+	
 
 	Stage1GameplayLayer();
 	~Stage1GameplayLayer();
