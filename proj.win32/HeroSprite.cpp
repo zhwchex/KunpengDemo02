@@ -7,7 +7,7 @@ HeroSprite::HeroSprite()
 
 	//初始化10个风弹，反复使用它们以节省资源
 	for (int i = 0; i < this->NUM_OF_WIND_BULLETS; i++){
-		WindBullet * wb = WindBullet::create("characters/kunpeng/wind_bullet.png");
+		WindBullet * wb = WindBullet::create("characters/kunpeng/wind_bullet_00.png");
 		//wb->setPosition(wb->magazineX, wb->magazineY);
 		wb->retain();
 		//this->getParent()->addChild(wb);
