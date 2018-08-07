@@ -1105,6 +1105,14 @@ HeroSprite::HeroSprite()
 		if (*userData->userInfo == tryCatchingStartInfo){
 			log("trycatching start");
 			this->disableAllAbilities();
+			if (this->facingRight){
+				//this->stopAllActions();
+				this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(-70, 0)), MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(100,20)), nullptr));
+			}
+			else if (this->facingLeft){
+				//this->stopAllActions();
+				this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(70,0)), MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(-100,20)), nullptr));
+			}
 		}
 		if (*userData->userInfo == tryCatchingCheckSuccessInfo){
 			log("Here is trycatchingchecksuccessinfo");
@@ -1123,7 +1131,7 @@ HeroSprite::HeroSprite()
 				int deltay = enemy->getPositionY() - catchEffect->getPositionY();
 
 				double distance = sqrt(deltax*deltax + deltay*deltay);
-				if (distance < (catchEffect->getContentSize().width + enemy->getContentSize().width) * 50 / 100){
+				if (distance < (catchEffect->getContentSize().width + enemy->getContentSize().width) * 20 / 100){
 					this->targetToSlamDunk = enemy;
 					log("Caught one!");
 					break;
@@ -1214,9 +1222,16 @@ HeroSprite::HeroSprite()
 		if (*userData->userInfo == slamDunkStartInfo){
 			log("slamDunking start");
 			this->disableAllAbilities();
-			this->runAction(Sequence::create(MoveBy::create(0.1f,Vec2(0,60)),MoveBy::create(0.1f, Vec2(0,15)),nullptr));
-			this->targetToSlamDunk->stopAllActions();
-			this->targetToSlamDunk->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, 60)), MoveBy::create(0.1f, Vec2(0, 15)), nullptr));
+			if (this->facingRight){
+				this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, 60)), MoveBy::create(0.1f, Vec2(-40, -40)), MoveBy::create(0.1f, Vec2(-30, -5)), nullptr));
+				this->targetToSlamDunk->stopAllActions();
+				this->targetToSlamDunk->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, 60)), MoveBy::create(0.1f, Vec2(0, 15)), nullptr));
+			}
+			else if (this->facingLeft){
+				this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, 60)), MoveBy::create(0.1f, Vec2(40, -40)), MoveBy::create(0.1f, Vec2(30, -5)), nullptr));
+				this->targetToSlamDunk->stopAllActions();
+				this->targetToSlamDunk->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, 60)), MoveBy::create(0.1f, Vec2(0, 15)), nullptr));
+			}
 		}
 		if (*userData->userInfo == slamDunkThrowInfo){
 			log("Here is slamDunkingEnemyThrowInfo");
@@ -1240,6 +1255,7 @@ HeroSprite::HeroSprite()
 				this->directionToMoveUp){
 				this->move_forBothShapes();
 			}
+			
 			this->targetToSlamDunk = nullptr;
 
 		}
