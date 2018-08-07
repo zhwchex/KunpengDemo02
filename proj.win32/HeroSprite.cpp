@@ -3,7 +3,10 @@
 
 HeroSprite::HeroSprite()
 {
-	//AllocConsole();
+	AllocConsole();
+	freopen("CONIN$", "r", stdin);
+	freopen("CONOUT$", "w", stdout);
+	freopen("CONOUT$", "w", stderr);
 
 	//初始化10个风弹，反复使用它们以节省资源
 	for (int i = 0; i < this->NUM_OF_WIND_BULLETS; i++){
@@ -1177,7 +1180,9 @@ HeroSprite::HeroSprite()
 	this->tryCatchingLeftAnimation->getFrames().at(5)->setUserInfo(tryCatchingEndInfo);
 
 
-	//鸟将小怪扔下去的动作
+
+
+	//鸟将小怪扔下去的动作。最多三个事件帧，不能再多了。
 	this->slamDunkingEnemyRightAnimation = Animation::create();
 	this->slamDunkingEnemyRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_right_00.png");
 	this->slamDunkingEnemyRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_right_01.png");
@@ -1188,6 +1193,68 @@ HeroSprite::HeroSprite()
 	this->slamDunkingEnemyRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->slamDunkingEnemyRightAnimation->setRestoreOriginalFrame(true);
 	this->slamDunkingEnemyRightAnimation->retain();
+
+	ValueMap slamDunkStartInfo;
+	ValueMap slamDunkThrowInfo;
+	ValueMap slamDunkRecoverAllAbilitiesInfo;
+	ValueMap slamDunkEndInfo;
+
+	slamDunkStartInfo["kp04"] = Value("kp04");
+	slamDunkThrowInfo["kp05"] = Value("kp05");
+	slamDunkRecoverAllAbilitiesInfo["kp06"] = Value("kp06");
+	slamDunkEndInfo["kp07"] = Value("kp07");
+
+	this->slamDunkingEnemyRightAnimation->getFrames().at(0)->setUserInfo(slamDunkStartInfo);
+	this->slamDunkingEnemyRightAnimation->getFrames().at(2)->setUserInfo(slamDunkThrowInfo);
+	this->slamDunkingEnemyRightAnimation->getFrames().at(4)->setUserInfo(slamDunkRecoverAllAbilitiesInfo);
+	this->slamDunkingEnemyRightAnimation->getFrames().at(5)->setUserInfo(slamDunkEndInfo);
+
+	EventListenerCustom * slamDunkingEnemyFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, slamDunkStartInfo, slamDunkThrowInfo, slamDunkRecoverAllAbilitiesInfo, slamDunkEndInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == slamDunkStartInfo){
+			log("slamDunking start");
+			this->disableAllAbilities();
+			this->runAction(Sequence::create(MoveBy::create(0.1f,Vec2(0,60)),MoveBy::create(0.1f, Vec2(0,15)),nullptr));
+			this->targetToSlamDunk->stopAllActions();
+			this->targetToSlamDunk->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, 60)), MoveBy::create(0.1f, Vec2(0, 15)), nullptr));
+		}
+		if (*userData->userInfo == slamDunkThrowInfo){
+			log("Here is slamDunkingEnemyThrowInfo");
+			//将targetToSlamDunk扔出去
+			this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, -60)), MoveBy::create(0.3f, Vec2(0, -75)), nullptr));
+
+			//不妨假设摔下去的速度是每秒5000像素
+			int distanceFromTargetToWaterface = this->targetToSlamDunk->getPositionY();
+			this->targetToSlamDunk->runAction(Sequence::create(MoveBy::create(distanceFromTargetToWaterface/5000.0, Vec2(0, -distanceFromTargetToWaterface)), MoveBy::create(0.1f, Vec2(0, 15)), nullptr));
+
+		}
+		if (*userData->userInfo == slamDunkRecoverAllAbilitiesInfo){
+			this->enableAllAbilities();
+			if (this->directionToMoveUpRight ||
+				this->directionToMoveRight ||
+				this->directionToMoveDownRight ||
+				this->directionToMoveDown ||
+				this->directionToMoveDownLeft ||
+				this->directionToMoveLeft ||
+				this->directionToMoveUpLeft ||
+				this->directionToMoveUp){
+				this->move_forBothShapes();
+			}
+			this->targetToSlamDunk = nullptr;
+
+		}
+		if (*userData->userInfo == slamDunkEndInfo){
+			if (this->isBird){
+				this->hover();
+			}
+			else if (this->isFish){
+				this->hover_kun();
+			}
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(slamDunkingEnemyFrameEventListener, -1);
+
+
 
 	this->slamDunkingEnemyLeftAnimation = Animation::create();
 	this->slamDunkingEnemyLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_left_00.png");
@@ -1200,7 +1267,10 @@ HeroSprite::HeroSprite()
 	this->slamDunkingEnemyLeftAnimation->setRestoreOriginalFrame(true);
 	this->slamDunkingEnemyLeftAnimation->retain();
 
-
+	this->slamDunkingEnemyLeftAnimation->getFrames().at(0)->setUserInfo(slamDunkStartInfo);
+	this->slamDunkingEnemyLeftAnimation->getFrames().at(2)->setUserInfo(slamDunkThrowInfo);
+	this->slamDunkingEnemyLeftAnimation->getFrames().at(4)->setUserInfo(slamDunkRecoverAllAbilitiesInfo);
+	this->slamDunkingEnemyLeftAnimation->getFrames().at(5)->setUserInfo(slamDunkEndInfo);
 
 	//鸟将Boss扔下去的动作。最多三个事件帧，不能再多了。
 	this->slamDunkingBossRightAnimation = Animation::create();
