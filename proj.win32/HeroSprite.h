@@ -81,7 +81,7 @@ public:
 	int scratchingType = 1;
 	int finAttackingType = 1;
 
-	Sprite * targetToSlamDunk = nullptr;
+	GeneralUnit * targetToSlamDunk = nullptr;
 
 	//ÄñÐüÍ£¶¯»­
 	Animation * hoveringRightAnimation;

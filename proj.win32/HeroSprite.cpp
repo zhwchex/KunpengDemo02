@@ -3,7 +3,7 @@
 
 HeroSprite::HeroSprite()
 {
-
+	//AllocConsole();
 
 	//初始化10个风弹，反复使用它们以节省资源
 	for (int i = 0; i < this->NUM_OF_WIND_BULLETS; i++){
@@ -1044,7 +1044,6 @@ HeroSprite::HeroSprite()
 			this->inTheAir = false;
 			this->inTheWater = true;
 
-
 			if (this->directionToMoveUpRight ||
 				this->directionToMoveRight ||
 				this->directionToMoveDownRight ||
@@ -1071,7 +1070,7 @@ HeroSprite::HeroSprite()
 
 
 
-	//鸟抓一下的动作
+	//鸟试图使用投技的动作
 	this->tryCatchingRightAnimation = Animation::create();
 	this->tryCatchingRightAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_trycatching_right_00.png");
 	this->tryCatchingRightAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_trycatching_right_01.png");
@@ -1082,6 +1081,84 @@ HeroSprite::HeroSprite()
 	this->tryCatchingRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->tryCatchingRightAnimation->setRestoreOriginalFrame(true);
 	this->tryCatchingRightAnimation->retain();
+
+	ValueMap tryCatchingStartInfo;
+	ValueMap tryCatchingCheckSuccessInfo;
+	ValueMap tryCatchingRecoverAllAbilitiesInfo;
+	ValueMap tryCatchingEndInfo;
+
+	tryCatchingStartInfo["kp00"] = Value("kp00");
+	tryCatchingCheckSuccessInfo["kp01"] = Value("kp01");
+	tryCatchingRecoverAllAbilitiesInfo["kp02"] = Value("kp02");
+	tryCatchingEndInfo["kp03"] = Value("kp03");
+
+	this->tryCatchingRightAnimation->getFrames().at(0)->setUserInfo(tryCatchingStartInfo);
+	this->tryCatchingRightAnimation->getFrames().at(3)->setUserInfo(tryCatchingCheckSuccessInfo);
+	this->tryCatchingRightAnimation->getFrames().at(4)->setUserInfo(tryCatchingRecoverAllAbilitiesInfo);
+	this->tryCatchingRightAnimation->getFrames().at(5)->setUserInfo(tryCatchingEndInfo);
+
+	EventListenerCustom * tryCatchingFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, tryCatchingStartInfo, tryCatchingCheckSuccessInfo, tryCatchingRecoverAllAbilitiesInfo, tryCatchingEndInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == tryCatchingStartInfo){
+			log("trycatching start");
+			this->disableAllAbilities();
+		}
+		if (*userData->userInfo == tryCatchingCheckSuccessInfo){
+			log("Here is trycatchingchecksuccessinfo");
+			//在这里遍历小怪列表，并挑选出一只足够近的提在爪子上
+			Sprite* catchEffect = Sprite::create("characters/kunpeng/peng_catchblade_right_00.png");
+			if (this->facingRight){
+				catchEffect->setPosition(this->getPositionX() + 50, this->getPositionY() - 50);
+			}
+			else{
+				catchEffect->setPosition(this->getPositionX() -50, this->getPositionY() - 50);
+			}
+
+			Vector < GeneralUnit * > elist = ((Stage1GameplayLayer *)(this->getParent()))->enemyList;
+			for (GeneralUnit * enemy : elist){
+				int deltax = enemy->getPositionX() - catchEffect->getPositionX();
+				int deltay = enemy->getPositionY() - catchEffect->getPositionY();
+
+				double distance = sqrt(deltax*deltax + deltay*deltay);
+				if (distance < (catchEffect->getContentSize().width + enemy->getContentSize().width) * 50 / 100){
+					this->targetToSlamDunk = enemy;
+					log("Caught one!");
+					break;
+				}
+			}
+			
+			if (this->targetToSlamDunk != nullptr){
+				this->stopAllActions();
+				this->slamDunk();
+			}
+			
+		}
+		if (*userData->userInfo == tryCatchingRecoverAllAbilitiesInfo){
+			this->enableAllAbilities();
+			if (this->directionToMoveUpRight ||
+				this->directionToMoveRight ||
+				this->directionToMoveDownRight ||
+				this->directionToMoveDown ||
+				this->directionToMoveDownLeft ||
+				this->directionToMoveLeft ||
+				this->directionToMoveUpLeft ||
+				this->directionToMoveUp){
+				this->move_forBothShapes();
+			}
+
+		}
+		if (*userData->userInfo == tryCatchingEndInfo){
+			if (this->isBird){
+				this->hover();
+			}
+			else if (this->isFish){
+				this->hover_kun();
+			}
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(tryCatchingFrameEventListener, -1);
+
+
 
 	this->tryCatchingLeftAnimation = Animation::create();
 	this->tryCatchingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_trycatching_left_00.png");
@@ -1094,7 +1171,10 @@ HeroSprite::HeroSprite()
 	this->tryCatchingLeftAnimation->setRestoreOriginalFrame(true);
 	this->tryCatchingLeftAnimation->retain();
 
-
+	this->tryCatchingLeftAnimation->getFrames().at(0)->setUserInfo(tryCatchingStartInfo);
+	this->tryCatchingLeftAnimation->getFrames().at(3)->setUserInfo(tryCatchingCheckSuccessInfo);
+	this->tryCatchingLeftAnimation->getFrames().at(4)->setUserInfo(tryCatchingRecoverAllAbilitiesInfo);
+	this->tryCatchingLeftAnimation->getFrames().at(5)->setUserInfo(tryCatchingEndInfo);
 
 
 	//鸟将小怪扔下去的动作
@@ -2647,6 +2727,10 @@ void HeroSprite::button2Release(){
 
 void HeroSprite::button3Hit(){
 
+	if (this->isBird){
+		this->tryCatch();
+	}
+
 	//this->getHurtGeneral();//测试过。没问题
 
 	//this->enterWater_kun();
@@ -3527,7 +3611,18 @@ void HeroSprite::hover_kun(){
 
 
 void HeroSprite::tryCatch(){
-
+	if (this->catchable){
+		this->stopAllActions();
+		if (this->facingRight){
+			this->runAction(Animate::create(this->tryCatchingRightAnimation));
+		}
+		else{
+			this->runAction(Animate::create(this->tryCatchingLeftAnimation));
+		}
+	}
+	else{
+		return;
+	}
 }
 void HeroSprite::hold(){
 
@@ -3536,5 +3631,34 @@ void HeroSprite::release(){
 
 }
 void HeroSprite::slamDunk(){
-
+	if (this->slamDunkable && this->targetToSlamDunk != nullptr){
+		if (this->targetToSlamDunk->isBoss){
+			if (this->facingRight){
+				this->stopAllActions();
+				//this->runAction(nullptr);
+				this->runAction(Animate::create(this->slamDunkingBossRightAnimation));
+			}
+			else{
+				this->stopAllActions();
+				//this->runAction(nullptr);
+				this->runAction(Animate::create(this->slamDunkingBossLeftAnimation));
+			}
+			
+		}
+		else{
+			if (this->facingRight){
+				this->stopAllActions();
+				//this->runAction(nullptr);
+				this->runAction(Animate::create(this->slamDunkingEnemyRightAnimation));
+			}
+			else{
+				this->stopAllActions();
+				//this->runAction(nullptr);
+				this->runAction(Animate::create(this->slamDunkingEnemyLeftAnimation));
+			}
+		}
+	}
+	else{
+		return;
+	}
 }
