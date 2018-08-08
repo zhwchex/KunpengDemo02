@@ -81,6 +81,8 @@ public:
 	int scratchingType = 1;
 	int finAttackingType = 1;
 
+	GeneralUnit * targetToSlamDunk = nullptr;
+
 	//鸟悬停动画
 	Animation * hoveringRightAnimation;
 	Animation * hoveringLeftAnimation;
@@ -139,13 +141,17 @@ public:
 	Animation * scratchRightBladeEffectAnimation;
 	Animation * scratchRightBladeEffect2Animation;
 
-	Animation * tryCatchingAnimation;//试图使用一下投技
-	Animation * holdingObjectAnimation;//抓住物品不放的动画
+	Animation * tryCatchingRightAnimation = nullptr;//试图使用一下投技
+	Animation * tryCatchingLeftAnimation = nullptr;
+	Animation * holdingObjectRightAnimation;//抓住物品不放的动画
+	Animation * holdingObjectLeftAnimation;
 	Animation * holdingEnemyAnimation;//抓住敌人不放的动画
 	Animation * throwingObjectAnimation;//扔出物品的动画
-	Animation * slamDunkingEnemyAnimationi;//对小兵使用投技的动画
+	Animation * slamDunkingEnemyRightAnimation = nullptr;//对小兵使用投技的动画
+	Animation * slamDunkingEnemyLeftAnimation = nullptr;
 
-	Animation * slamDunkingBossAnimation;//对Boss使用投技的动画
+	Animation * slamDunkingBossRightAnimation = nullptr;//对Boss使用投技的动画
+	Animation * slamDunkingBossLeftAnimation = nullptr;
 
 	//鱼技能动画
 	Animation * blowingVortexRightAnimation;
@@ -168,7 +174,8 @@ public:
 	Animation * finRightBladeEffectAnimation;
 	Animation * finRightBladeEffect2Animation;
 
-
+	Animation * airSpinningRightAnimation_kun;
+	Animation * airSpinningLeftAnimation_kun;
 
 
 	//主角的招式特效
@@ -285,8 +292,9 @@ public:
 
 
 	void tryCatch();
-	void tryHold();
-	void trySlamDunk();
+	void hold();
+	void release();
+	void slamDunk();
 
 
 	void disableAllAbilities();
@@ -385,6 +393,10 @@ public:
 	void finAttackLeft2();
 
 
+	void airSpin();
+	void airSpinRight();
+	void airSpinLeft();
+
 
 	void windAttack();//多个重载
 	void pawAttack();
@@ -406,7 +418,7 @@ public:
 	void getHurt();//多个重载
 	void getHurtGeneral();
 	void getHurtGeneral(int damage);
-	void getHurtByThunder();//被雷电击中，骨架闪烁+原地震颤
+	void getHurtByThunder();//被雷电击中，骨架闪烁+
 	void getHurtByFire();//被火球击中，羽毛烧焦闪烁+后退
 	void getHurtByWater();//被水流击中，变落汤鸡+下落
 	void getHurtByWater(int damage);//被水流击中，变落汤鸡+下落

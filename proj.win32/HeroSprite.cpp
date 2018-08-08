@@ -3,11 +3,14 @@
 
 HeroSprite::HeroSprite()
 {
-
+	AllocConsole();
+	freopen("CONIN$", "r", stdin);
+	freopen("CONOUT$", "w", stdout);
+	freopen("CONOUT$", "w", stderr);
 
 	//初始化10个风弹，反复使用它们以节省资源
 	for (int i = 0; i < this->NUM_OF_WIND_BULLETS; i++){
-		WindBullet * wb = WindBullet::create("characters/kunpeng/wind_bullet.png");
+		WindBullet * wb = WindBullet::create("characters/kunpeng/wind_bullet_00.png");
 		//wb->setPosition(wb->magazineX, wb->magazineY);
 		wb->retain();
 		//this->getParent()->addChild(wb);
@@ -1044,7 +1047,6 @@ HeroSprite::HeroSprite()
 			this->inTheAir = false;
 			this->inTheWater = true;
 
-
 			if (this->directionToMoveUpRight ||
 				this->directionToMoveRight ||
 				this->directionToMoveDownRight ||
@@ -1068,6 +1070,291 @@ HeroSprite::HeroSprite()
 		}
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(transformingFromBirdToFishAnimationFrameEventListener, -1);
+
+
+
+	//鸟试图使用投技的动作
+	this->tryCatchingRightAnimation = Animation::create();
+	this->tryCatchingRightAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_trycatching_right_00.png");
+	this->tryCatchingRightAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_trycatching_right_01.png");
+	this->tryCatchingRightAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_trycatching_right_02.png");
+	this->tryCatchingRightAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_trycatching_right_03.png");
+	this->tryCatchingRightAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_trycatching_right_04.png");
+	this->tryCatchingRightAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_trycatching_right_05.png");
+	this->tryCatchingRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->tryCatchingRightAnimation->setRestoreOriginalFrame(true);
+	this->tryCatchingRightAnimation->retain();
+
+	ValueMap tryCatchingStartInfo;
+	ValueMap tryCatchingCheckSuccessInfo;
+	ValueMap tryCatchingRecoverAllAbilitiesInfo;
+	ValueMap tryCatchingEndInfo;
+
+	tryCatchingStartInfo["kp00"] = Value("kp00");
+	tryCatchingCheckSuccessInfo["kp01"] = Value("kp01");
+	tryCatchingRecoverAllAbilitiesInfo["kp02"] = Value("kp02");
+	tryCatchingEndInfo["kp03"] = Value("kp03");
+
+	this->tryCatchingRightAnimation->getFrames().at(0)->setUserInfo(tryCatchingStartInfo);
+	this->tryCatchingRightAnimation->getFrames().at(3)->setUserInfo(tryCatchingCheckSuccessInfo);
+	this->tryCatchingRightAnimation->getFrames().at(4)->setUserInfo(tryCatchingRecoverAllAbilitiesInfo);
+	this->tryCatchingRightAnimation->getFrames().at(5)->setUserInfo(tryCatchingEndInfo);
+
+	EventListenerCustom * tryCatchingFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, tryCatchingStartInfo, tryCatchingCheckSuccessInfo, tryCatchingRecoverAllAbilitiesInfo, tryCatchingEndInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == tryCatchingStartInfo){
+			log("trycatching start");
+			this->disableAllAbilities();
+			if (this->facingRight){
+				//this->stopAllActions();
+				this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(-70, 0)), MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(100,20)), nullptr));
+			}
+			else if (this->facingLeft){
+				//this->stopAllActions();
+				this->runAction(Sequence::create(MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(70,0)), MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(-100,20)), nullptr));
+			}
+		}
+		if (*userData->userInfo == tryCatchingCheckSuccessInfo){
+			log("Here is trycatchingchecksuccessinfo");
+			//在这里遍历小怪列表，并挑选出一只足够近的提在爪子上
+			Sprite* catchEffect = Sprite::create("characters/kunpeng/peng_catchblade_right_00.png");
+			if (this->facingRight){
+				catchEffect->setPosition(this->getPositionX() + 50, this->getPositionY() - 50);
+			}
+			else{
+				catchEffect->setPosition(this->getPositionX() -50, this->getPositionY() - 50);
+			}
+
+			Vector < GeneralUnit * > elist = ((Stage1GameplayLayer *)(this->getParent()))->enemyList;
+			for (GeneralUnit * enemy : elist){
+				int deltax = enemy->getPositionX() - catchEffect->getPositionX();
+				int deltay = enemy->getPositionY() - catchEffect->getPositionY();
+
+				double distance = sqrt(deltax*deltax + deltay*deltay);
+				if (distance < (catchEffect->getContentSize().width + enemy->getContentSize().width) * 20 / 100){
+					this->targetToSlamDunk = enemy;
+					log("Caught one!");
+					((Stage1GameplayLayer *)this->getParent())->cameraShake_vertical_slight();
+					break;
+				}
+			}
+			
+			if (this->targetToSlamDunk != nullptr){
+				this->stopAllActions();
+				this->slamDunk();
+			}
+			
+		}
+		if (*userData->userInfo == tryCatchingRecoverAllAbilitiesInfo){
+			this->enableAllAbilities();
+			if (this->directionToMoveUpRight ||
+				this->directionToMoveRight ||
+				this->directionToMoveDownRight ||
+				this->directionToMoveDown ||
+				this->directionToMoveDownLeft ||
+				this->directionToMoveLeft ||
+				this->directionToMoveUpLeft ||
+				this->directionToMoveUp){
+				this->move_forBothShapes();
+			}
+
+		}
+		if (*userData->userInfo == tryCatchingEndInfo){
+			if (this->isBird){
+				this->hover();
+			}
+			else if (this->isFish){
+				this->hover_kun();
+			}
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(tryCatchingFrameEventListener, -1);
+
+
+
+	this->tryCatchingLeftAnimation = Animation::create();
+	this->tryCatchingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_trycatching_left_00.png");
+	this->tryCatchingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_trycatching_left_01.png");
+	this->tryCatchingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_trycatching_left_02.png");
+	this->tryCatchingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_trycatching_left_03.png");
+	this->tryCatchingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_trycatching_left_04.png");
+	this->tryCatchingLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_trycatching_left_05.png");
+	this->tryCatchingLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->tryCatchingLeftAnimation->setRestoreOriginalFrame(true);
+	this->tryCatchingLeftAnimation->retain();
+
+	this->tryCatchingLeftAnimation->getFrames().at(0)->setUserInfo(tryCatchingStartInfo);
+	this->tryCatchingLeftAnimation->getFrames().at(3)->setUserInfo(tryCatchingCheckSuccessInfo);
+	this->tryCatchingLeftAnimation->getFrames().at(4)->setUserInfo(tryCatchingRecoverAllAbilitiesInfo);
+	this->tryCatchingLeftAnimation->getFrames().at(5)->setUserInfo(tryCatchingEndInfo);
+
+
+
+
+	//鸟将小怪扔下去的动作。最多三个事件帧，不能再多了。
+	this->slamDunkingEnemyRightAnimation = Animation::create();
+	this->slamDunkingEnemyRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_right_00.png");
+	this->slamDunkingEnemyRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_right_01.png");
+	this->slamDunkingEnemyRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_right_02.png");
+	this->slamDunkingEnemyRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_right_03.png");
+	this->slamDunkingEnemyRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_right_04.png");
+	this->slamDunkingEnemyRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_right_05.png");
+	this->slamDunkingEnemyRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->slamDunkingEnemyRightAnimation->setRestoreOriginalFrame(true);
+	this->slamDunkingEnemyRightAnimation->retain();
+
+	ValueMap slamDunkStartInfo;
+	ValueMap slamDunkThrowInfo;
+	ValueMap slamDunkRecoverAllAbilitiesInfo;
+	ValueMap slamDunkEndInfo;
+
+	slamDunkStartInfo["kp04"] = Value("kp04");
+	slamDunkThrowInfo["kp05"] = Value("kp05");
+	slamDunkRecoverAllAbilitiesInfo["kp06"] = Value("kp06");
+	slamDunkEndInfo["kp07"] = Value("kp07");
+
+	this->slamDunkingEnemyRightAnimation->getFrames().at(0)->setUserInfo(slamDunkStartInfo);
+	this->slamDunkingEnemyRightAnimation->getFrames().at(2)->setUserInfo(slamDunkThrowInfo);
+	this->slamDunkingEnemyRightAnimation->getFrames().at(4)->setUserInfo(slamDunkRecoverAllAbilitiesInfo);
+	this->slamDunkingEnemyRightAnimation->getFrames().at(5)->setUserInfo(slamDunkEndInfo);
+
+	EventListenerCustom * slamDunkingEnemyFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, slamDunkStartInfo, slamDunkThrowInfo, slamDunkRecoverAllAbilitiesInfo, slamDunkEndInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == slamDunkStartInfo){
+			log("slamDunking start");
+			this->disableAllAbilities();
+			if (this->facingRight){
+				this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, 60)), MoveBy::create(0.1f, Vec2(-40, -40)), MoveBy::create(0.1f, Vec2(-30, -5)), nullptr));
+				this->targetToSlamDunk->stopAllActions();
+				this->targetToSlamDunk->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, 60)), MoveBy::create(0.1f, Vec2(0, 15)), nullptr));
+			}
+			else if (this->facingLeft){
+				this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, 60)), MoveBy::create(0.1f, Vec2(40, -40)), MoveBy::create(0.1f, Vec2(30, -5)), nullptr));
+				this->targetToSlamDunk->stopAllActions();
+				this->targetToSlamDunk->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, 60)), MoveBy::create(0.1f, Vec2(0, 15)), nullptr));
+			}
+		}
+		if (*userData->userInfo == slamDunkThrowInfo){
+			log("Here is slamDunkingEnemyThrowInfo");
+			//将targetToSlamDunk扔出去
+			this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, -60)), MoveBy::create(0.3f, Vec2(0, -75)), nullptr));
+
+			//不妨假设摔下去的速度是每秒5000像素
+			int distanceFromTargetToWaterface = this->targetToSlamDunk->getPositionY();
+			this->targetToSlamDunk->runAction(Sequence::create(MoveBy::create(distanceFromTargetToWaterface / 5000.0, Vec2(0, -distanceFromTargetToWaterface)),
+				CallFunc::create([this]{((Stage1GameplayLayer *)this->getParent())->cameraShake_vertical_significant(); }), 
+				MoveBy::create(0.1f, Vec2(0, 15)), 
+				nullptr));
+
+		}
+		if (*userData->userInfo == slamDunkRecoverAllAbilitiesInfo){
+			this->enableAllAbilities();
+			if (this->directionToMoveUpRight ||
+				this->directionToMoveRight ||
+				this->directionToMoveDownRight ||
+				this->directionToMoveDown ||
+				this->directionToMoveDownLeft ||
+				this->directionToMoveLeft ||
+				this->directionToMoveUpLeft ||
+				this->directionToMoveUp){
+				this->move_forBothShapes();
+			}
+			
+			this->targetToSlamDunk = nullptr;
+
+		}
+		if (*userData->userInfo == slamDunkEndInfo){
+			if (this->isBird){
+				this->hover();
+			}
+			else if (this->isFish){
+				this->hover_kun();
+			}
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(slamDunkingEnemyFrameEventListener, -1);
+
+
+
+	this->slamDunkingEnemyLeftAnimation = Animation::create();
+	this->slamDunkingEnemyLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_left_00.png");
+	this->slamDunkingEnemyLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_left_01.png");
+	this->slamDunkingEnemyLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_left_02.png");
+	this->slamDunkingEnemyLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_left_03.png");
+	this->slamDunkingEnemyLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_left_04.png");
+	this->slamDunkingEnemyLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_left_05.png");
+	this->slamDunkingEnemyLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->slamDunkingEnemyLeftAnimation->setRestoreOriginalFrame(true);
+	this->slamDunkingEnemyLeftAnimation->retain();
+
+	this->slamDunkingEnemyLeftAnimation->getFrames().at(0)->setUserInfo(slamDunkStartInfo);
+	this->slamDunkingEnemyLeftAnimation->getFrames().at(2)->setUserInfo(slamDunkThrowInfo);
+	this->slamDunkingEnemyLeftAnimation->getFrames().at(4)->setUserInfo(slamDunkRecoverAllAbilitiesInfo);
+	this->slamDunkingEnemyLeftAnimation->getFrames().at(5)->setUserInfo(slamDunkEndInfo);
+
+	//鸟将Boss扔下去的动作。最多三个事件帧，不能再多了。
+	this->slamDunkingBossRightAnimation = Animation::create();
+	this->slamDunkingBossRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_right_00.png");
+	this->slamDunkingBossRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_right_01.png");
+	this->slamDunkingBossRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_right_02.png");
+	this->slamDunkingBossRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_right_03.png");
+	this->slamDunkingBossRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_right_04.png");
+	this->slamDunkingBossRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_right_05.png");
+	this->slamDunkingBossRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_right_06.png");
+	this->slamDunkingBossRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_right_07.png");
+	this->slamDunkingBossRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_right_08.png");
+	this->slamDunkingBossRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_right_09.png");
+	this->slamDunkingBossRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_right_10.png");
+	this->slamDunkingBossRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_right_11.png");
+	this->slamDunkingBossRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_right_12.png");
+	this->slamDunkingBossRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_right_13.png");
+	this->slamDunkingBossRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_right_14.png");
+	this->slamDunkingBossRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_right_15.png");
+	this->slamDunkingBossRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_right_16.png");
+	this->slamDunkingBossRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_right_17.png");
+	this->slamDunkingBossRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_right_18.png");
+	this->slamDunkingBossRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_right_19.png");
+	this->slamDunkingBossRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_right_20.png");
+	this->slamDunkingBossRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_right_21.png");
+	this->slamDunkingBossRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_right_22.png");
+	this->slamDunkingBossRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_right_23.png");
+	this->slamDunkingBossRightAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_right_24.png");
+	this->slamDunkingBossRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->slamDunkingBossRightAnimation->setRestoreOriginalFrame(true);
+	this->slamDunkingBossRightAnimation->retain();
+
+	this->slamDunkingBossLeftAnimation = Animation::create();
+	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_left_00.png");
+	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_left_01.png");
+	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_left_02.png");
+	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_left_03.png");
+	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_left_04.png");
+	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_left_05.png");
+	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_left_06.png");
+	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_left_07.png");
+	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_left_08.png");
+	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_left_09.png");
+	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_left_10.png");
+	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_left_11.png");
+	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_left_12.png");
+	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_left_13.png");
+	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_left_14.png");
+	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_left_15.png");
+	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_left_16.png");
+	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_left_17.png");
+	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_left_18.png");
+	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_left_19.png");
+	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_left_20.png");
+	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_left_21.png");
+	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_left_22.png");
+	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_left_23.png");
+	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFileName("characters/kunpeng/peng_slamdunking_boss_left_24.png");
+
+	this->slamDunkingBossLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->slamDunkingBossLeftAnimation->setRestoreOriginalFrame(true);
+	this->slamDunkingBossLeftAnimation->retain();
+	/*
+	*/
 
 
 
@@ -2406,6 +2693,51 @@ HeroSprite::HeroSprite()
 
 
 
+
+	this->airSpinningRightAnimation_kun = Animation::create();
+	this->airSpinningRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_air_spinning_right_00.png");
+	this->airSpinningRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_air_spinning_right_01.png");
+	this->airSpinningRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_air_spinning_right_02.png");
+	this->airSpinningRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_air_spinning_right_03.png");
+	this->airSpinningRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_air_spinning_right_04.png");
+	this->airSpinningRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_air_spinning_right_05.png");
+	this->airSpinningRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_air_spinning_right_06.png");
+	this->airSpinningRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_air_spinning_right_07.png");
+	//this->airSpinningRightAnimation_kun->addSpriteFrameWithFileName("characters/kunpeng/kun_air_spinning_right_08.png");
+	this->airSpinningRightAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->airSpinningRightAnimation_kun->setRestoreOriginalFrame(true);
+	this->airSpinningRightAnimation_kun->retain();
+
+	ValueMap airSpinningStartInfo;
+	ValueMap airSpinningEndInfo;
+
+	airSpinningStartInfo["heroAirSpinning00"] = Value("heroAirSpinning00");
+	airSpinningEndInfo["heroAirSpinning07"] = Value("heroAirSpinning07");
+
+	this->airSpinningRightAnimation_kun->getFrames().at(0)->setUserInfo(airSpinningStartInfo);
+	this->airSpinningRightAnimation_kun->getFrames().at(7)->setUserInfo(airSpinningEndInfo);
+
+	EventListenerCustom * airSpinningFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, airSpinningStartInfo, airSpinningEndInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == airSpinningStartInfo){
+
+		}
+		if (*userData->userInfo == airSpinningEndInfo){
+			this->hover_kun();
+		}
+
+
+
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(airSpinningFrameEventListener, -1);
+
+
+
+
+
+
+
+
 }
 
 
@@ -2484,6 +2816,23 @@ void HeroSprite::button2Release(){
 }
 
 void HeroSprite::button3Hit(){
+
+	//((Stage1GameplayLayer *)this->getParent())->cameraShake_vertical_slight();
+	//return;
+
+
+
+	if (this->isBird){
+		this->tryCatch();
+	}
+	else if (this->isFish){
+		if (this->getPositionY() - ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY() > 0){
+
+		}
+		else if (this->getPositionY() - ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY() <= 0){
+
+		}
+	}
 
 	//this->getHurtGeneral();//测试过。没问题
 
@@ -3359,12 +3708,60 @@ void HeroSprite::hover_kun(){
 }
 
 
+
+
+
+
+
 void HeroSprite::tryCatch(){
+	if (this->catchable){
+		this->stopAllActions();
+		if (this->facingRight){
+			this->runAction(Animate::create(this->tryCatchingRightAnimation));
+		}
+		else{
+			this->runAction(Animate::create(this->tryCatchingLeftAnimation));
+		}
+	}
+	else{
+		return;
+	}
+}
+void HeroSprite::hold(){
 
 }
-void HeroSprite::tryHold(){
+void HeroSprite::release(){
 
 }
-void HeroSprite::trySlamDunk(){
-
+void HeroSprite::slamDunk(){
+	if (this->slamDunkable && this->targetToSlamDunk != nullptr){
+		if (this->targetToSlamDunk->isBoss){
+			if (this->facingRight){
+				this->stopAllActions();
+				//this->runAction(nullptr);
+				this->runAction(Animate::create(this->slamDunkingBossRightAnimation));
+			}
+			else{
+				this->stopAllActions();
+				//this->runAction(nullptr);
+				this->runAction(Animate::create(this->slamDunkingBossLeftAnimation));
+			}
+			
+		}
+		else{
+			if (this->facingRight){
+				this->stopAllActions();
+				//this->runAction(nullptr);
+				this->runAction(Animate::create(this->slamDunkingEnemyRightAnimation));
+			}
+			else{
+				this->stopAllActions();
+				//this->runAction(nullptr);
+				this->runAction(Animate::create(this->slamDunkingEnemyLeftAnimation));
+			}
+		}
+	}
+	else{
+		return;
+	}
 }
