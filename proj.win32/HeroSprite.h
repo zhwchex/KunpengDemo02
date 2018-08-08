@@ -161,8 +161,8 @@ public:
 	Animation * finAttackLeftAnimation;
 	Animation * finAttackLeftAnimation2;
 
-	Animation * fallingFromSkyRightAnimation;//从空中掉入水中的过程动画。当自己是在空中的鱼时触发。掉落时每时每刻都要判断是否入水，因此需要做成无限循环动作，每帧都判断是否入水。掉落时只能变身为鸟或吐水泡。
-	Animation * fallingFromSkyLeftAnimation;//从空中掉入水中的过程动画。当自己是在空中的鱼时触发。掉落时每时每刻都要判断是否入水，因此需要做成无限循环动作，每帧都判断是否入水。掉落时只能变身为鸟或吐水泡。
+	Animation * fallingFromSkyRightAnimation;//从空中掉入水中的过程动画。当自己是在空中的鱼时触发。掉落时每时每刻都要判断是否入水，因此需要做成无限循环动作，每帧都判断是否入水。掉落时能做的事只有变身为鸟或吐水球。
+	Animation * fallingFromSkyLeftAnimation;//从空中掉入水中的过程动画。当自己是在空中的鱼时触发。掉落时每时每刻都要判断是否入水，因此需要做成无限循环动作，每帧都判断是否入水。掉落时能做的事只有变身为鸟或吐水球。
 	Animation * enteringIntoWaterRightAnimation;//入水动画。第一帧开始禁掉全能力，播放到一半enable全能力并且如果有方向键就move_kun，最后一帧转入hover_kun。
 	Animation * enteringIntoWaterLeftAnimation;//入水动画。第一帧开始禁掉全能力，播放到一半enable全能力并且如果有方向键就move_kun，最后一帧转入hover_kun。
 
@@ -177,6 +177,8 @@ public:
 	Animation * airSpinningRightAnimation_kun;
 	Animation * airSpinningLeftAnimation_kun;
 
+	Animation * collidingRightAnimation_kun;
+	Animation * collidingLeftAnimation_kun;
 
 	//主角的招式特效
 	Animation * windBulletFlyingAnimation;
@@ -251,6 +253,8 @@ public:
 	bool throwable = true;//能否将爪子上的东西扔出。例：主角不能一心二用。如果当前正在使用翅膀发射风弹，则该项为false，该项为false时调用throw方法将不会触发敌人被扔下的动画，将触发敌人从爪下生还顺毛重新发动攻击的动画。
 	bool spittable = false;//能否吐口水（
 	bool vortexAttackable = true;
+
+	bool collidable = true;
 
 	//逻辑上讲，这两者不能同时为真。
 	bool transformable_BirdToFish = true;
@@ -397,6 +401,9 @@ public:
 	void airSpinRight();
 	void airSpinLeft();
 
+	void collide();
+	void collideLeft();
+	void collideRight();
 
 	void windAttack();//多个重载
 	void pawAttack();
