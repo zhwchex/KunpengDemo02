@@ -254,6 +254,7 @@ public:
 	bool spittable = false;//能否吐口水（
 	bool vortexAttackable = true;
 
+	bool airSpinnable = true;
 	bool collidable = true;
 
 	//逻辑上讲，这两者不能同时为真。

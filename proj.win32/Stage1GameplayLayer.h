@@ -79,6 +79,8 @@ public:
 	void cameraShake_significant();
 	void cameraShake_vertical_slight();
 	void cameraShake_vertical_significant();
+	void cameraShake_horizontal_slight();
+	void cameraShake_horizontal_significant();
 	
 
 	Stage1GameplayLayer();

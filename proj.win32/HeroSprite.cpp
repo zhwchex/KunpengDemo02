@@ -2704,7 +2704,7 @@ HeroSprite::HeroSprite()
 	this->airSpinningRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_right_06.png");
 	this->airSpinningRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_right_07.png");
 	//this->airSpinningRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_right_08.png");
-	this->airSpinningRightAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
+	this->airSpinningRightAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL / 4);
 	this->airSpinningRightAnimation_kun->setRestoreOriginalFrame(true);
 	this->airSpinningRightAnimation_kun->retain();
 
@@ -2720,10 +2720,12 @@ HeroSprite::HeroSprite()
 	EventListenerCustom * airSpinningFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, airSpinningStartInfo, airSpinningEndInfo](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == airSpinningStartInfo){
-
+			this->disableAllAbilities();
 		}
 		if (*userData->userInfo == airSpinningEndInfo){
-			this->hover_kun();
+			//this->enableAllAbilities();
+			//this->hover_kun();
+			this->fallFromSky_kun();
 		}
 
 
@@ -2731,8 +2733,22 @@ HeroSprite::HeroSprite()
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(airSpinningFrameEventListener, -1);
 
+	this->airSpinningLeftAnimation_kun = Animation::create();
+	this->airSpinningLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_left_00.png");
+	this->airSpinningLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_left_01.png");
+	this->airSpinningLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_left_02.png");
+	this->airSpinningLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_left_03.png");
+	this->airSpinningLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_left_04.png");
+	this->airSpinningLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_left_05.png");
+	this->airSpinningLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_left_06.png");
+	this->airSpinningLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_left_07.png");
+	//this->airSpinningLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_left_08.png");
+	this->airSpinningLeftAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL / 4);
+	this->airSpinningLeftAnimation_kun->setRestoreOriginalFrame(true);
+	this->airSpinningLeftAnimation_kun->retain();
 
-
+	this->airSpinningLeftAnimation_kun->getFrames().at(0)->setUserInfo(airSpinningStartInfo);
+	this->airSpinningLeftAnimation_kun->getFrames().at(7)->setUserInfo(airSpinningEndInfo);
 
 
 	//鱼在水中的特殊技
@@ -2792,6 +2808,7 @@ HeroSprite::HeroSprite()
 				int deltay = enemy->getPositionY() - collisionArea->getPositionY();
 				double distance = sqrt(pow(deltax, 2) + pow(deltay, 2));
 				if (distance < (enemy->getContentSize().width + collisionArea->getContentSize().width) / 2){
+					((Stage1GameplayLayer *)this->getParent())->cameraShake_horizontal_slight();
 					enemy->getHurtByWind(this->DAMAGE_WATER_BALL);//TODOTODOTODO 疯狂需要改动。此处需要改成getHurtByCollision
 				}
 			}
@@ -3018,6 +3035,7 @@ void HeroSprite::disableAllAbilities(){
 	this->vortexAttackable = false;
 	//this->spittable = false;
 	this->collidable = false;
+	//this->airSpinnable = false;
 }
 void HeroSprite::enableAllAbilities(){
 	this->catchable = true;
@@ -3032,6 +3050,7 @@ void HeroSprite::enableAllAbilities(){
 	this->vortexAttackable = true;
 	this->spittable = true;
 	this->collidable = true;
+	this->airSpinnable = true;
 }
 
 void HeroSprite::windAttack(){
@@ -3910,7 +3929,16 @@ void HeroSprite::collideRight(){
 
 
 void HeroSprite::airSpin(){
-	
+	if (this->airSpinnable){
+		if (this->facingRight){
+			this->airSpinRight();
+			this->airSpinnable = false;
+		}
+		else if (this->facingLeft){
+			this->airSpinLeft();
+			this->airSpinnable = false;
+		}
+	}
 }
 
 void HeroSprite::airSpinLeft(){
