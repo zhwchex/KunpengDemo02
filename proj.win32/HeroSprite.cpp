@@ -1134,6 +1134,7 @@ HeroSprite::HeroSprite()
 				if (distance < (catchEffect->getContentSize().width + enemy->getContentSize().width) * 20 / 100){
 					this->targetToSlamDunk = enemy;
 					log("Caught one!");
+					((Stage1GameplayLayer *)this->getParent())->cameraShake_vertical_slight();
 					break;
 				}
 			}
@@ -1240,7 +1241,10 @@ HeroSprite::HeroSprite()
 
 			//不妨假设摔下去的速度是每秒5000像素
 			int distanceFromTargetToWaterface = this->targetToSlamDunk->getPositionY();
-			this->targetToSlamDunk->runAction(Sequence::create(MoveBy::create(distanceFromTargetToWaterface/5000.0, Vec2(0, -distanceFromTargetToWaterface)), MoveBy::create(0.1f, Vec2(0, 15)), nullptr));
+			this->targetToSlamDunk->runAction(Sequence::create(MoveBy::create(distanceFromTargetToWaterface / 5000.0, Vec2(0, -distanceFromTargetToWaterface)),
+				CallFunc::create([this]{((Stage1GameplayLayer *)this->getParent())->cameraShake_vertical_significant(); }), 
+				MoveBy::create(0.1f, Vec2(0, 15)), 
+				nullptr));
 
 		}
 		if (*userData->userInfo == slamDunkRecoverAllAbilitiesInfo){
@@ -2813,8 +2817,21 @@ void HeroSprite::button2Release(){
 
 void HeroSprite::button3Hit(){
 
+	//((Stage1GameplayLayer *)this->getParent())->cameraShake_vertical_slight();
+	//return;
+
+
+
 	if (this->isBird){
 		this->tryCatch();
+	}
+	else if (this->isFish){
+		if (this->getPositionY() - ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY() > 0){
+
+		}
+		else if (this->getPositionY() - ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY() <= 0){
+
+		}
 	}
 
 	//this->getHurtGeneral();//测试过。没问题

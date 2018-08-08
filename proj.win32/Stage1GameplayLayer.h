@@ -15,7 +15,7 @@ class Stage1GameplayLayer :	public Layer
 {
 public:
 
-
+	bool enableAutoTrackingHero = true;
 	bool enableHorizontalMotion = true;
 	bool enableVerticalMotion = true;
 
@@ -77,6 +77,8 @@ public:
 
 	void cameraShake_slight();
 	void cameraShake_significant();
+	void cameraShake_vertical_slight();
+	void cameraShake_vertical_significant();
 	
 
 	Stage1GameplayLayer();

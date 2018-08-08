@@ -35,11 +35,11 @@ EnemyFish::EnemyFish()
 	EventListenerCustom * hoveringLeftAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, hoveringLeftAnimationReachesLastFrameInfo, hoveringLeftAnimationReachesfirstFrameInfo](EventCustom *event) {
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == hoveringLeftAnimationReachesLastFrameInfo) {
-			log("Last ljjFrame of hoveringLeftAnimation reached.");
+			//log("Last ljjFrame of hoveringLeftAnimation reached.");
 			this->acceptCall = true;
 		}
 		if (*userData->userInfo == hoveringLeftAnimationReachesfirstFrameInfo) {
-			log("First ljjFrame of hoveringLeftAnimation reached.");
+			//log("First ljjFrame of hoveringLeftAnimation reached.");
 			this->acceptCall = false;
 		}
 	});
@@ -72,11 +72,11 @@ EnemyFish::EnemyFish()
 	EventListenerCustom * hoveringRightAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, hoveringRightAnimationReachesLastFrameInfo, hoveringRightAnimationReachesfirstFrameInfo](EventCustom *event) {
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == hoveringRightAnimationReachesLastFrameInfo) {
-			log("Last ljjFrame of hoveringRightAnimation reached.");
+			//log("Last ljjFrame of hoveringRightAnimation reached.");
 			this->acceptCall = true;
 		}
 		if (*userData->userInfo == hoveringRightAnimationReachesfirstFrameInfo) {
-			log("First ljjFrame of hoveringRightAnimation reached.");
+			//log("First ljjFrame of hoveringRightAnimation reached.");
 			this->acceptCall = false;
 		}
 	});
@@ -109,11 +109,11 @@ EnemyFish::EnemyFish()
 	EventListenerCustom * movingUpAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, movingUpAnimationReachesLastFrameInfo, movingUpAnimationReachesfirstFrameInfo](EventCustom *event) {
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == movingUpAnimationReachesLastFrameInfo) {
-			log("Last ljjFrame of movingUpAnimation reached.");
+			//log("Last ljjFrame of movingUpAnimation reached.");
 			this->acceptCall = true;
 		}
 		if (*userData->userInfo == movingUpAnimationReachesfirstFrameInfo) {
-			log("First ljjFrame of movingUpAnimation reached.");
+			//log("First ljjFrame of movingUpAnimation reached.");
 			this->acceptCall = false;
 		}
 	});
@@ -146,11 +146,11 @@ EnemyFish::EnemyFish()
 	EventListenerCustom * movingDownAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, movingDownAnimationReachesLastFrameInfo, movingDownAnimationReachesfirstFrameInfo](EventCustom *event) {
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == movingDownAnimationReachesLastFrameInfo) {
-			log("Last ljjFrame of movingDownAnimation reached.");
+			//log("Last ljjFrame of movingDownAnimation reached.");
 			this->acceptCall = true;
 		}
 		if (*userData->userInfo == movingDownAnimationReachesfirstFrameInfo) {
-			log("First ljjFrame of movingDownAnimation reached.");
+			//log("First ljjFrame of movingDownAnimation reached.");
 			this->acceptCall = false;
 		}
 	});
@@ -183,11 +183,11 @@ EnemyFish::EnemyFish()
 	EventListenerCustom * movingLeftAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, movingLeftAnimationReachesLastFrameInfo, movingLeftAnimationReachesfirstFrameInfo](EventCustom *event) {
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == movingLeftAnimationReachesLastFrameInfo) {
-			log("Last ljjFrame of movingLeftAnimation reached.");
+			//log("Last ljjFrame of movingLeftAnimation reached.");
 			this->acceptCall = true;
 		}
 		if (*userData->userInfo == movingLeftAnimationReachesfirstFrameInfo) {
-			log("First ljjFrame of movingLeftAnimation reached.");
+			//log("First ljjFrame of movingLeftAnimation reached.");
 			this->acceptCall = false;
 		}
 	});
@@ -220,11 +220,11 @@ EnemyFish::EnemyFish()
 	EventListenerCustom * movingRightAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, movingRightAnimationReachesLastFrameInfo, movingRightAnimationReachesfirstFrameInfo](EventCustom *event) {
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == movingRightAnimationReachesLastFrameInfo) {
-			log("Last ljjFrame of movingRightAnimation reached.");
+			//log("Last ljjFrame of movingRightAnimation reached.");
 			this->acceptCall = true;
 		}
 		if (*userData->userInfo == movingRightAnimationReachesfirstFrameInfo) {
-			log("First ljjFrame of movingRightAnimation reached.");
+			//log("First ljjFrame of movingRightAnimation reached.");
 			this->acceptCall = false;
 		}
 	});
@@ -257,11 +257,11 @@ EnemyFish::EnemyFish()
 	EventListenerCustom * movingUpRightAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, movingUpRightAnimationReachesLastFrameInfo, movingUpRightAnimationReachesfirstFrameInfo](EventCustom *event) {
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == movingUpRightAnimationReachesLastFrameInfo) {
-			log("Last ljjFrame of movingUpRightAnimation reached.");
+			//log("Last ljjFrame of movingUpRightAnimation reached.");
 			this->acceptCall = true;
 		}
 		if (*userData->userInfo == movingUpRightAnimationReachesfirstFrameInfo) {
-			log("First ljjFrame of movingUpRightAnimation reached.");
+			//log("First ljjFrame of movingUpRightAnimation reached.");
 			this->acceptCall = false;
 		}
 	});
@@ -294,11 +294,11 @@ EnemyFish::EnemyFish()
 	EventListenerCustom * movingDownRightAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, movingDownRightAnimationReachesLastFrameInfo, movingDownRightAnimationReachesfirstFrameInfo](EventCustom *event) {
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == movingDownRightAnimationReachesLastFrameInfo) {
-			log("Last ljjFrame of movingDownRightAnimation reached.");
+			//log("Last ljjFrame of movingDownRightAnimation reached.");
 			this->acceptCall = true;
 		}
 		if (*userData->userInfo == movingDownRightAnimationReachesfirstFrameInfo) {
-			log("First ljjFrame of movingDownRightAnimation reached.");
+			//log("First ljjFrame of movingDownRightAnimation reached.");
 			this->acceptCall = false;
 		}
 	});
@@ -331,11 +331,11 @@ EnemyFish::EnemyFish()
 	EventListenerCustom * movingUpLeftAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, movingUpLeftAnimationReachesLastFrameInfo, movingUpLeftAnimationReachesfirstFrameInfo](EventCustom *event) {
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == movingUpLeftAnimationReachesLastFrameInfo) {
-			log("Last ljjFrame of movingUpLeftAnimation reached.");
+			//log("Last ljjFrame of movingUpLeftAnimation reached.");
 			this->acceptCall = true;
 		}
 		if (*userData->userInfo == movingUpLeftAnimationReachesfirstFrameInfo) {
-			log("First ljjFrame of movingUpLeftAnimation reached.");
+			//log("First ljjFrame of movingUpLeftAnimation reached.");
 			this->acceptCall = false;
 		}
 	});
@@ -368,11 +368,11 @@ EnemyFish::EnemyFish()
 	EventListenerCustom * movingDownLeftAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, movingDownLeftAnimationReachesLastFrameInfo, movingDownLeftAnimationReachesfirstFrameInfo](EventCustom *event) {
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == movingDownLeftAnimationReachesLastFrameInfo) {
-			log("Last ljjFrame of movingDownLeftAnimation reached.");
+			//log("Last ljjFrame of movingDownLeftAnimation reached.");
 			this->acceptCall = true;
 		}
 		if (*userData->userInfo == movingDownLeftAnimationReachesfirstFrameInfo) {
-			log("First ljjFrame of movingDownLeftAnimation reached.");
+			//log("First ljjFrame of movingDownLeftAnimation reached.");
 			this->acceptCall = false;
 		}
 	});
@@ -401,11 +401,11 @@ EnemyFish::EnemyFish()
 	EventListenerCustom * attackAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, attackAnimationReachesLastFrameInfo, attackAnimationReachesfirstFrameInfo](EventCustom *event) {
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == attackAnimationReachesLastFrameInfo) {
-			log("Last ljjFrame of attackAnimation reached.");
+			//log("Last ljjFrame of attackAnimation reached.");
 			this->acceptCall = true;
 		}
 		if (*userData->userInfo == attackAnimationReachesfirstFrameInfo) {
-			log("First ljjFrame of attackAnimation reached.");
+			//log("First ljjFrame of attackAnimation reached.");
 			this->acceptCall = false;
 		}
 	});
@@ -439,11 +439,11 @@ EnemyFish::EnemyFish()
 	EventListenerCustom * getHurtAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, getHurtAnimationReachesLastFrameInfo, getHurtAnimationReachesfirstFrameInfo](EventCustom *event) {
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == getHurtAnimationReachesLastFrameInfo) {
-			log("Last ljjFrame of getHurtAnimation reached.");
+			//log("Last ljjFrame of getHurtAnimation reached.");
 			this->acceptCall = true;
 		}
 		if (*userData->userInfo == getHurtAnimationReachesfirstFrameInfo) {
-			log("First ljjFrame of getHurtAnimation reached.");
+			//log("First ljjFrame of getHurtAnimation reached.");
 			this->acceptCall = false;
 		}
 	});
