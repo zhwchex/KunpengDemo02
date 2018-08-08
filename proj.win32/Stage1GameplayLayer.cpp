@@ -205,7 +205,7 @@ void Stage1GameplayLayer::onEnter(){
 	this->addChild(fishljj);
 	enemyList.pushBack(fishljj);
 
-
+/**/
 	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
 	fishljj->setPosition(Vec2(6850, -200));
 	this->addChild(fishljj);
@@ -364,7 +364,7 @@ void Stage1GameplayLayer::onEnter(){
 	enemyList.pushBack(enemyZWC);
 	this->addChild(enemyZWC);
 
-
+	/**/
 	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
 	fishljj->setPosition(Vec2(11800, -100));
 	this->addChild(fishljj);
