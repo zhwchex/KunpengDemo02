@@ -444,7 +444,7 @@ EnemyFish::EnemyFish()
 
 			this->acceptCall = false;//在动画开始的第0帧开始禁止外面调用wanderAbout()
 			Sprite * inkBall = Sprite::create("characters/enemyfish/enemyfish_inkBallAttack_00.png");
-			Sprite * hero = ((Stage1GameplayLayer *)this->getParent())->kunpeng;
+			HeroSprite * hero = ((Stage1GameplayLayer *)this->getParent())->kunpeng;
 			Point zhu = this->getPosition();
 			Point biginkBall = Vec2(zhu.x - 120, zhu.y + 150);
 			inkBall->setPosition(biginkBall);

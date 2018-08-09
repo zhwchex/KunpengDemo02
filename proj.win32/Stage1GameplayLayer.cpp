@@ -436,6 +436,7 @@ void Stage1GameplayLayer::onEnter(){
 	/**/
 	this->zhurong = Zhurong::create("characters/zhurong/walking_left_while_facing_left_00.png");
 	zhurong->setPosition(11500, 100);
+	zhurong->isBoss = true;
 	this->addChild(zhurong);
 	enemyList.pushBack(zhurong);
 	

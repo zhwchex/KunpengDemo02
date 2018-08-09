@@ -470,7 +470,7 @@ HeroSprite::HeroSprite()
 				int deltay = enemy->getPositionY() - windBulletExplosion->getPositionY();
 
 				double distance = sqrt(deltax*deltax + deltay*deltay);
-				if (distance < (windBulletExplosion->getContentSize().width + enemy->getContentSize().width) * 75 / 100){
+				if (distance < (windBulletExplosion->getContentSize().width + enemy->getContentSize().width) * 55 / 100){
 					enemy->getHurtByWind(this->DAMAGE_WIND);
 				}
 			}
@@ -958,7 +958,14 @@ HeroSprite::HeroSprite()
 			this->enableAllAbilities();
 			this->invincible = false;
 			if (this->isBird) this->hover();
-			else this->hover_kun();
+			else {
+				if (this->getPositionY() > 0){
+					this->fallFromSky_kun();
+				}
+				else{
+					this->hover_kun();
+				}
+			}
 			if (this->directionToMoveUpRight ||
 				this->directionToMoveRight ||
 				this->directionToMoveDownRight ||
@@ -1195,6 +1202,10 @@ HeroSprite::HeroSprite()
 	this->slamDunkingEnemyRightAnimation = Animation::create();
 	this->slamDunkingEnemyRightAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_slamdunking_right_00.png");
 	this->slamDunkingEnemyRightAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_slamdunking_right_01.png");
+	this->slamDunkingEnemyRightAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_slamdunking_right_00.png");
+	this->slamDunkingEnemyRightAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_slamdunking_right_01.png");
+	this->slamDunkingEnemyRightAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_slamdunking_right_00.png");
+	this->slamDunkingEnemyRightAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_slamdunking_right_01.png");
 	this->slamDunkingEnemyRightAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_slamdunking_right_02.png");
 	this->slamDunkingEnemyRightAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_slamdunking_right_03.png");
 	this->slamDunkingEnemyRightAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_slamdunking_right_04.png");
@@ -1214,24 +1225,46 @@ HeroSprite::HeroSprite()
 	slamDunkEndInfo["kp07"] = Value("kp07");
 
 	this->slamDunkingEnemyRightAnimation->getFrames().at(0)->setUserInfo(slamDunkStartInfo);
-	this->slamDunkingEnemyRightAnimation->getFrames().at(2)->setUserInfo(slamDunkThrowInfo);
-	this->slamDunkingEnemyRightAnimation->getFrames().at(4)->setUserInfo(slamDunkRecoverAllAbilitiesInfo);
-	this->slamDunkingEnemyRightAnimation->getFrames().at(5)->setUserInfo(slamDunkEndInfo);
+	this->slamDunkingEnemyRightAnimation->getFrames().at(6)->setUserInfo(slamDunkThrowInfo);
+	this->slamDunkingEnemyRightAnimation->getFrames().at(8)->setUserInfo(slamDunkRecoverAllAbilitiesInfo);
+	this->slamDunkingEnemyRightAnimation->getFrames().at(9)->setUserInfo(slamDunkEndInfo);
 
 	EventListenerCustom * slamDunkingEnemyFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, slamDunkStartInfo, slamDunkThrowInfo, slamDunkRecoverAllAbilitiesInfo, slamDunkEndInfo](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == slamDunkStartInfo){
 			log("slamDunking start");
 			this->disableAllAbilities();
+			
 			if (this->facingRight){
-				this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, 60)), MoveBy::create(0.1f, Vec2(-40, -40)), MoveBy::create(0.1f, Vec2(-30, -5)), nullptr));
+				this->targetToSlamDunk->setPosition(this->getPositionX() + 50, this->getPositionY() - 50);
+				this->runAction(Sequence::create(
+					DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 3),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 60)), 
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(-40, -40)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(-30, -5)),
+					nullptr));
 				this->targetToSlamDunk->stopAllActions();
-				this->targetToSlamDunk->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, 60)), MoveBy::create(0.1f, Vec2(0, 15)), nullptr));
+				this->targetToSlamDunk->runAction(Sequence::create(
+					DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 3),
+					MoveBy::create(0.1f, Vec2(0, 60)),
+					MoveBy::create(0.1f, Vec2(0, 15)), 
+					nullptr));
 			}
 			else if (this->facingLeft){
-				this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, 60)), MoveBy::create(0.1f, Vec2(40, -40)), MoveBy::create(0.1f, Vec2(30, -5)), nullptr));
+				this->targetToSlamDunk->setPosition(this->getPositionX() - 50, this->getPositionY() - 50);
+				this->runAction(Sequence::create(
+					DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 3),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 60)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(40, -40)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(30, -5)),
+					nullptr));
 				this->targetToSlamDunk->stopAllActions();
-				this->targetToSlamDunk->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, 60)), MoveBy::create(0.1f, Vec2(0, 15)), nullptr));
+				this->targetToSlamDunk->runAction(Sequence::create(
+					DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 3),
+
+					MoveBy::create(0.1f, Vec2(0, 60)), 
+					MoveBy::create(0.1f, Vec2(0, 15)), 
+					nullptr));
 			}
 		}
 		if (*userData->userInfo == slamDunkThrowInfo){
@@ -1279,6 +1312,10 @@ HeroSprite::HeroSprite()
 	this->slamDunkingEnemyLeftAnimation = Animation::create();
 	this->slamDunkingEnemyLeftAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_slamdunking_left_00.png");
 	this->slamDunkingEnemyLeftAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_slamdunking_left_01.png");
+	this->slamDunkingEnemyLeftAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_slamdunking_left_00.png");
+	this->slamDunkingEnemyLeftAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_slamdunking_left_01.png");
+	this->slamDunkingEnemyLeftAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_slamdunking_left_00.png");
+	this->slamDunkingEnemyLeftAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_slamdunking_left_01.png");
 	this->slamDunkingEnemyLeftAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_slamdunking_left_02.png");
 	this->slamDunkingEnemyLeftAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_slamdunking_left_03.png");
 	this->slamDunkingEnemyLeftAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_slamdunking_left_04.png");
@@ -1288,9 +1325,9 @@ HeroSprite::HeroSprite()
 	this->slamDunkingEnemyLeftAnimation->retain();
 
 	this->slamDunkingEnemyLeftAnimation->getFrames().at(0)->setUserInfo(slamDunkStartInfo);
-	this->slamDunkingEnemyLeftAnimation->getFrames().at(2)->setUserInfo(slamDunkThrowInfo);
-	this->slamDunkingEnemyLeftAnimation->getFrames().at(4)->setUserInfo(slamDunkRecoverAllAbilitiesInfo);
-	this->slamDunkingEnemyLeftAnimation->getFrames().at(5)->setUserInfo(slamDunkEndInfo);
+	this->slamDunkingEnemyLeftAnimation->getFrames().at(6)->setUserInfo(slamDunkThrowInfo);
+	this->slamDunkingEnemyLeftAnimation->getFrames().at(8)->setUserInfo(slamDunkRecoverAllAbilitiesInfo);
+	this->slamDunkingEnemyLeftAnimation->getFrames().at(9)->setUserInfo(slamDunkEndInfo);
 
 	//鸟将Boss扔下去的动作。最多三个事件帧，不能再多了。
 	this->slamDunkingBossRightAnimation = Animation::create();
@@ -2193,7 +2230,7 @@ HeroSprite::HeroSprite()
 				int deltay = enemy->getPositionY() - waterBulletExplosion->getPositionY();
 
 				double distance = sqrt(deltax*deltax + deltay*deltay);
-				if (distance < (waterBulletExplosion->getContentSize().width + enemy->getContentSize().width) * 75 / 100){
+				if (distance < (waterBulletExplosion->getContentSize().width + enemy->getContentSize().width) * 55 / 100){
 					//enemy->getHurtByWater(this->DAMAGE_VORTEX);//TODO!!!等他们填完再改
 					enemy->getHurtByWind(this->DAMAGE_WIND);
 				}
@@ -2703,25 +2740,64 @@ HeroSprite::HeroSprite()
 	this->airSpinningRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_right_05.png");
 	this->airSpinningRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_right_06.png");
 	this->airSpinningRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_right_07.png");
+	this->airSpinningRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_right_00.png");
+	this->airSpinningRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_right_01.png");
+	this->airSpinningRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_right_02.png");
+	this->airSpinningRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_right_03.png");
+	this->airSpinningRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_right_04.png");
+	this->airSpinningRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_right_05.png");
+	this->airSpinningRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_right_06.png");
+	this->airSpinningRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_right_07.png");
 	//this->airSpinningRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_right_08.png");
-	this->airSpinningRightAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL / 4);
+	this->airSpinningRightAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL / 8);
 	this->airSpinningRightAnimation_kun->setRestoreOriginalFrame(true);
 	this->airSpinningRightAnimation_kun->retain();
 
 	ValueMap airSpinningStartInfo;
+	ValueMap airSpinningDealDamageInfo;
 	ValueMap airSpinningEndInfo;
 
 	airSpinningStartInfo["heroAirSpinning00"] = Value("heroAirSpinning00");
+	airSpinningDealDamageInfo["heroAirSpinning01"] = Value("heroAirSpinning01");
 	airSpinningEndInfo["heroAirSpinning07"] = Value("heroAirSpinning07");
 
 	this->airSpinningRightAnimation_kun->getFrames().at(0)->setUserInfo(airSpinningStartInfo);
-	this->airSpinningRightAnimation_kun->getFrames().at(7)->setUserInfo(airSpinningEndInfo);
+	this->airSpinningRightAnimation_kun->getFrames().at(1)->setUserInfo(airSpinningDealDamageInfo);
+	this->airSpinningRightAnimation_kun->getFrames().at(3)->setUserInfo(airSpinningDealDamageInfo);
+	this->airSpinningRightAnimation_kun->getFrames().at(5)->setUserInfo(airSpinningDealDamageInfo);
+	this->airSpinningRightAnimation_kun->getFrames().at(7)->setUserInfo(airSpinningDealDamageInfo);
+	this->airSpinningRightAnimation_kun->getFrames().at(9)->setUserInfo(airSpinningDealDamageInfo);
+	this->airSpinningRightAnimation_kun->getFrames().at(11)->setUserInfo(airSpinningDealDamageInfo);
+	this->airSpinningRightAnimation_kun->getFrames().at(13)->setUserInfo(airSpinningDealDamageInfo);
+	this->airSpinningRightAnimation_kun->getFrames().at(15)->setUserInfo(airSpinningEndInfo);
 
-	EventListenerCustom * airSpinningFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, airSpinningStartInfo, airSpinningEndInfo](EventCustom * event){
+	EventListenerCustom * airSpinningFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, airSpinningStartInfo, airSpinningDealDamageInfo, airSpinningEndInfo](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == airSpinningStartInfo){
 			this->disableAllAbilities();
+			
 		}
+		if (*userData->userInfo == airSpinningDealDamageInfo){
+			Vector<GeneralUnit *> enemyList = ((Stage1GameplayLayer *)this->getParent())->enemyList;
+			for (GeneralUnit * enemy : enemyList){
+				int deltax = enemy->getPositionX() - this->getPositionX();
+				int deltay = enemy->getPositionY() - this->getPositionY();
+				double distance = sqrt(pow(deltax, 2) + pow(deltay, 2));
+				if (distance < (enemy->getContentSize().width + this->getContentSize().width) * 50 / 100){
+
+					Sprite * collideCrush = Sprite::create("characters/kunpeng/crush_00.png");
+					int crushX = (this->getPositionX() + enemy->getPositionX()) / 2;
+					int crushY = (this->getPositionY() + enemy->getPositionY()) / 2;
+					collideCrush->setPosition(crushX, crushY);
+					this->getParent()->addChild(collideCrush);
+					collideCrush->runAction(Sequence::create(FadeOut::create(2), CallFunc::create([collideCrush]{ collideCrush->removeFromParent(); }), nullptr));
+
+					((Stage1GameplayLayer *)this->getParent())->cameraShake_vertical_slight();
+					enemy->getHurtByWind(this->DAMAGE_WATER_BALL);//TODOTODOTODO 疯狂需要改动。此处需要改成getHurtByAirSpin
+				}
+			}
+		}
+
 		if (*userData->userInfo == airSpinningEndInfo){
 			//this->enableAllAbilities();
 			//this->hover_kun();
@@ -2742,13 +2818,28 @@ HeroSprite::HeroSprite()
 	this->airSpinningLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_left_05.png");
 	this->airSpinningLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_left_06.png");
 	this->airSpinningLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_left_07.png");
+	this->airSpinningLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_left_00.png");
+	this->airSpinningLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_left_01.png");
+	this->airSpinningLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_left_02.png");
+	this->airSpinningLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_left_03.png");
+	this->airSpinningLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_left_04.png");
+	this->airSpinningLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_left_05.png");
+	this->airSpinningLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_left_06.png");
+	this->airSpinningLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_left_07.png");
 	//this->airSpinningLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_air_spinning_left_08.png");
-	this->airSpinningLeftAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL / 4);
+	this->airSpinningLeftAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL / 8);
 	this->airSpinningLeftAnimation_kun->setRestoreOriginalFrame(true);
 	this->airSpinningLeftAnimation_kun->retain();
 
 	this->airSpinningLeftAnimation_kun->getFrames().at(0)->setUserInfo(airSpinningStartInfo);
-	this->airSpinningLeftAnimation_kun->getFrames().at(7)->setUserInfo(airSpinningEndInfo);
+	this->airSpinningLeftAnimation_kun->getFrames().at(1)->setUserInfo(airSpinningDealDamageInfo);
+	this->airSpinningLeftAnimation_kun->getFrames().at(3)->setUserInfo(airSpinningDealDamageInfo);
+	this->airSpinningLeftAnimation_kun->getFrames().at(5)->setUserInfo(airSpinningDealDamageInfo);
+	this->airSpinningLeftAnimation_kun->getFrames().at(7)->setUserInfo(airSpinningDealDamageInfo);
+	this->airSpinningLeftAnimation_kun->getFrames().at(9)->setUserInfo(airSpinningDealDamageInfo);
+	this->airSpinningLeftAnimation_kun->getFrames().at(11)->setUserInfo(airSpinningDealDamageInfo);
+	this->airSpinningLeftAnimation_kun->getFrames().at(13)->setUserInfo(airSpinningDealDamageInfo);
+	this->airSpinningLeftAnimation_kun->getFrames().at(15)->setUserInfo(airSpinningEndInfo);
 
 
 	//鱼在水中的特殊技
@@ -2796,10 +2887,10 @@ HeroSprite::HeroSprite()
 			collisionArea->setPosition(this->getPositionX(), this->getPositionY());
 
 			if (this->facingRight){
-				collisionArea->setPosition(this->getPositionX() + this->getContentSize().width/2, this->getPositionY());
+				collisionArea->setPosition(this->getPositionX() + this->getContentSize().width / 4, this->getPositionY());
 			}
 			else if (this->facingLeft){
-				collisionArea->setPosition(this->getPositionX() - this->getContentSize().width / 2, this->getPositionY());
+				collisionArea->setPosition(this->getPositionX() - this->getContentSize().width / 4, this->getPositionY());
 			}
 
 			Vector<GeneralUnit *> enemyList = ((Stage1GameplayLayer *)this->getParent())->enemyList;
@@ -2808,7 +2899,14 @@ HeroSprite::HeroSprite()
 				int deltay = enemy->getPositionY() - collisionArea->getPositionY();
 				double distance = sqrt(pow(deltax, 2) + pow(deltay, 2));
 				if (distance < (enemy->getContentSize().width + collisionArea->getContentSize().width) / 2){
-					((Stage1GameplayLayer *)this->getParent())->cameraShake_horizontal_slight();
+					Sprite * collideCrush = Sprite::create("characters/kunpeng/crush_00.png");
+					int crushX = (this->getPositionX() + enemy->getPositionX()) / 2;
+					int crushY = (this->getPositionY() + enemy->getPositionY()) / 2;
+					collideCrush->setPosition(crushX, crushY);
+					this->getParent()->addChild(collideCrush);
+					collideCrush->runAction(Sequence::create(FadeOut::create(2), CallFunc::create([collideCrush]{ collideCrush->removeFromParent(); }), nullptr));
+
+					((Stage1GameplayLayer *)this->getParent())->cameraShake_vertical_slight();
 					enemy->getHurtByWind(this->DAMAGE_WATER_BALL);//TODOTODOTODO 疯狂需要改动。此处需要改成getHurtByCollision
 				}
 			}
