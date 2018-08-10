@@ -1377,11 +1377,12 @@ HeroSprite::HeroSprite()
 	slamDunkingBossRecoverAllAbilitiesInfo["sd02"] = Value("sd02");
 	slamDunkingBossEndInfo["sd03"] = Value("sd03");
 
-	EventListenerCustom * slamDunkingBossFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, slamDunkStartInfo, slamDunkThrowInfo, slamDunkRecoverAllAbilitiesInfo, slamDunkEndInfo](EventCustom * event){
+	EventListenerCustom * slamDunkingBossFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, slamDunkingBossStartInfo, slamDunkingBossThrowBossInfo, slamDunkingBossRecoverAllAbilitiesInfo, slamDunkingBossEndInfo](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
-		if (*userData->userInfo == slamDunkStartInfo){
+		if (*userData->userInfo == slamDunkingBossStartInfo){
 			log("slamDunkingBoss start");
 			this->disableAllAbilities();
+			this->invincible = true;
 
 			if (this->facingRight){
 				this->targetToSlamDunk->setPosition(this->getPositionX() + 50, this->getPositionY() - 50);
@@ -1416,8 +1417,8 @@ HeroSprite::HeroSprite()
 					nullptr));
 			}
 		}
-		if (*userData->userInfo == slamDunkThrowInfo){
-			log("Here is slamDunkingEnemyThrowInfo");
+		if (*userData->userInfo == slamDunkingBossThrowBossInfo){
+			log("Here is slamDunkingBossThrowInfo");
 			/*
 			*/
 			//½«targetToSlamDunkÈÓ³öÈ¥
@@ -1431,7 +1432,7 @@ HeroSprite::HeroSprite()
 				MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 15)),
 				nullptr));
 		}
-		if (*userData->userInfo == slamDunkRecoverAllAbilitiesInfo){
+		if (*userData->userInfo == slamDunkingBossRecoverAllAbilitiesInfo){
 			this->enableAllAbilities();
 			if (this->directionToMoveUpRight ||
 				this->directionToMoveRight ||
@@ -1442,12 +1443,14 @@ HeroSprite::HeroSprite()
 				this->directionToMoveUpLeft ||
 				this->directionToMoveUp){
 				this->move_forBothShapes();
+				this->invincible = false;
 			}
 
 			this->targetToSlamDunk = nullptr;
 
 		}
-		if (*userData->userInfo == slamDunkEndInfo){
+		if (*userData->userInfo == slamDunkingBossEndInfo){
+			this->invincible = false;
 			if (this->isBird){
 				this->hover();
 			}
