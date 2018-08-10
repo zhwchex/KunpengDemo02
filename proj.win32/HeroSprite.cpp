@@ -1238,47 +1238,50 @@ HeroSprite::HeroSprite()
 			if (this->facingRight){
 				this->targetToSlamDunk->setPosition(this->getPositionX() + 50, this->getPositionY() - 50);
 				this->runAction(Sequence::create(
-					DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 3),
+					DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 6),
 					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 60)), 
-					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(-40, -40)),
-					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(-30, -5)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(-10, -120)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(-80, -20)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL*2, Vec2(-40, 0)),
 					nullptr));
 				this->targetToSlamDunk->stopAllActions();
 				this->targetToSlamDunk->runAction(Sequence::create(
-					DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 3),
-					MoveBy::create(0.1f, Vec2(0, 60)),
-					MoveBy::create(0.1f, Vec2(0, 15)), 
+					DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 6),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 60)),
+					//MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 15)),
 					nullptr));
 			}
 			else if (this->facingLeft){
 				this->targetToSlamDunk->setPosition(this->getPositionX() - 50, this->getPositionY() - 50);
 				this->runAction(Sequence::create(
-					DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 3),
+					DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 6),
 					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 60)),
-					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(40, -40)),
-					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(30, -5)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(10, -120)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(80, -20)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL *2, Vec2(40, 0)),
 					nullptr));
 				this->targetToSlamDunk->stopAllActions();
 				this->targetToSlamDunk->runAction(Sequence::create(
-					DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 3),
-
-					MoveBy::create(0.1f, Vec2(0, 60)), 
-					MoveBy::create(0.1f, Vec2(0, 15)), 
+					DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 6),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 60)),
+					//MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 15)),
 					nullptr));
 			}
 		}
 		if (*userData->userInfo == slamDunkThrowInfo){
 			log("Here is slamDunkingEnemyThrowInfo");
+			/*
+			*/
 			//将targetToSlamDunk扔出去
-			this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, -60)), MoveBy::create(0.3f, Vec2(0, -75)), nullptr));
+			//this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, -60)), MoveBy::create(0.3f, Vec2(0, -75)), nullptr));
 
 			//不妨假设摔下去的速度是每秒5000像素
 			int distanceFromTargetToWaterface = this->targetToSlamDunk->getPositionY();
-			this->targetToSlamDunk->runAction(Sequence::create(MoveBy::create(distanceFromTargetToWaterface / 5000.0, Vec2(0, -distanceFromTargetToWaterface)),
+			this->targetToSlamDunk->runAction(Sequence::create(DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL),
+				MoveBy::create(distanceFromTargetToWaterface / 5000.0, Vec2(0, -distanceFromTargetToWaterface)),
 				CallFunc::create([this]{((Stage1GameplayLayer *)this->getParent())->cameraShake_vertical_significant(); }), 
-				MoveBy::create(0.1f, Vec2(0, 15)), 
+				MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 15)),
 				nullptr));
-
 		}
 		if (*userData->userInfo == slamDunkRecoverAllAbilitiesInfo){
 			this->enableAllAbilities();
@@ -1329,7 +1332,10 @@ HeroSprite::HeroSprite()
 	this->slamDunkingEnemyLeftAnimation->getFrames().at(8)->setUserInfo(slamDunkRecoverAllAbilitiesInfo);
 	this->slamDunkingEnemyLeftAnimation->getFrames().at(9)->setUserInfo(slamDunkEndInfo);
 
-	//鸟将Boss扔下去的动作。最多三个事件帧，不能再多了。
+
+
+
+	//鸟将Boss扔下去的动作。最多三个事件帧，不能再多了。全程无敌
 	this->slamDunkingBossRightAnimation = Animation::create();
 	this->slamDunkingBossRightAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_slamdunking_boss_right_00.png");
 	this->slamDunkingBossRightAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_slamdunking_boss_right_01.png");
@@ -1356,9 +1362,102 @@ HeroSprite::HeroSprite()
 	this->slamDunkingBossRightAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_slamdunking_boss_right_22.png");
 	this->slamDunkingBossRightAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_slamdunking_boss_right_23.png");
 	this->slamDunkingBossRightAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_slamdunking_boss_right_24.png");
+
 	this->slamDunkingBossRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->slamDunkingBossRightAnimation->setRestoreOriginalFrame(true);
 	this->slamDunkingBossRightAnimation->retain();
+
+	ValueMap slamDunkingBossStartInfo;
+	ValueMap slamDunkingBossThrowBossInfo;
+	ValueMap slamDunkingBossRecoverAllAbilitiesInfo;
+	ValueMap slamDunkingBossEndInfo;
+
+	slamDunkingBossStartInfo["sd00"] = Value("sd00");
+	slamDunkingBossThrowBossInfo["sd01"] = Value("sd01");
+	slamDunkingBossRecoverAllAbilitiesInfo["sd02"] = Value("sd02");
+	slamDunkingBossEndInfo["sd03"] = Value("sd03");
+
+	EventListenerCustom * slamDunkingBossFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, slamDunkStartInfo, slamDunkThrowInfo, slamDunkRecoverAllAbilitiesInfo, slamDunkEndInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == slamDunkStartInfo){
+			log("slamDunkingBoss start");
+			this->disableAllAbilities();
+
+			if (this->facingRight){
+				this->targetToSlamDunk->setPosition(this->getPositionX() + 50, this->getPositionY() - 50);
+				this->runAction(Sequence::create(
+					DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 6),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 60)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(-10, -120)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(-80, -20)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(-40, 0)),
+					nullptr));
+				this->targetToSlamDunk->stopAllActions();
+				this->targetToSlamDunk->runAction(Sequence::create(
+					DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 6),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 60)),
+					//MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 15)),
+					nullptr));
+			}
+			else if (this->facingLeft){
+				this->targetToSlamDunk->setPosition(this->getPositionX() - 50, this->getPositionY() - 50);
+				this->runAction(Sequence::create(
+					DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 6),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 60)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(10, -120)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(80, -20)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(40, 0)),
+					nullptr));
+				this->targetToSlamDunk->stopAllActions();
+				this->targetToSlamDunk->runAction(Sequence::create(
+					DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 6),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 60)),
+					//MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 15)),
+					nullptr));
+			}
+		}
+		if (*userData->userInfo == slamDunkThrowInfo){
+			log("Here is slamDunkingEnemyThrowInfo");
+			/*
+			*/
+			//将targetToSlamDunk扔出去
+			//this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, -60)), MoveBy::create(0.3f, Vec2(0, -75)), nullptr));
+
+			//不妨假设摔下去的速度是每秒5000像素
+			int distanceFromTargetToWaterface = this->targetToSlamDunk->getPositionY();
+			this->targetToSlamDunk->runAction(Sequence::create(DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL),
+				MoveBy::create(distanceFromTargetToWaterface / 5000.0, Vec2(0, -distanceFromTargetToWaterface)),
+				CallFunc::create([this]{((Stage1GameplayLayer *)this->getParent())->cameraShake_vertical_significant(); }),
+				MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 15)),
+				nullptr));
+		}
+		if (*userData->userInfo == slamDunkRecoverAllAbilitiesInfo){
+			this->enableAllAbilities();
+			if (this->directionToMoveUpRight ||
+				this->directionToMoveRight ||
+				this->directionToMoveDownRight ||
+				this->directionToMoveDown ||
+				this->directionToMoveDownLeft ||
+				this->directionToMoveLeft ||
+				this->directionToMoveUpLeft ||
+				this->directionToMoveUp){
+				this->move_forBothShapes();
+			}
+
+			this->targetToSlamDunk = nullptr;
+
+		}
+		if (*userData->userInfo == slamDunkEndInfo){
+			if (this->isBird){
+				this->hover();
+			}
+			else if (this->isFish){
+				this->hover_kun();
+			}
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(slamDunkingBossFrameEventListener, -1);
+
 
 	this->slamDunkingBossLeftAnimation = Animation::create();
 	this->slamDunkingBossLeftAnimation->addSpriteFrameWithFile("characters/kunpeng/peng_slamdunking_boss_left_00.png");
