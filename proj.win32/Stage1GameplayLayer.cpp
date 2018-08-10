@@ -171,6 +171,7 @@ void Stage1GameplayLayer::onEnter(){
 	
 	Bird_yyh* bird1 = Bird_yyh::create("characters/Bird_yyh/left1.png");
 	bird1->setPosition(4500, 100);
+	//bird1->setPosition(300, 100);
 	this->addChild(bird1);
 	enemyList.pushBack(bird1);
 

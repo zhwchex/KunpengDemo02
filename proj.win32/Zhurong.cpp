@@ -6,7 +6,8 @@ using namespace std;
 
 Zhurong::Zhurong()
 {
-	
+	AllocConsole();                                          // 开辟控制台
+	freopen("CONOUT$", "w", stdout);
 	//祝融移动动画，开始播放到播放完毕前，外面对wanderAbout的调用没有效果。
 	this->walkingLeftWhileFacingLeftAnimation = Animation::create();
 	this->walkingLeftWhileFacingLeftAnimation->addSpriteFrameWithFileName("characters/zhurong/walking_left_while_facing_left_00.png");
@@ -68,6 +69,77 @@ Zhurong::Zhurong()
 		}
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(walkingrightFrameEventListener, -1);
+
+	//扔的动画
+	this->thrownAnimation = Animation::create();
+	this->thrownAnimation->addSpriteFrameWithFileName("characters/zhurong/fall_0.png");
+	this->thrownAnimation->addSpriteFrameWithFileName("characters/zhurong/fall_1.png");
+	this->thrownAnimation->addSpriteFrameWithFileName("characters/zhurong/fall_2.png");
+	this->thrownAnimation->addSpriteFrameWithFileName("characters/zhurong/fall_3.png");//旋转角度1
+	this->thrownAnimation->addSpriteFrameWithFileName("characters/zhurong/fall_4.png");//旋转角度2
+	this->thrownAnimation->addSpriteFrameWithFileName("characters/zhurong/fall_5.png");//旋转角度1
+	this->thrownAnimation->addSpriteFrameWithFileName("characters/zhurong/fall_6.png");//回归
+	this->thrownAnimation->addSpriteFrameWithFileName("characters/zhurong/fall_7.png");
+	this->thrownAnimation->addSpriteFrameWithFileName("characters/zhurong/fall_8.png");
+	this->thrownAnimation->addSpriteFrameWithFileName("characters/zhurong/fall_9.png");
+	this->thrownAnimation->addSpriteFrameWithFileName("characters/zhurong/fall_10.png");
+	this->thrownAnimation->addSpriteFrameWithFileName("characters/zhurong/fall_11.png");
+
+	this->thrownAnimation->setDelayPerUnit(this->ANIMATION_FRAME_INTERVAL);
+	this->thrownAnimation->setRestoreOriginalFrame(true);
+	this->thrownAnimation->retain();
+
+	ValueMap thrown0AnimationStartInfo;
+	ValueMap thrown3AnimationStartInfo;
+	ValueMap thrown4AnimationStartInfo;
+	ValueMap thrown5AnimationStartInfo;
+	ValueMap thrown6AnimationStartInfo;
+	ValueMap thrown11AnimationStartInfo;
+
+	thrown0AnimationStartInfo["yh10"] = Value("yh10");
+	thrown3AnimationStartInfo["yh11"] = Value("yh11");
+	thrown4AnimationStartInfo["yh12"] = Value("yh12");
+	thrown5AnimationStartInfo["yh13"] = Value("yh13");
+	thrown6AnimationStartInfo["yh14"] = Value("yh14");
+	thrown11AnimationStartInfo["yh15"] = Value("yh15");
+
+	this->thrownAnimation->getFrames().at(0)->setUserInfo(thrown0AnimationStartInfo);//动画的第0帧携带“开始动画”的信息
+	this->thrownAnimation->getFrames().at(3)->setUserInfo(thrown3AnimationStartInfo);
+	this->thrownAnimation->getFrames().at(4)->setUserInfo(thrown4AnimationStartInfo);
+	this->thrownAnimation->getFrames().at(5)->setUserInfo(thrown5AnimationStartInfo);
+	this->thrownAnimation->getFrames().at(6)->setUserInfo(thrown6AnimationStartInfo);
+	this->thrownAnimation->getFrames().at(11)->setUserInfo(thrown11AnimationStartInfo);
+
+	EventListenerCustom * thrownEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, thrown0AnimationStartInfo, thrown3AnimationStartInfo, thrown4AnimationStartInfo, thrown5AnimationStartInfo,thrown6AnimationStartInfo, thrown11AnimationStartInfo](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == thrown0AnimationStartInfo){
+			this->acceptCall = false;//在动画开始的第一帧禁止外面调用wanderAbout()
+			
+		}
+		if (*userData->userInfo == thrown3AnimationStartInfo){
+			this->runAction(MoveBy::create(this->ANIMATION_FRAME_INTERVAL, Vec2(-50, 50)));
+			this->setRotation(-45);
+			
+		}
+		if (*userData->userInfo == thrown4AnimationStartInfo){
+			this->runAction(MoveBy::create(this->ANIMATION_FRAME_INTERVAL, Vec2(-50, 50)));
+			this->setRotation(-45);
+		}
+		if (*userData->userInfo == thrown5AnimationStartInfo){
+			this->runAction(MoveBy::create(this->ANIMATION_FRAME_INTERVAL, Vec2(50, -50)));
+			this->setRotation(-45);
+		}
+		if (*userData->userInfo == thrown6AnimationStartInfo){
+			this->runAction(MoveBy::create(this->ANIMATION_FRAME_INTERVAL, Vec2(50, -50)));
+			this->setRotation(0);
+		}
+		if (*userData->userInfo == thrown11AnimationStartInfo){
+			
+			//this->acceptCall = true;//动画结束时，允许祝融接受外面调用wanderAbout()
+			//this->weak_flag = 0;
+		}
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(thrownEventListener, -1);
 
 	//左受伤
 	this->hurtleftAnimation = Animation::create();
@@ -142,6 +214,11 @@ Zhurong::Zhurong()
 	this->dieleftAnimation->addSpriteFrameWithFileName("characters/zhurong/dieleft_2.png");
 	this->dieleftAnimation->addSpriteFrameWithFileName("characters/zhurong/dieleft_3.png");
 	this->dieleftAnimation->addSpriteFrameWithFileName("characters/zhurong/dieleft_4.png");
+	this->dieleftAnimation->addSpriteFrameWithFileName("characters/zhurong/dieleft_5.png");
+	this->dieleftAnimation->addSpriteFrameWithFileName("characters/zhurong/dieleft_6.png");
+	this->dieleftAnimation->addSpriteFrameWithFileName("characters/zhurong/dieleft_7.png");
+	this->dieleftAnimation->addSpriteFrameWithFileName("characters/zhurong/dieleft_8.png");
+	this->dieleftAnimation->addSpriteFrameWithFileName("characters/zhurong/dieleft_9.png");
 
 	this->dieleftAnimation->setDelayPerUnit(this->ANIMATION_FRAME_INTERVAL);
 	this->dieleftAnimation->setRestoreOriginalFrame(true);
@@ -154,7 +231,7 @@ Zhurong::Zhurong()
 	dieleftEndInfo["yyh21"] = Value("yyh21");
 
 	this->dieleftAnimation->getFrames().at(0)->setUserInfo(dieleftStartInfo);//动画的第0帧携带“开始动画”的信息
-	this->dieleftAnimation->getFrames().at(4)->setUserInfo(dieleftEndInfo);//动画的最后一帧携带“结束动画”的信息
+	this->dieleftAnimation->getFrames().at(9)->setUserInfo(dieleftEndInfo);//动画的最后一帧携带“结束动画”的信息
 
 	EventListenerCustom * dieleftFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, dieleftStartInfo, dieleftEndInfo](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
@@ -184,6 +261,11 @@ Zhurong::Zhurong()
 	this->dierightAnimation->addSpriteFrameWithFileName("characters/zhurong/dieright_2.png");
 	this->dierightAnimation->addSpriteFrameWithFileName("characters/zhurong/dieright_3.png");
 	this->dierightAnimation->addSpriteFrameWithFileName("characters/zhurong/dieright_4.png");
+	this->dierightAnimation->addSpriteFrameWithFileName("characters/zhurong/dieright_5.png");
+	this->dierightAnimation->addSpriteFrameWithFileName("characters/zhurong/dieright_6.png");
+	this->dierightAnimation->addSpriteFrameWithFileName("characters/zhurong/dieright_7.png");
+	this->dierightAnimation->addSpriteFrameWithFileName("characters/zhurong/dieright_8.png");
+	this->dierightAnimation->addSpriteFrameWithFileName("characters/zhurong/dieright_9.png");
 
 	this->dierightAnimation->setDelayPerUnit(this->ANIMATION_FRAME_INTERVAL);
 	this->dierightAnimation->setRestoreOriginalFrame(true);
@@ -196,7 +278,7 @@ Zhurong::Zhurong()
 	dierightEndInfo["yyh23"] = Value("yyh23");
 
 	this->dierightAnimation->getFrames().at(0)->setUserInfo(dierightStartInfo);//动画的第0帧携带“开始动画”的信息
-	this->dierightAnimation->getFrames().at(4)->setUserInfo(dierightEndInfo);//动画的最后一帧携带“结束动画”的信息
+	this->dierightAnimation->getFrames().at(9)->setUserInfo(dierightEndInfo);//动画的最后一帧携带“结束动画”的信息
 
 	EventListenerCustom * dierightFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, dierightStartInfo, dierightEndInfo](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
@@ -331,6 +413,64 @@ Zhurong::Zhurong()
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(rightcloseEventListener, -1);
 
+	this->weakfightAnimation = Animation::create();
+	this->weakfightAnimation->addSpriteFrameWithFileName("characters/zhurong/shootleft_0.png");//图片没改
+	this->weakfightAnimation->addSpriteFrameWithFileName("characters/zhurong/shootleft_1.png");
+	this->weakfightAnimation->addSpriteFrameWithFileName("characters/zhurong/shootleft_2.png");
+	this->weakfightAnimation->addSpriteFrameWithFileName("characters/zhurong/shootleft_3.png");
+	this->weakfightAnimation->addSpriteFrameWithFileName("characters/zhurong/shootleft_4.png");
+	this->weakfightAnimation->addSpriteFrameWithFileName("characters/zhurong/shootleft_5.png");
+
+
+
+	this->weakfightAnimation->setDelayPerUnit(this->ANIMATION_FRAME_INTERVAL);
+	this->weakfightAnimation->setRestoreOriginalFrame(true);
+	this->weakfightAnimation->retain();
+
+	ValueMap fightAnimation;
+	ValueMap weakfightstartAnimation;
+	ValueMap weakfightendAnimation;
+
+
+
+	fightAnimation["yh1"] = Value("yh1");
+	weakfightstartAnimation["yh2"] = Value("yh2");
+	weakfightendAnimation["yh3"] = Value("yh3");
+
+
+	this->weakfightAnimation->getFrames().at(0)->setUserInfo(weakfightstartAnimation);
+	this->weakfightAnimation->getFrames().at(2)->setUserInfo(fightAnimation);
+	this->weakfightAnimation->getFrames().at(3)->setUserInfo(fightAnimation);
+	this->weakfightAnimation->getFrames().at(4)->setUserInfo(fightAnimation);
+	this->weakfightAnimation->getFrames().at(5)->setUserInfo(weakfightendAnimation);
+
+
+	EventListenerCustom * weakfightEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, fightAnimation, weakfightstartAnimation, weakfightendAnimation](EventCustom * event){
+		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
+		if (*userData->userInfo == weakfightstartAnimation){
+			this->acceptCall = false;//动画结束时，允许祝融接受外面调用wanderAbout()
+			this->setScale(2);
+		}
+		if (*userData->userInfo == weakfightendAnimation){
+			this->setScale(1);
+			this->weak_flag = 1;
+			this->acceptCall = true;//动画结束时，允许祝融接受外面调用wanderAbout()
+		}
+
+		if (*userData->userInfo == fightAnimation){
+			auto temp = (Stage1GameplayLayer*)this->getParent();
+			auto hero = temp->kunpeng;
+			if (hero->boundingBox().intersectsRect(this->boundingBox()))
+			{
+				hero->getHurtGeneral(2*hockblood);
+			}
+
+
+		}
+
+	});
+	_eventDispatcher->addEventListenerWithFixedPriority(weakfightEventListener, -1);
+
 	//海水温度升高动画
 	this->heatupAnimation = Animation::create();
 	this->heatupAnimation->addSpriteFrameWithFileName("characters/zhurong/water_0.png");//图片没改
@@ -438,8 +578,9 @@ Zhurong::Zhurong()
 	this->shootingFireBallWhileFacingLeftAnimation->addSpriteFrameWithFileName("characters/zhurong/shooting_fireball_while_facing_left_04.png");
 	this->shootingFireBallWhileFacingLeftAnimation->addSpriteFrameWithFileName("characters/zhurong/shooting_fireball_while_facing_left_05.png");
 	this->shootingFireBallWhileFacingLeftAnimation->addSpriteFrameWithFileName("characters/zhurong/shooting_fireball_while_facing_left_06.png");
+	this->shootingFireBallWhileFacingLeftAnimation->addSpriteFrameWithFileName("characters/zhurong/shooting_fireball_while_facing_left_07.png");
 
-	this->shootingFireBallWhileFacingLeftAnimation->setDelayPerUnit(0.3);
+	this->shootingFireBallWhileFacingLeftAnimation->setDelayPerUnit(this->ANIMATION_FRAME_INTERVAL);
 	this->shootingFireBallWhileFacingLeftAnimation->setRestoreOriginalFrame(true);
 	this->shootingFireBallWhileFacingLeftAnimation->retain();
 
@@ -453,17 +594,19 @@ Zhurong::Zhurong()
 
 
 	this->shootingFireBallWhileFacingLeftAnimation->getFrames().at(0)->setUserInfo(shootingFireBallStartAnimation);//动画的第0帧携带“开始动画”的信息
-	this->shootingFireBallWhileFacingLeftAnimation->getFrames().at(3)->setUserInfo(shootingFireBallLaunchingAnimation);//动画的第8帧携带“火球脱手”的信息
-	this->shootingFireBallWhileFacingLeftAnimation->getFrames().at(6)->setUserInfo(shootingFireBallEndAnimation);//动画的最后一帧携带“结束动画”的信息
+	this->shootingFireBallWhileFacingLeftAnimation->getFrames().at(6)->setUserInfo(shootingFireBallLaunchingAnimation);//动画的第8帧携带“火球脱手”的信息
+	this->shootingFireBallWhileFacingLeftAnimation->getFrames().at(7)->setUserInfo(shootingFireBallEndAnimation);//动画的最后一帧携带“结束动画”的信息
 
 	EventListenerCustom * shootingFireBallFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, shootingFireBallStartAnimation, shootingFireBallLaunchingAnimation, shootingFireBallEndAnimation](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == shootingFireBallStartAnimation){
 			this->acceptCall = false;//在动画开始的第0帧开始禁止外面调用wanderAbout()
 			Sprite * fireball = Sprite::create("characters/zhurong/fire_ball_00.png");
+			//fireball->setScale(0.3);
 			Sprite * hero = ((Stage1GameplayLayer *)this->getParent())->kunpeng;
 			Point zhu = this->getPosition();
-			Point bigfireball = Vec2(zhu.x - 120, zhu.y + 150);
+			//Point bigfireball = Vec2(zhu.x - 120, zhu.y + 150);
+			Point bigfireball = Vec2(zhu.x , zhu.y);
 			fireball->setPosition(bigfireball);
 			fire_con = fireball;
 			this->getParent()->addChild(fireball);
@@ -474,12 +617,15 @@ Zhurong::Zhurong()
 			fireanimation->addSpriteFrameWithFileName("characters/zhurong/fire2.png");
 			fireanimation->addSpriteFrameWithFileName("characters/zhurong/fire3.png");
 			fireanimation->addSpriteFrameWithFileName("characters/zhurong/fire4.png");
+			fireanimation->addSpriteFrameWithFileName("characters/zhurong/fire5.png");
+			fireanimation->addSpriteFrameWithFileName("characters/zhurong/fire6.png");
+			fireanimation->addSpriteFrameWithFileName("characters/zhurong/fire7.png");
 
 			fireanimation->setDelayPerUnit(this->ANIMATION_FRAME_INTERVAL);
 			fireanimation->setRestoreOriginalFrame(true);
 			fireanimation->retain();
 			fireball->runAction(Animate::create(fireanimation));
-			auto delayTime = DelayTime::create(this->ANIMATION_FRAME_INTERVAL * 4);
+			auto delayTime = DelayTime::create(this->ANIMATION_FRAME_INTERVAL * 7);
 			auto func = CallFunc::create([this](){ 
 				
 				Sprite * hero = ((Stage1GameplayLayer *)this->getParent())->kunpeng;
@@ -675,7 +821,35 @@ void Zhurong::update(float dt){
 			
 		}
 	}
+	/*
+	if (this->weak_flag == 0)
+	{
+		//虚弱状态
+		this->stopAllActions();
+		cout << "come" << endl;
+		cout << this->health << endl;
+		this->weak = this->health;
+		this->acceptCall = false;
+		this->weak_flag = 2;
+		Animation * waterflower = Animation::create();
+		waterflower->addSpriteFrameWithFileName("characters/zhurong/weak_0.png");
+		waterflower->addSpriteFrameWithFileName("characters/zhurong/weak_1.png");
+		waterflower->addSpriteFrameWithFileName("characters/zhurong/weak_2.png");
+		waterflower->addSpriteFrameWithFileName("characters/zhurong/weak_3.png");
+		waterflower->addSpriteFrameWithFileName("characters/zhurong/weak_4.png");
+		waterflower->addSpriteFrameWithFileName("characters/zhurong/weak_5.png");
+		waterflower->addSpriteFrameWithFileName("characters/zhurong/weak_6.png");
+		waterflower->setDelayPerUnit(0.5f);
+		waterflower->setRestoreOriginalFrame(true);
+		waterflower->retain();
+		auto weak = Animate::create(waterflower);
+		auto fight = Animate::create(weakfightAnimation);
+		auto seq = Sequence::create(weak, fight, nullptr);
+		this->runAction(seq);
+		
 
+	}
+	*/
 }
 
 
@@ -788,6 +962,7 @@ void Zhurong::wanderAbout(){
 					else{
 						romote_flag = romote_flag + 1;
 						if (romote_flag % 100 == 0 &&kun_x >= 10890)
+						//if (romote_flag % 100 == 0)
 							prepareAndLaunchAFireballWhileFacingLeft();
 					}
 				}
@@ -923,9 +1098,85 @@ void Zhurong::heatwater(){
 
 }
 
+void Zhurong::getThrown(){
+	
+	if (weak_flag == 1)
+	{
+		weak_flag = 0;
+		this->stopAllActions();
+		this->acceptCall = false;
+		health = health - 20;
+		Animation * waterflower = Animation::create();
+		waterflower->addSpriteFrameWithFileName("characters/zhurong/weak_0.png");
+		waterflower->addSpriteFrameWithFileName("characters/zhurong/weak_1.png");
+		waterflower->addSpriteFrameWithFileName("characters/zhurong/weak_2.png");
+		waterflower->addSpriteFrameWithFileName("characters/zhurong/weak_3.png");
+		waterflower->addSpriteFrameWithFileName("characters/zhurong/weak_4.png");
+		waterflower->addSpriteFrameWithFileName("characters/zhurong/weak_5.png");
+		waterflower->addSpriteFrameWithFileName("characters/zhurong/weak_6.png");
+		waterflower->setDelayPerUnit(0.5f);
+		waterflower->setRestoreOriginalFrame(true);
+		waterflower->retain();
+		auto thrown = Animate::create(this->thrownAnimation);
+		auto weak = Animate::create(waterflower);
+		auto fight = Animate::create(weakfightAnimation);
+		auto seq = Sequence::create(thrown,weak, fight, nullptr);
+		this->runAction(seq);
+	}
+		
+}
+
+void Zhurong::getCollided(int damage){
+	this->stopAllActions();
+	if (dieflagforzhongrong == 0){
+
+		auto temp = (Stage1GameplayLayer*)this->getParent();
+		auto hero = temp->kunpeng;
+		float hero_x = hero->getPosition().x;
+		float zhu_x = this->getPosition().x;
+		health = health - damage;
+		if (health >= 0)
+		{
+			/*
+			if (hero_x - zhu_x > 0)
+			{
+				this->runAction(Animate::create(this->hurtrightAnimation));
+			}
+			else{
+				this->runAction(Animate::create(this->hurtleftAnimation));
+			}
+
+			*/
+			if (hero_x - zhu_x > 0)
+			{
+				this->runAction(MoveBy::create(0.2f, Vec2(-100, 0)));
+			}
+			else{
+				this->runAction(MoveBy::create(0.2f, Vec2(100, 0)));
+			}
+
+		}
+		else{
+
+			this->stopAllActions();
+			this->acceptCall = false;
+			dieflagforzhongrong = 1;
+			if (hero_x - zhu_x > 0)
+			{
+				this->runAction(Animate::create(this->dierightAnimation));
+			}
+			else{
+				this->runAction(Animate::create(this->dieleftAnimation));
+			}
+
+		}
+	}
+
+}
 void Zhurong::getHurt(int damage){
 
 }
+
 void Zhurong::getHurtByWind(int damage){
 	//this->stopAllActions();
 	if (dieflagforzhongrong == 0){
@@ -936,7 +1187,7 @@ void Zhurong::getHurtByWind(int damage){
 		float zhu_x = this->getPosition().x;
 		health = health - damage;
 		if (health >= 0)
-		{	/*
+		{	
 			if (hero_x - zhu_x > 0)
 			{
 			this->runAction(Animate::create(this->hurtrightAnimation));
@@ -945,7 +1196,7 @@ void Zhurong::getHurtByWind(int damage){
 			this->runAction(Animate::create(this->hurtleftAnimation));
 			}
 
-			*/
+			
 
 		}
 		else{
@@ -967,6 +1218,7 @@ void Zhurong::getHurtByWind(int damage){
 
 
 }
+
 void Zhurong::getHurtByPaw(int damage){
 
 }

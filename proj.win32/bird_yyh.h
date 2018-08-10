@@ -16,7 +16,8 @@ public:
 	Animation * rightdieAnimation;
 	Animation * leftfightAnimation;
 	Animation * rightfightAnimation;
-
+	Animation * waterSplashingAnimation;
+	Sprite* wa;
 
 	Bird_yyh();
 	~Bird_yyh();
@@ -27,6 +28,8 @@ public:
 
 	int dieflag = 0;
 	int pauseflag = 0;
+	int heldflag = 0;
+	int thrownflag = 0;
 
 	int x_scope, y_scope;
 	float x_change, y_change;
@@ -45,12 +48,19 @@ public:
 	void Lockfightright();
 	void f();
 	void getHurtByWind(int damage);
+	/*
+	void getHurtByWind(int damage);
 	void getHurtByPaw(int damage);
 	void getHurtByCrush(int damage);
 
 	void getHurtByWater(int damage);
 	void getHurtByFin(int damage);
-
+	*/
+	void getHeld();
+	void getThrown();
+	void getSlamDunkOnGround(int damage);
+	void getSlamDunkOnWater(int damage);
+	void getCollided(int damage);
 
 };
 #endif

@@ -29,7 +29,14 @@ Bird_yyh::Bird_yyh()
 	this->hoveringAnimation->setRestoreOriginalFrame(true);// 设置动画播放完毕后是否回到第一帧
 	this->hoveringAnimation->retain();
 
-	
+	this->waterSplashingAnimation = Animation::create();
+	this->waterSplashingAnimation->addSpriteFrameWithFileName("landscapes/splash_big_00.png");
+	this->waterSplashingAnimation->addSpriteFrameWithFileName("landscapes/splash_big_01.png");
+	this->waterSplashingAnimation->addSpriteFrameWithFileName("landscapes/splash_big_02.png");
+	this->waterSplashingAnimation->addSpriteFrameWithFileName("landscapes/splash_big_03.png");
+	this->waterSplashingAnimation->setDelayPerUnit(0.5f);
+	this->waterSplashingAnimation->setRestoreOriginalFrame(true);
+	this->waterSplashingAnimation->retain();
 
 	this->rightAnimation = Animation::create();
 	this->rightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/right1.png");
@@ -177,130 +184,153 @@ void Bird_yyh::wanderAbout(){
 	p.x = p.x + 1;
 	p.y = p.y + 1;
 	this->setPosition(p);*/
-	auto temp = (Stage1GameplayLayer*)this->getParent();
-	Point hero = temp->kunpeng->getPosition();
-	//cout << "hero.x:" << hero.x << " y:" << hero.y << endl;
-	Point bird = this->getPosition();
-	float distance = sqrt(pow(hero.x - bird.x, 2) + pow(hero.y - bird.y, 2));
-	//cout << distance << endl;
-	//auto temp_bullet = (Bullet*)temp->getChildByName("bu");
-	auto temp_bullet = this->getChildByName("bu");
-	float battledistance = 450;
-	//float x = cos(asin(0.5));
-	//cout << x << endl;
-	//int x_scope, y_scope;
-	float x_dis = hero.x - bird.x;
-	float y_dis = hero.y - bird.y;
-
-	float x_scala = (rand() % 201 - 100) / 100.0;
-	float y_scala = (rand() % 201 - 100) / 100.0;  //先获得（-1,1）的百分位的随机小数
-	int change = 1;
-	/*
-	this->runAction(MoveBy::create(1.0f, Vec2(x_scala*change, y_scala*change)));
-	lockBirdWithinLandscape();
-	//temp_bullet->schedule(schedule_selector(Bullet::ShootBullet), 2.0f);
-	if (distance <= battledistance && flag == 0){
-	cout << "come in" << endl;
-
-	temp_bullet->schedule(schedule_selector(Bullet::ShootBullet), 2.0f);
-	flag = 1;
-
-	}
-	if (distance > battledistance && flag == 1){
-	cout << "stop" << endl;
-	temp_bullet->unschedule(schedule_selector(Bullet::ShootBullet));
-	flag = 0;
-	}
-	*/
-	if (distance <= battledistance){
-
-		x_change = bird_step*(cos(atan(x_dis / y_dis)));
-		y_change = bird_step*(sin(atan(x_dis / y_dis)));
-		if (x_dis >= 0)
-			x_scope = 1;
-		else
-			x_scope = -1;
-		if (y_dis >= 0)
-			y_scope = 1;
-		else
-			y_scope = -1;
+		if (thrownflag == 1 || heldflag == 1){
+			if (heldflag == 1)
+			{
+				//循环播放抓住动画
+				auto temp = (Stage1GameplayLayer*)this->getParent();
+				Point hero = temp->kunpeng->getPosition();
+				//cout << "hero.x:" << hero.x << " y:" << hero.y << endl;
+				Point bird = this->getPosition();
+				this->setPosition(Vec2(bird.x + 20, bird.y - 20));
+				
 
 
-		if (x_dis == 0){
-			if (dir < 0){
-				Lockturnleft(1);
 			}
-			else{
-				Lockturnright(1);
-			}
+			if (thrownflag == 1)
+			{
 
-		}
-		else if (y_dis == 0){
-			//this->stopAllActions();
-			if (x_scope > 0){
-				Lockturnright(2);
 			}
-			else{
-				Lockturnleft(2);
-			}
-
-
 
 		}
 		else{
-			//this->stopAllActions();
-			if (x_scope > 0)
-				Lockturnright(3);
-			else
-				Lockturnleft(3);
-			//this->runAction(MoveBy::create(1.0f, Vec2(x_scope * abs(x_change), y_scope * abs(y_change))));
-		}
+			auto temp = (Stage1GameplayLayer*)this->getParent();
+			Point hero = temp->kunpeng->getPosition();
+			//cout << "hero.x:" << hero.x << " y:" << hero.y << endl;
+			Point bird = this->getPosition();
+			float distance = sqrt(pow(hero.x - bird.x, 2) + pow(hero.y - bird.y, 2));
+			//cout << distance << endl;
+			//auto temp_bullet = (Bullet*)temp->getChildByName("bu");
+			auto temp_bullet = this->getChildByName("bu");
+			float battledistance = 450;
+			//float x = cos(asin(0.5));
+			//cout << x << endl;
+			//int x_scope, y_scope;
+			float x_dis = hero.x - bird.x;
+			float y_dis = hero.y - bird.y;
 
-		lockBirdWithinLandscape();
-		if (flag == 0 && dieflag == 0){
-			temp_bullet->schedule(schedule_selector(Bullet::ShootBullet), 2.0f);
-			//cout << "come in" << endl;
-			//this->runAction(Animate::create(this->rightAnimation));
+			float x_scala = (rand() % 201 - 100) / 100.0;
+			float y_scala = (rand() % 201 - 100) / 100.0;  //先获得（-1,1）的百分位的随机小数
+			int change = 1;
 			/*
-			if (dir = -1){
-				auto fi = Animate::create(this->leftfightAnimation);
-				auto func = CallFunc::create([this](){
-				auto temp_bullet = this->getChildByName("bu");
-				 });
-				auto seq = Sequence::create(fi, func, nullptr);
-				this->runAction(seq);
-			}
-				
-			else{
-				auto fi = Animate::create(this->rightfightAnimation);
-				auto func = CallFunc::create([this](){
-				auto temp_bullet = this->getChildByName("bu");
-				temp_bullet->schedule(schedule_selector(Bullet::ShootBullet), 2.0f); });
-				auto seq = Sequence::create(fi, func, nullptr);
-				this->runAction(seq);
+			this->runAction(MoveBy::create(1.0f, Vec2(x_scala*change, y_scala*change)));
+			lockBirdWithinLandscape();
+			//temp_bullet->schedule(schedule_selector(Bullet::ShootBullet), 2.0f);
+			if (distance <= battledistance && flag == 0){
+			cout << "come in" << endl;
 
-			}
-				
-			*/
-			
+			temp_bullet->schedule(schedule_selector(Bullet::ShootBullet), 2.0f);
 			flag = 1;
 
-		}
-
-	}
-	if (distance > battledistance){
-		//cout << this->getPosition().x << ' '<<this->getPosition().y << endl;
-		Lockhoving();
-		dir = 0;
-		this->runAction(MoveBy::create(1.0f, Vec2(x_scala*change, y_scala*change)));
-		lockBirdWithinLandscape();
-		if (flag == 1 && dieflag == 0){
-			//cout << "stop" << endl;
+			}
+			if (distance > battledistance && flag == 1){
+			cout << "stop" << endl;
 			temp_bullet->unschedule(schedule_selector(Bullet::ShootBullet));
 			flag = 0;
-		}
+			}
+			*/
+			if (distance <= battledistance){
 
-	}
+				x_change = bird_step*(cos(atan(x_dis / y_dis)));
+				y_change = bird_step*(sin(atan(x_dis / y_dis)));
+				if (x_dis >= 0)
+					x_scope = 1;
+				else
+					x_scope = -1;
+				if (y_dis >= 0)
+					y_scope = 1;
+				else
+					y_scope = -1;
+
+
+				if (x_dis == 0){
+					if (dir < 0){
+						Lockturnleft(1);
+					}
+					else{
+						Lockturnright(1);
+					}
+
+				}
+				else if (y_dis == 0){
+					//this->stopAllActions();
+					if (x_scope > 0){
+						Lockturnright(2);
+					}
+					else{
+						Lockturnleft(2);
+					}
+
+
+
+				}
+				else{
+					//this->stopAllActions();
+					if (x_scope > 0)
+						Lockturnright(3);
+					else
+						Lockturnleft(3);
+					//this->runAction(MoveBy::create(1.0f, Vec2(x_scope * abs(x_change), y_scope * abs(y_change))));
+				}
+
+				lockBirdWithinLandscape();
+				if (flag == 0 && dieflag == 0){
+					temp_bullet->schedule(schedule_selector(Bullet::ShootBullet), 2.0f);
+					//cout << "come in" << endl;
+					//this->runAction(Animate::create(this->rightAnimation));
+					/*
+					if (dir = -1){
+					auto fi = Animate::create(this->leftfightAnimation);
+					auto func = CallFunc::create([this](){
+					auto temp_bullet = this->getChildByName("bu");
+					});
+					auto seq = Sequence::create(fi, func, nullptr);
+					this->runAction(seq);
+					}
+
+					else{
+					auto fi = Animate::create(this->rightfightAnimation);
+					auto func = CallFunc::create([this](){
+					auto temp_bullet = this->getChildByName("bu");
+					temp_bullet->schedule(schedule_selector(Bullet::ShootBullet), 2.0f); });
+					auto seq = Sequence::create(fi, func, nullptr);
+					this->runAction(seq);
+
+					}
+
+					*/
+
+					flag = 1;
+
+				}
+
+			}
+			if (distance > battledistance){
+				//cout << this->getPosition().x << ' '<<this->getPosition().y << endl;
+				Lockhoving();
+				dir = 0;
+				this->runAction(MoveBy::create(1.0f, Vec2(x_scala*change, y_scala*change)));
+				lockBirdWithinLandscape();
+				if (flag == 1 && dieflag == 0){
+					//cout << "stop" << endl;
+					temp_bullet->unschedule(schedule_selector(Bullet::ShootBullet));
+					flag = 0;
+				}
+
+			}
+
+		}
+	
 
   }
 	
@@ -492,8 +522,198 @@ void Bird_yyh::lockBirdWithinLandscape(){
 		this->setPositionY(this->getPositionY() - difference);
 	}
 }
+void Bird_yyh::getHeld(){
+	//heldflag = 1;
+
+}
+void Bird_yyh::getThrown(){
+	if (thrownflag == 0){
+		thrownflag = 1;
+		pauseflag = 1;
+		this->stopAllActions();
+		auto actionup = MoveTo::create(0.5f, Vec2(this->getPositionX(), this->getPositionY() + 100));
+		auto actiondown = MoveTo::create(1.0f, Vec2(this->getPositionX(), 0));
+		auto water = Animate::create(waterSplashingAnimation);
+		auto moveseq = Sequence::create(actionup, actiondown, nullptr);
+		this->runAction(moveseq);
+		auto delayTime = DelayTime::create(1.5f);
+		auto func = CallFunc::create([this](){ getSlamDunkOnWater(10); });
+		auto seq = Sequence::create(delayTime, func, nullptr);
+		this->runAction(seq);
+	}
+	
+
+}
+
+void Bird_yyh::getSlamDunkOnWater(int damage){
+	//unscheduleUpdate(); 
+	if (dieflag == 0){
+		pauseflag = 1;
+		this->stopAllActions();
+
+		health = health - damage;
+		auto temp = (Stage1GameplayLayer*)this->getParent();
+		//auto temp_bullet = (Bullet*)temp->getChildByName("bu");
+		auto temp_bullet = this->getChildByName("bu");
+		temp_bullet->unschedule(schedule_selector(Bullet::ShootBullet));
+		Sprite* s = Sprite::create("landscapes/splash_big_00.png");
+		s->setPosition(Vec2(50, 50));
+		this->addChild(s);
+		Animation * waterflower = Animation::create();
+		waterflower->addSpriteFrameWithFileName("landscapes/splash_big_00.png");
+		waterflower->addSpriteFrameWithFileName("landscapes/splash_big_01.png");
+		waterflower->addSpriteFrameWithFileName("landscapes/splash_big_02.png");
+		waterflower->addSpriteFrameWithFileName("landscapes/splash_big_03.png");
+		waterflower->setDelayPerUnit(0.5f);
+		waterflower->setRestoreOriginalFrame(true);
+		waterflower->retain();
+		wa = s;
+		s->runAction(Animate::create(waterflower));
+		if (health > 0)
+		{
+			if (dir == -1 || dir == 0)                            //徘徊的时候会不会受伤？？？
+				this->runAction(Animate::create(lefthurtAnimation));
+			if (dir == 1)
+				this->runAction(Animate::create(righthurtAnimation));
+			auto delayTime = DelayTime::create(2.0f);
+			auto func = CallFunc::create([this](){ pauseflag = 0; lock = 0; flag = 0; thrownflag = 0; wa->removeFromParent(); });
+			auto seq = Sequence::create(delayTime, func, nullptr);
+			this->runAction(seq);
+
+		}
+		else{
+			dieflag = 1;
+			if (dir == -1 || dir == 0)
+				this->runAction(Animate::create(leftdieAnimation));
+			if (dir == 1)
+				this->runAction(Animate::create(rightdieAnimation));
+
+			auto delayTime = DelayTime::create(2.0f);
+			auto func = CallFunc::create([this](){
+				auto temp = (Stage1GameplayLayer*)this->getParent();
+				temp->removeChild(this);
+
+				//temp->removeChildByName("bu");
+				this->removeChildByName("bu");
+
+				//temp->removeChildByName("bu");
+
+				temp->enemyList.eraseObject(this); });
+			auto seq = Sequence::create(delayTime, func, nullptr);
+			this->runAction(seq);
 
 
+		}
+	}
+}
+
+void Bird_yyh::getCollided(int damage){
+	//unscheduleUpdate(); 
+	if (dieflag == 0){
+		pauseflag = 1;
+		this->stopAllActions();
+
+		health = health - damage;
+		auto temp = (Stage1GameplayLayer*)this->getParent();
+		auto hero = temp->kunpeng;
+		auto temp_bullet = this->getChildByName("bu");
+		temp_bullet->unschedule(schedule_selector(Bullet::ShootBullet));
+		if (hero->getPositionX() >= this->getPositionX())
+			this->runAction(MoveBy::create(0.2f, Vec2(-100, 0)));
+		else
+			this->runAction(MoveBy::create(0.2f, Vec2(100, 0)));
+
+		if (health > 0)
+		{
+			if (dir == -1 || dir == 0)                            //徘徊的时候会不会受伤？？？
+				this->runAction(Animate::create(lefthurtAnimation));
+			if (dir == 1)
+				this->runAction(Animate::create(righthurtAnimation));
+			auto delayTime = DelayTime::create(2.0f);
+			auto func = CallFunc::create([this](){ pauseflag = 0; lock = 0; flag = 0; });
+			auto seq = Sequence::create(delayTime, func, nullptr);
+			this->runAction(seq);
+
+		}
+		else{
+			dieflag = 1;
+			if (dir == -1 || dir == 0)
+				this->runAction(Animate::create(leftdieAnimation));
+			if (dir == 1)
+				this->runAction(Animate::create(rightdieAnimation));
+
+			auto delayTime = DelayTime::create(2.0f);
+			auto func = CallFunc::create([this](){
+				auto temp = (Stage1GameplayLayer*)this->getParent();
+				temp->removeChild(this);
+
+				//temp->removeChildByName("bu");
+				this->removeChildByName("bu");
+
+				//temp->removeChildByName("bu");
+
+				temp->enemyList.eraseObject(this); });
+			auto seq = Sequence::create(delayTime, func, nullptr);
+			this->runAction(seq);
+
+
+		}
+	}
+}
+
+void Bird_yyh::getHurtByWind(int damage){
+	//unscheduleUpdate(); 
+	if (dieflag == 0){
+		pauseflag = 1;
+		this->stopAllActions();
+
+		health = health - damage;
+		auto temp = (Stage1GameplayLayer*)this->getParent();
+		//auto temp_bullet = (Bullet*)temp->getChildByName("bu");
+		auto temp_bullet = this->getChildByName("bu");
+		temp_bullet->unschedule(schedule_selector(Bullet::ShootBullet));
+
+
+		if (health > 0)
+		{
+			if (dir == -1 || dir == 0)                            //徘徊的时候会不会受伤？？？
+				this->runAction(Animate::create(lefthurtAnimation));
+			if (dir == 1)
+				this->runAction(Animate::create(righthurtAnimation));
+			auto delayTime = DelayTime::create(2.0f);
+			auto func = CallFunc::create([this](){ pauseflag = 0; lock = 0; flag = 0; });
+			auto seq = Sequence::create(delayTime, func, nullptr);
+			this->runAction(seq);
+
+		}
+		else{
+			dieflag = 1;
+			if (dir == -1 || dir == 0)
+				this->runAction(Animate::create(leftdieAnimation));
+			if (dir == 1)
+				this->runAction(Animate::create(rightdieAnimation));
+
+			auto delayTime = DelayTime::create(2.0f);
+			auto func = CallFunc::create([this](){
+				auto temp = (Stage1GameplayLayer*)this->getParent();
+				temp->removeChild(this);
+
+				//temp->removeChildByName("bu");
+				this->removeChildByName("bu");
+
+				//temp->removeChildByName("bu");
+
+				temp->enemyList.eraseObject(this); });
+			auto seq = Sequence::create(delayTime, func, nullptr);
+			this->runAction(seq);
+
+
+		}
+	}
+}
+
+
+/*
 void Bird_yyh::getHurtByWind(int damage){
 	//unscheduleUpdate(); 
 	if (dieflag == 0){
@@ -759,6 +979,7 @@ void Bird_yyh::getHurtByFin(int damage){
 		}
 	}
 }
+*/
 Bird_yyh::~Bird_yyh()
 {
 }

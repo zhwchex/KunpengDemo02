@@ -44,6 +44,8 @@ public:
 	int romote_flag = 0;
 	int aoe_flag = 0;
 	int heat_flag = 0;
+	int weak_flag = 1;
+	int weak = FULL_HP;
 	Sprite* s; 
 	Vector <Sprite *>fireball;// = {};
 
@@ -67,7 +69,7 @@ public:
 
 	Animation * waterSplashingAnimation;
 
-	
+	Animation * weakfightAnimation;
 
 	//挨打动画
 	Animation * hurtleftAnimation;
@@ -75,6 +77,8 @@ public:
 	//死亡动画
 	Animation * dieleftAnimation;
 	Animation * dierightAnimation;
+
+	Animation * thrownAnimation;
 
 
 	//动作，既包含动画又包含位移。
@@ -91,6 +95,10 @@ public:
 	void update(float dt);
 	void wanderAbout();
 
+	void getThrown();
+	void getSlamDunkOnGround(int damage);
+	void getSlamDunkOnWater(int damage);
+	void getCollided(int damage);
 	void getHurt(int damage);
 	void getHurtByWind(int damage);
 	void getHurtByPaw(int damage);
