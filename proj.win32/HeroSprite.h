@@ -81,6 +81,8 @@ public:
 	int scratchingType = 1;
 	int finAttackingType = 1;
 
+	GeneralUnit * targetToSlamDunk = nullptr;
+
 	//鸟悬停动画
 	Animation * hoveringRightAnimation;
 	Animation * hoveringLeftAnimation;
@@ -139,13 +141,17 @@ public:
 	Animation * scratchRightBladeEffectAnimation;
 	Animation * scratchRightBladeEffect2Animation;
 
-	Animation * tryCatchingAnimation;//试图使用一下投技
-	Animation * holdingObjectAnimation;//抓住物品不放的动画
+	Animation * tryCatchingRightAnimation = nullptr;//试图使用一下投技
+	Animation * tryCatchingLeftAnimation = nullptr;
+	Animation * holdingObjectRightAnimation;//抓住物品不放的动画
+	Animation * holdingObjectLeftAnimation;
 	Animation * holdingEnemyAnimation;//抓住敌人不放的动画
 	Animation * throwingObjectAnimation;//扔出物品的动画
-	Animation * slamDunkingEnemyAnimationi;//对小兵使用投技的动画
+	Animation * slamDunkingEnemyRightAnimation = nullptr;//对小兵使用投技的动画
+	Animation * slamDunkingEnemyLeftAnimation = nullptr;
 
-	Animation * slamDunkingBossAnimation;//对Boss使用投技的动画
+	Animation * slamDunkingBossRightAnimation = nullptr;//对Boss使用投技的动画
+	Animation * slamDunkingBossLeftAnimation = nullptr;
 
 	//鱼技能动画
 	Animation * blowingVortexRightAnimation;
@@ -155,8 +161,8 @@ public:
 	Animation * finAttackLeftAnimation;
 	Animation * finAttackLeftAnimation2;
 
-	Animation * fallingFromSkyRightAnimation;//从空中掉入水中的过程动画。当自己是在空中的鱼时触发。掉落时每时每刻都要判断是否入水，因此需要做成无限循环动作，每帧都判断是否入水。掉落时只能变身为鸟或吐水泡。
-	Animation * fallingFromSkyLeftAnimation;//从空中掉入水中的过程动画。当自己是在空中的鱼时触发。掉落时每时每刻都要判断是否入水，因此需要做成无限循环动作，每帧都判断是否入水。掉落时只能变身为鸟或吐水泡。
+	Animation * fallingFromSkyRightAnimation;//从空中掉入水中的过程动画。当自己是在空中的鱼时触发。掉落时每时每刻都要判断是否入水，因此需要做成无限循环动作，每帧都判断是否入水。掉落时能做的事只有变身为鸟或吐水球。
+	Animation * fallingFromSkyLeftAnimation;//从空中掉入水中的过程动画。当自己是在空中的鱼时触发。掉落时每时每刻都要判断是否入水，因此需要做成无限循环动作，每帧都判断是否入水。掉落时能做的事只有变身为鸟或吐水球。
 	Animation * enteringIntoWaterRightAnimation;//入水动画。第一帧开始禁掉全能力，播放到一半enable全能力并且如果有方向键就move_kun，最后一帧转入hover_kun。
 	Animation * enteringIntoWaterLeftAnimation;//入水动画。第一帧开始禁掉全能力，播放到一半enable全能力并且如果有方向键就move_kun，最后一帧转入hover_kun。
 
@@ -168,8 +174,11 @@ public:
 	Animation * finRightBladeEffectAnimation;
 	Animation * finRightBladeEffect2Animation;
 
+	Animation * airSpinningRightAnimation_kun;
+	Animation * airSpinningLeftAnimation_kun;
 
-
+	Animation * collidingRightAnimation_kun;
+	Animation * collidingLeftAnimation_kun;
 
 	//主角的招式特效
 	Animation * windBulletFlyingAnimation;
@@ -245,6 +254,9 @@ public:
 	bool spittable = false;//能否吐口水（
 	bool vortexAttackable = true;
 
+	bool airSpinnable = true;
+	bool collidable = true;
+
 	//逻辑上讲，这两者不能同时为真。
 	bool transformable_BirdToFish = true;
 	bool transformable_FishToBird = true;//为方便测试，暂时将两者均设为真。
@@ -285,8 +297,9 @@ public:
 
 
 	void tryCatch();
-	void tryHold();
-	void trySlamDunk();
+	void hold();
+	void release();
+	void slamDunk();
 
 
 	void disableAllAbilities();
@@ -385,6 +398,13 @@ public:
 	void finAttackLeft2();
 
 
+	void airSpin();
+	void airSpinRight();
+	void airSpinLeft();
+
+	void collide();
+	void collideLeft();
+	void collideRight();
 
 	void windAttack();//多个重载
 	void pawAttack();
@@ -406,7 +426,7 @@ public:
 	void getHurt();//多个重载
 	void getHurtGeneral();
 	void getHurtGeneral(int damage);
-	void getHurtByThunder();//被雷电击中，骨架闪烁+原地震颤
+	void getHurtByThunder();//被雷电击中，骨架闪烁+
 	void getHurtByFire();//被火球击中，羽毛烧焦闪烁+后退
 	void getHurtByWater();//被水流击中，变落汤鸡+下落
 	void getHurtByWater(int damage);//被水流击中，变落汤鸡+下落

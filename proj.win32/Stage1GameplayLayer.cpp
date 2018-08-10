@@ -206,7 +206,7 @@ void Stage1GameplayLayer::onEnter(){
 	this->addChild(fishljj);
 	enemyList.pushBack(fishljj);
 
-
+/**/
 	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
 	fishljj->setPosition(Vec2(6850, -200));
 	this->addChild(fishljj);
@@ -365,7 +365,7 @@ void Stage1GameplayLayer::onEnter(){
 	enemyList.pushBack(enemyZWC);
 	this->addChild(enemyZWC);
 
-
+	/**/
 	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
 	fishljj->setPosition(Vec2(11800, -100));
 	this->addChild(fishljj);
@@ -437,6 +437,7 @@ void Stage1GameplayLayer::onEnter(){
 	/**/
 	this->zhurong = Zhurong::create("characters/zhurong/walking_left_while_facing_left_00.png");
 	zhurong->setPosition(11500, 100);
+	zhurong->isBoss = true;
 	this->addChild(zhurong);
 	enemyList.pushBack(zhurong);
 	
@@ -460,7 +461,7 @@ void Stage1GameplayLayer::onEnter(){
 
 //当地图增加纵向面积时，这里需要更改
 void Stage1GameplayLayer::updateLayerPositionToMaintainHeroInCamera(float positionRatioLeft,  float positionRatioRight, float screenScrollingSpeedRatio){
-	//Stage1Scene * scene = (Stage1Scene *)this->getParent();
+	if (!this->enableAutoTrackingHero) return;
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	int heroPositionInCameraX = this->getPositionX() + this->kunpeng->getPositionX();
 	if (heroPositionInCameraX > visibleSize.width * positionRatioRight){
@@ -476,7 +477,7 @@ void Stage1GameplayLayer::updateLayerPositionToMaintainHeroInCamera(float positi
 }
 
 void Stage1GameplayLayer::updateLayerPositionToMaintainHeroInCamera(){
-	//Stage1Scene * scene = (Stage1Scene *)this->getParent();
+	if (!this->enableAutoTrackingHero) return;
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	int heroPositionInCameraX = this->getPositionX() + this->kunpeng->getPositionX();
 	if (heroPositionInCameraX > visibleSize.width * this->positionRatioRight){
@@ -550,6 +551,7 @@ void Stage1GameplayLayer::updateLayerPositionToMaintainHeroInCamera(){
 
 //需要主角不超出镜头范围的时候，调用它。如果主角在视野外，则将主角挪到镜头内。
 void Stage1GameplayLayer::pauseflagHeroWithinCamera(){
+	if (!this->enableAutoTrackingHero) return;
 	Stage1Scene * scene = (Stage1Scene *)this->getParent();
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 
@@ -618,3 +620,79 @@ void Stage1GameplayLayer::pauseflagHeroWithinLandscape(){
 	}
 }
 
+void Stage1GameplayLayer::cameraShake_slight(){
+
+}
+void Stage1GameplayLayer::cameraShake_significant(){
+
+}
+void Stage1GameplayLayer::cameraShake_vertical_slight(){
+	this->runAction(Sequence::create(CallFunc::create([this]{this->enableAutoTrackingHero = false; }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionY(this->getPositionY() - 8); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionY(this->getPositionY() + 7); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionY(this->getPositionY() - 6); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionY(this->getPositionY() + 5); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionY(this->getPositionY() - 4); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionY(this->getPositionY() + 3); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionY(this->getPositionY() - 2); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->enableAutoTrackingHero = true; }), 
+		nullptr));
+}
+void Stage1GameplayLayer::cameraShake_vertical_significant(){
+	this->runAction(Sequence::create(CallFunc::create([this]{this->enableAutoTrackingHero = false; this->setPositionY(this->getPositionY() - 10); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionY(this->getPositionY() + 19); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionY(this->getPositionY() - 18); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionY(this->getPositionY() + 17); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionY(this->getPositionY() - 16); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionY(this->getPositionY() + 15); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionY(this->getPositionY() - 14); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionY(this->getPositionY() + 13); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionY(this->getPositionY() - 12); }), DelayTime::create(1.0 / 60), 
+		CallFunc::create([this]{this->setPositionY(this->getPositionY() + 11); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionY(this->getPositionY() - 10); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionY(this->getPositionY() + 9); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionY(this->getPositionY() - 8); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionY(this->getPositionY() + 7); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionY(this->getPositionY() - 6); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionY(this->getPositionY() + 5); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionY(this->getPositionY() - 4); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionY(this->getPositionY() + 3); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionY(this->getPositionY() - 2); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->enableAutoTrackingHero = true; }),
+		nullptr));
+}
+void Stage1GameplayLayer::cameraShake_horizontal_slight(){
+	this->runAction(Sequence::create(/*CallFunc::create([this]{this->enableAutoTrackingHero = false; }),*/ DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionX(this->getPositionX() - 8); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionX(this->getPositionX() + 7); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionX(this->getPositionX() - 6); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionX(this->getPositionX() + 5); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionX(this->getPositionX() - 4); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionX(this->getPositionX() + 3); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionX(this->getPositionX() - 2); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->enableAutoTrackingHero = true; }),
+		nullptr));
+}
+void Stage1GameplayLayer::cameraShake_horizontal_significant(){
+	this->runAction(Sequence::create(CallFunc::create([this]{/*this->enableAutoTrackingHero = false;*/ this->setPositionX(this->getPositionX() - 10); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionX(this->getPositionX() + 19); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionX(this->getPositionX() - 18); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionX(this->getPositionX() + 17); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionX(this->getPositionX() - 16); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionX(this->getPositionX() + 15); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionX(this->getPositionX() - 14); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionX(this->getPositionX() + 13); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionX(this->getPositionX() - 12); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionX(this->getPositionX() + 11); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionX(this->getPositionX() - 10); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionX(this->getPositionX() + 9); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionX(this->getPositionX() - 8); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionX(this->getPositionX() + 7); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionX(this->getPositionX() - 6); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionX(this->getPositionX() + 5); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionX(this->getPositionX() - 4); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionX(this->getPositionX() + 3); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->setPositionX(this->getPositionX() - 2); }), DelayTime::create(1.0 / 60),
+		CallFunc::create([this]{this->enableAutoTrackingHero = true; }),
+		nullptr));
+}
