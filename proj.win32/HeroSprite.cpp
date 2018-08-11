@@ -43,13 +43,13 @@ HeroSprite::HeroSprite()
 		this->waterBulletExplosions[i] = waterBulletExplosion;
 	}
 
-	//比较大的水花。主角出入水面时在水面处播放一下它，或者比较大的敌人掉进水里时也播放一下它。需要在结尾调用removeFromParent。TODO
+	//比较大的水花。主角出入水面时在水面处播放一下它，或者比较大的敌人掉进水里时也播放一下它。需要在结尾调用removeFromParent。
 	this->waterSplashingAnimation_big = Animation::create();
 	this->waterSplashingAnimation_big->addSpriteFrameWithFile("landscapes/splash_big_00.png");
 	this->waterSplashingAnimation_big->addSpriteFrameWithFile("landscapes/splash_big_01.png");
 	this->waterSplashingAnimation_big->addSpriteFrameWithFile("landscapes/splash_big_02.png");
 	this->waterSplashingAnimation_big->addSpriteFrameWithFile("landscapes/splash_big_03.png");
-	this->waterSplashingAnimation_big->addSpriteFrameWithFile("landscapes/splash_big_03.png");
+	this->waterSplashingAnimation_big->addSpriteFrameWithFile("landscapes/splash_big_04.png");
 	this->waterSplashingAnimation_big->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->waterSplashingAnimation_big->setRestoreOriginalFrame(true);
 	this->waterSplashingAnimation_big->retain();
@@ -2793,7 +2793,7 @@ HeroSprite::HeroSprite()
 	this->waterSplashingAnimation_small->addSpriteFrameWithFile("landscapes/splash_small_01.png");
 	this->waterSplashingAnimation_small->addSpriteFrameWithFile("landscapes/splash_small_02.png");
 	this->waterSplashingAnimation_small->addSpriteFrameWithFile("landscapes/splash_small_03.png");
-	this->waterSplashingAnimation_small->addSpriteFrameWithFile("landscapes/splash_small_03.png");
+	this->waterSplashingAnimation_small->addSpriteFrameWithFile("landscapes/splash_small_04.png");
 	this->waterSplashingAnimation_small->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->waterSplashingAnimation_small->setRestoreOriginalFrame(true);
 	this->waterSplashingAnimation_small->retain();
