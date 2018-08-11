@@ -235,3 +235,12 @@ void FishEnemy1::attack(Vec2 pos)
 		this->runAction(RepeatForever::create(Animate::create(this->defaultAnimation)));
 	}), NULL));
 }
+void FishEnemy1::getCollided(int d){
+	this->getHurt(d);
+	if (((Stage1GameplayLayer *)this->getParent())->getPositionX() < this->getPositionX()){
+		this->runAction(MoveBy::create(0.2f, Vec2(50,0)));
+	}
+	else{
+		this->runAction(MoveBy::create(0.2f, Vec2(-50, 0)));
+	}
+}

@@ -712,6 +712,13 @@ void Bird_yyh::getHurtByWind(int damage){
 	}
 }
 
+void Bird_yyh::getHurtByWater(int damage){
+	this->getHurtByWind(damage);
+}
+void Bird_yyh::getHurtByFin(int damage){
+	this->getHurtByWind(damage);
+}
+
 
 /*
 void Bird_yyh::getHurtByWind(int damage){
@@ -985,5 +992,5 @@ Bird_yyh::~Bird_yyh()
 }
 
 void Bird_yyh::getSlamDunkOnGround(int damage){
-
+	this->getHurt(damage);
 }

@@ -2818,7 +2818,7 @@ HeroSprite::HeroSprite()
 				int deltay = enemy->getPositionY() - explosion->getPositionY();
 				double distance = sqrt(pow(deltax,2)+pow(deltay,2));
 				if (distance < (enemy->getContentSize().width + explosion->getContentSize().width) / 2){
-					enemy->getHurtByWind(this->DAMAGE_WATER_BALL);//TODOTODOTODO 疯狂需要改动。此处需要改成getHurtByWater
+					enemy->getHurtByWater(this->DAMAGE_WATER_BALL);//TODOTODOTODO 疯狂需要改动。此处需要改成getHurtByWater
 				}
 			}
 		}
@@ -3013,7 +3013,7 @@ HeroSprite::HeroSprite()
 					collideCrush->runAction(Sequence::create(FadeOut::create(2), CallFunc::create([collideCrush]{ collideCrush->removeFromParent(); }), nullptr));
 
 					((Stage1GameplayLayer *)this->getParent())->cameraShake_vertical_slight();
-					enemy->getHurtByWind(this->DAMAGE_WATER_BALL);//TODOTODOTODO 疯狂需要改动。此处需要改成getHurtByCollision
+					enemy->getCollided(this->DAMAGE_COLLISION);
 				}
 			}
 		}

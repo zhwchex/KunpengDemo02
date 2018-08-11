@@ -52,13 +52,13 @@ public:
 	void getHurtByWind(int damage);
 	void getHurtByPaw(int damage);
 	void getHurtByCrush(int damage);
-
-	void getHurtByWater(int damage);
-	void getHurtByFin(int damage);
 	*/
+
+	void getHurtByFin(int damage);
+	void getHurtByWater(int damage);
 	void getHeld();
 	void getThrown();
-	//void getSlamDunkOnGround(int damage);
+	void getSlamDunkOnGround(int damage);
 	void getSlamDunkOnWater(int damage);
 	void getCollided(int damage);
 
