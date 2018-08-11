@@ -96,8 +96,8 @@ public:
 	void wanderAbout();
 
 	void getThrown();
-	void getSlamDunkOnGround(int damage);
-	void getSlamDunkOnWater(int damage);
+	//void getSlamDunkOnGround(int damage);
+	//void getSlamDunkOnWater(int damage);
 	void getCollided(int damage);
 	void getHurt(int damage);
 	void getHurtByWind(int damage);

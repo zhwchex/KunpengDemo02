@@ -6,8 +6,8 @@ using namespace std;
 
 Zhurong::Zhurong()
 {
-	AllocConsole();                                          // 开辟控制台
-	freopen("CONOUT$", "w", stdout);
+	//AllocConsole();                                          // 开辟控制台
+	//freopen("CONOUT$", "w", stdout);
 	//祝融移动动画，开始播放到播放完毕前，外面对wanderAbout的调用没有效果。
 	this->walkingLeftWhileFacingLeftAnimation = Animation::create();
 	this->walkingLeftWhileFacingLeftAnimation->addSpriteFrameWithFileName("characters/zhurong/walking_left_while_facing_left_00.png");

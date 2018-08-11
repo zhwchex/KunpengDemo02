@@ -58,7 +58,7 @@ public:
 	*/
 	void getHeld();
 	void getThrown();
-	void getSlamDunkOnGround(int damage);
+	//void getSlamDunkOnGround(int damage);
 	void getSlamDunkOnWater(int damage);
 	void getCollided(int damage);
 
