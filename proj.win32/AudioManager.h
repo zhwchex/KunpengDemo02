@@ -18,6 +18,8 @@ using namespace CocosDenshion;
 using namespace std;
 
 static const string BGM_FILE_NAME = "audios/bgm.mp3";
+static const string CRAB_ATTACK_FILE_NAME = "audios/crab_attack.mp3";
+static const string MONSTER_HURT_FILE_NAME = "audios/monster_hurt.mp3";
 
 class AudioManager
 {

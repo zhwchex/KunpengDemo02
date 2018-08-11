@@ -1,5 +1,6 @@
 #include "FishEnemy1.h"
 #include "Stage1GameplayLayer.h"
+#include "AudioManager.h"
 
 const static int STATE_DEFAULT = 0;
 const static int STATE_ATTACK = 1;
@@ -146,6 +147,7 @@ void FishEnemy1::getHurt(int h)
 
 	state = STATE_BE_ATTACKED;
 	health -= h;
+	AudioManager::getInstance()->play(MONSTER_HURT_FILE_NAME, false);
 	if (health <= 0) die();
 	else
 	{
@@ -222,6 +224,7 @@ void FishEnemy1::attack(Vec2 pos)
 
 	state = STATE_ATTACK;
 	stopAllActions();
+	AudioManager::getInstance()->play(CRAB_ATTACK_FILE_NAME, false);
 	Stage1GameplayLayer *gamePlayer = (Stage1GameplayLayer *) this->getParent();
 	HeroSprite *hero = gamePlayer->kunpeng;
 	if (hero->getPosition().distance(this->getPosition()) <= 100)
