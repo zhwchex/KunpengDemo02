@@ -1271,7 +1271,6 @@ HeroSprite::HeroSprite()
 		if (*userData->userInfo == slamDunkThrowInfo){
 			log("Here is slamDunkingEnemyThrowInfo");
 			/*
-			*/
 			//½«targetToSlamDunkÈÓ³öÈ¥
 			//this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, -60)), MoveBy::create(0.3f, Vec2(0, -75)), nullptr));
 
@@ -1282,6 +1281,11 @@ HeroSprite::HeroSprite()
 				CallFunc::create([this]{((Stage1GameplayLayer *)this->getParent())->cameraShake_vertical_significant(); }), 
 				MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 15)),
 				nullptr));
+			*/
+
+			if (this->targetToSlamDunk != nullptr){
+				this->targetToSlamDunk->getThrown();
+			}
 		}
 		if (*userData->userInfo == slamDunkRecoverAllAbilitiesInfo){
 			this->enableAllAbilities();

@@ -1236,3 +1236,11 @@ void Zhurong::getHurtByFin(int damage){
 void Zhurong::die(){
 
 }
+
+void Zhurong::getSlamDunkOnGround(int damage){
+
+}
+
+void Zhurong::getSlamDunkOnWater(int damage){
+
+}

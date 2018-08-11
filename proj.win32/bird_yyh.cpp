@@ -983,3 +983,7 @@ void Bird_yyh::getHurtByFin(int damage){
 Bird_yyh::~Bird_yyh()
 {
 }
+
+void Bird_yyh::getSlamDunkOnGround(int damage){
+
+}
