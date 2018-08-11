@@ -208,9 +208,9 @@ void Bird_zwc::wanderAbout(){
 
 		AllocConsole();
 		freopen("CONOUT$", "w", stdout);
-		cout << "ATTACK!!!heroPointX:" << hero.x << "     heroPointY:" << hero.y << endl;
-		cout << "ATTACK!!!birdPointX:" << bird.x << "     birdPointY:" << bird.y << endl;
-		cout << "ATTACK!!!x_scope * abs(x_change):" << x_scope * abs(x_change) << "     y_scope * abs(y_change):" << y_scope * abs(y_change) << endl;
+		//cout << "ATTACK!!!heroPointX:" << hero.x << "     heroPointY:" << hero.y << endl;
+		//cout << "ATTACK!!!birdPointX:" << bird.x << "     birdPointY:" << bird.y << endl;
+		//cout << "ATTACK!!!x_scope * abs(x_change):" << x_scope * abs(x_change) << "     y_scope * abs(y_change):" << y_scope * abs(y_change) << endl;
 	}
 
 	else if (pauseflag == 0 && distance >= battledistance){//超出攻击范围，保持在守卫点附近
@@ -249,10 +249,10 @@ void Bird_zwc::wanderAbout(){
 
 	}
 
-	cout << "KEEP!!!heroPointX:" << hero.x << "     heroPointY:" << hero.y << endl;
-	cout << "KEEP!!!birdPointX:" << bird.x << "     birdPointY:" << bird.y << endl;
-	cout << "KEEP!!!guardPointX:" << guardPoint.x << "       guardPointY:" << guardPoint.y << endl;
-	cout << "KEEP!!!x_scope * abs(x_change):" << x_scope * abs(x_change) << "     y_scope * abs(y_change):" << y_scope * abs(y_change) << endl;
+	//cout << "KEEP!!!heroPointX:" << hero.x << "     heroPointY:" << hero.y << endl;
+	//cout << "KEEP!!!birdPointX:" << bird.x << "     birdPointY:" << bird.y << endl;
+	//cout << "KEEP!!!guardPointX:" << guardPoint.x << "       guardPointY:" << guardPoint.y << endl;
+	//cout << "KEEP!!!x_scope * abs(x_change):" << x_scope * abs(x_change) << "     y_scope * abs(y_change):" << y_scope * abs(y_change) << endl;
 
 	lockBirdWithinLandscape();
 
@@ -328,8 +328,8 @@ void Bird_zwc::lockBirdWithinLandscape(){
 
 
 void Bird_zwc::getHurtByWind(int damage){
-	//this->getHurt(damage);
-	getHeld();//forTest
+	this->getHurt(damage);
+	//getHeld();//forTest
 	//getThrown();//forTest
 }
 
@@ -414,59 +414,59 @@ void Bird_zwc::die(bool facingLeft) {
 	this->runAction(seq);
 }
 
-		void  Bird_zwc::getHeld(){//被鹏抓住提在爪子上，像兔子被老鹰抓住一样，呆滞，循环播放
-			this->stopAllActions();
-			pauseflag = 1;//1代表因伤暂停
-			this->runAction((Animate::create(leftAnimation)));
+void  Bird_zwc::getHeld(){//被鹏抓住提在爪子上，像兔子被老鹰抓住一样，呆滞，循环播放
+	this->stopAllActions();
+	pauseflag = 1;//1代表因伤暂停
+	this->runAction((Animate::create(leftAnimation)));
 			
-			auto lefthurtAnimation2 = lefthurtAnimation->clone();
-			lefthurtAnimation2->setDelayPerUnit(0.3f);
-			lefthurtAnimation2->setRestoreOriginalFrame(false);
-			auto hurt = Animate::create(lefthurtAnimation2);//受伤动画
+	auto lefthurtAnimation2 = lefthurtAnimation->clone();
+	lefthurtAnimation2->setDelayPerUnit(0.3f);
+	lefthurtAnimation2->setRestoreOriginalFrame(false);
+	auto hurt = Animate::create(lefthurtAnimation2);//受伤动画
 			
-			auto delayTime = DelayTime::create(2.f);
-			auto func = CallFunc::create([this](){ pauseflag = 0; f(); wanderAbout(); });
-			auto seq = Sequence::create(delayTime, func, nullptr);
-			this->runAction(seq);
-			//this->runAction(Animate::create(this->leftAnimation));
-		}						
+	auto delayTime = DelayTime::create(2.f);
+	auto func = CallFunc::create([this](){ pauseflag = 0; f(); wanderAbout(); });
+	auto seq = Sequence::create(delayTime, func, nullptr);
+	this->runAction(seq);
+	//this->runAction(Animate::create(this->leftAnimation));
+}						
 		
-		void Bird_zwc::getThrown(){//被鹏往地上扔的动画，位于半空中，震惊和失控，循环播放
-			this->stopAllActions();
-			pauseflag = 1;//1代表因伤暂停
+void Bird_zwc::getThrown(){//被鹏往地上扔的动画，位于半空中，震惊和失控，循环播放
+	this->stopAllActions();
+	pauseflag = 1;//1代表因伤暂停
 
-			auto fallingDown = MoveTo::create(1.0f, Vec2(this->getPosition().x, -10));//下落到水面的动画
+	auto fallingDown = MoveTo::create(1.0f, Vec2(this->getPosition().x, -10));//下落到水面的动画
 			
 
-			auto lefthurtAnimation2 = lefthurtAnimation->clone();
-			lefthurtAnimation2->setDelayPerUnit(0.1f);
-			//lefthurtAnimation2->setLoops(5);
-			lefthurtAnimation2->setRestoreOriginalFrame(false);
-			auto left = Animate::create(lefthurtAnimation2);//震惊和失控动画
+	auto lefthurtAnimation2 = lefthurtAnimation->clone();
+	lefthurtAnimation2->setDelayPerUnit(0.1f);
+	//lefthurtAnimation2->setLoops(5);
+	lefthurtAnimation2->setRestoreOriginalFrame(false);
+	auto left = Animate::create(lefthurtAnimation2);//震惊和失控动画
 
-			auto s = Spawn::create(fallingDown, left, nullptr);
-			auto delayTime = DelayTime::create(2.f);
-			auto func = CallFunc::create([this](){ pauseflag = 0; f(); wanderAbout(); });
-			auto seq = Sequence::create(s,delayTime, func, nullptr);
-			this->runAction(seq);
+	auto s = Spawn::create(fallingDown, left, nullptr);
+	auto delayTime = DelayTime::create(2.f);
+	auto func = CallFunc::create([this](){ pauseflag = 0; f(); wanderAbout(); });
+	auto seq = Sequence::create(s,delayTime, func, nullptr);
+	this->runAction(seq);
 
 
-		}						
+}						
 		
-		void Bird_zwc::getSlamDunkOnGround(int damage){//砸在地面的动画，最好有个小弹跳的动作，瘫痪几秒爬起来进入正常行动状态。播放一次，播放完进入正常活动状态或直接死掉，调一下die或dieOnSlamDunk
-			return;
-		}	
+void Bird_zwc::getSlamDunkOnGround(int damage){//砸在地面的动画，最好有个小弹跳的动作，瘫痪几秒爬起来进入正常行动状态。播放一次，播放完进入正常活动状态或直接死掉，调一下die或dieOnSlamDunk
+	getHurt(damage);
+}	
 
-		void Bird_zwc::getSlamDunkOnWater(int damage){//砸在水面的动画，最好有个小弹跳的动作，瘫痪几秒爬起来进入正常行动状态，记得在落水的地方添加一个水花。播放一次，播放完进入正常活动状态或直接死掉，调一下die或dieOnSlamDunk
-			getHurt(damage);
-		}
+void Bird_zwc::getSlamDunkOnWater(int damage){//砸在水面的动画，最好有个小弹跳的动作，瘫痪几秒爬起来进入正常行动状态，记得在落水的地方添加一个水花。播放一次，播放完进入正常活动状态或直接死掉，调一下die或dieOnSlamDunk
+	getHurt(damage);
+}
 
-		void Bird_zwc::getCollided(int damage){//被鲲冲撞到的动画，需要有一个小位移，鲲如果在左边就往右边位移一下，鲲如果在右边就往左边位移一下（更高级的做法是沿着远离鲲的方向位移一下）。播放一次，播放完进入正常活动状态或直接死掉，调一下die或dieOnCollision
-			return;
-		}
+void Bird_zwc::getCollided(int damage){//被鲲冲撞到的动画，需要有一个小位移，鲲如果在左边就往右边位移一下，鲲如果在右边就往左边位移一下（更高级的做法是沿着远离鲲的方向位移一下）。播放一次，播放完进入正常活动状态或直接死掉，调一下die或dieOnCollision
+	getHurt(damage);
+}
 
-		void Bird_zwc::dieOnSlamDunk(){ return; }			//精良死法，可做可不做，如果做了请做成软趴趴死在地上的样子。如果被投技直接砸死，调用它会更流畅一点，这是增加流畅性的小trick
-		void Bird_zwc::dieOnCollision(){ return; }			//史诗死法，可做可不做，如果做了请做成被撞死的样子。如果被冲撞直接撞死，调用它会更流畅一点，这是增加流畅性的小trick
+void Bird_zwc::dieOnSlamDunk(){ return; }			//精良死法，可做可不做，如果做了请做成软趴趴死在地上的样子。如果被投技直接砸死，调用它会更流畅一点，这是增加流畅性的小trick
+void Bird_zwc::dieOnCollision(){ return; }			//史诗死法，可做可不做，如果做了请做成被撞死的样子。如果被冲撞直接撞死，调用它会更流畅一点，这是增加流畅性的小trick
 
 
 Bird_zwc::~Bird_zwc()
