@@ -1502,7 +1502,7 @@ HeroSprite::HeroSprite()
 			*/
 			//将targetToSlamDunk扔出去
 			//this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, -60)), MoveBy::create(0.3f, Vec2(0, -75)), nullptr));
-			/*
+			
 			//不妨假设摔下去的速度是每秒5000像素
 			int distanceFromTargetToWaterface = this->targetToSlamDunk->getPositionY() -  this->targetToSlamDunk->getContentSize().height / 2;
 			this->targetToSlamDunk->runAction(Sequence::create(DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL),
@@ -1521,9 +1521,9 @@ HeroSprite::HeroSprite()
 				}),
 				MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 15)),
 				nullptr));
-			*/
+			
 
-			this->targetToSlamDunk->getThrown();
+			//this->targetToSlamDunk->getThrown();
 		}
 		if (*userData->userInfo == slamDunkingBossRecoverAllAbilitiesInfo){
 			this->enableAllAbilities();
@@ -1639,6 +1639,11 @@ HeroSprite::HeroSprite()
 	this->TransformingFromFishToBirdAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_transforming_to_peng_01.png");
 	this->TransformingFromFishToBirdAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_transforming_to_peng_02.png");
 	this->TransformingFromFishToBirdAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_transforming_to_peng_03.png");
+	this->TransformingFromFishToBirdAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_transforming_to_peng_04.png");
+	this->TransformingFromFishToBirdAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_transforming_to_peng_05.png");
+	this->TransformingFromFishToBirdAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_transforming_to_peng_06.png");
+	this->TransformingFromFishToBirdAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_transforming_to_peng_07.png");
+	this->TransformingFromFishToBirdAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_transforming_to_peng_08.png");
 	this->TransformingFromFishToBirdAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->TransformingFromFishToBirdAnimation->setRestoreOriginalFrame(true);
 	this->TransformingFromFishToBirdAnimation->retain();
@@ -1652,8 +1657,8 @@ HeroSprite::HeroSprite()
 	transformingFTBEndInfo["37"] = Value(37);
 
 	this->TransformingFromFishToBirdAnimation->getFrames().at(0)->setUserInfo(transformingFTBStartInfo);
-	this->TransformingFromFishToBirdAnimation->getFrames().at(2)->setUserInfo(transformingFTBRecoverAllAbilitiesInfo);
-	this->TransformingFromFishToBirdAnimation->getFrames().at(3)->setUserInfo(transformingFTBEndInfo);
+	this->TransformingFromFishToBirdAnimation->getFrames().at(6)->setUserInfo(transformingFTBRecoverAllAbilitiesInfo);
+	this->TransformingFromFishToBirdAnimation->getFrames().at(8)->setUserInfo(transformingFTBEndInfo);
 
 
 	EventListenerCustom * transformingFromFishToBirdAnimationFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, transformingFTBStartInfo, transformingFTBRecoverAllAbilitiesInfo, transformingFTBEndInfo](EventCustom * event){
