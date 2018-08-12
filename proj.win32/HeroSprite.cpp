@@ -516,7 +516,15 @@ HeroSprite::HeroSprite()
 	EventListenerCustom * dashingRightAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, dashingRightFrame00Info, dashingCheckIfToTransformInfo, dashingRightFrame02Info, dashingRightFrame03Info](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == dashingRightFrame00Info){
+			Sprite * emission = Sprite::create("characters/kunpeng/emission_00.png");
+			emission->setPosition(this->getPosition());
+			this->getParent()->addChild(emission);
+			emission->runAction(Sequence::create(
+				FadeOut::create(1), 
+				CallFunc::create([emission]{emission->removeFromParent(); }), nullptr));
+
 			this->disableAllAbilities();
+
 			if (this->getPositionY() < ((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY()){
 				this->enableAllAbilities();
 				this->transformFromBirdToFish();
@@ -936,6 +944,9 @@ HeroSprite::HeroSprite()
 			//log("get hurt");
 			this->disableAllAbilities();
 			this->invincible = true;
+			if (this->targetToSlamDunk != nullptr){
+				//this->targetToSlamDunk->wanderAbout();
+			}
 		}
 		if (*userData->userInfo == gettingHurtGeneralRecoverMovabilityInfo){
 			//log("get hurt");
@@ -1140,6 +1151,7 @@ HeroSprite::HeroSprite()
 				double distance = sqrt(deltax*deltax + deltay*deltay);
 				if (distance < (catchEffect->getContentSize().width + enemy->getContentSize().width) * 20 / 100){
 					this->targetToSlamDunk = enemy;
+					enemy->getHeld();
 					log("Caught one!");
 					((Stage1GameplayLayer *)this->getParent())->cameraShake_vertical_slight();
 					break;
@@ -1271,6 +1283,7 @@ HeroSprite::HeroSprite()
 		if (*userData->userInfo == slamDunkThrowInfo){
 			log("Here is slamDunkingEnemyThrowInfo");
 			/*
+			*/
 			//将targetToSlamDunk扔出去
 			//this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, -60)), MoveBy::create(0.3f, Vec2(0, -75)), nullptr));
 
@@ -1278,14 +1291,25 @@ HeroSprite::HeroSprite()
 			int distanceFromTargetToWaterface = this->targetToSlamDunk->getPositionY();
 			this->targetToSlamDunk->runAction(Sequence::create(DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL),
 				MoveBy::create(distanceFromTargetToWaterface / 5000.0, Vec2(0, -distanceFromTargetToWaterface)),
-				CallFunc::create([this]{((Stage1GameplayLayer *)this->getParent())->cameraShake_vertical_significant(); }), 
+				CallFunc::create([this]{
+					if (targetToSlamDunk != nullptr){
+						this->targetToSlamDunk->getSlamDunkOnWater(this->DAMAGE_SLAMDUNK);
+						((Stage1GameplayLayer *)this->getParent())->cameraShake_vertical_significant();
+
+						Sprite * bigSplash = Sprite::create("landscapes/splash_big_00.png");
+						bigSplash->setPositionX(targetToSlamDunk->getPositionX());
+						bigSplash->setPositionY(((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY());
+						this->getParent()->addChild(bigSplash);
+						bigSplash->runAction(Animate::create(this->waterSplashingAnimation_big));
+					}
+				}), 
 				MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 15)),
 				nullptr));
-			*/
-
+			/*
 			if (this->targetToSlamDunk != nullptr){
 				this->targetToSlamDunk->getThrown();
 			}
+			*/
 		}
 		if (*userData->userInfo == slamDunkRecoverAllAbilitiesInfo){
 			this->enableAllAbilities();
@@ -1381,6 +1405,12 @@ HeroSprite::HeroSprite()
 	slamDunkingBossRecoverAllAbilitiesInfo["sd02"] = Value("sd02");
 	slamDunkingBossEndInfo["sd03"] = Value("sd03");
 
+	this->slamDunkingBossRightAnimation->getFrames().at(0)->setUserInfo(slamDunkingBossStartInfo);
+	this->slamDunkingBossRightAnimation->getFrames().at(15)->setUserInfo(slamDunkingBossThrowBossInfo);
+	this->slamDunkingBossRightAnimation->getFrames().at(20)->setUserInfo(slamDunkingBossRecoverAllAbilitiesInfo);
+	this->slamDunkingBossRightAnimation->getFrames().at(24)->setUserInfo(slamDunkingBossEndInfo);
+
+
 	EventListenerCustom * slamDunkingBossFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, slamDunkingBossStartInfo, slamDunkingBossThrowBossInfo, slamDunkingBossRecoverAllAbilitiesInfo, slamDunkingBossEndInfo](EventCustom * event){
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == slamDunkingBossStartInfo){
@@ -1388,7 +1418,26 @@ HeroSprite::HeroSprite()
 			this->disableAllAbilities();
 			this->invincible = true;
 
+
+			if (!this->targetToSlamDunk->isWeak){
+				this->getHurtGeneral(0);
+				return;
+			}
 			if (this->facingRight){
+				this->runAction(Sequence::create(
+					MoveTo::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 1, Vec2(this->targetToSlamDunk->getPositionX() - this->targetToSlamDunk->getContentSize().width / 3, this->targetToSlamDunk->getPositionY() + this->targetToSlamDunk->getContentSize().height / 3)), 
+					DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 3),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 5, Vec2(0, this->targetToSlamDunk->getContentSize().height / 2)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 4, Vec2(0,0)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, this->targetToSlamDunk->getContentSize().height /2 )), 
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, -this->targetToSlamDunk->getContentSize().height)), 
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2 , Vec2(0,0)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 3, Vec2(-this->getContentSize().width, this->getContentSize().height / 2)), 
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(-this->getContentSize().width / 2, 0)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(-this->getContentSize().width / 6, -this->getContentSize().height / 12)),
+					nullptr));
+
+				/*
 				this->targetToSlamDunk->setPosition(this->getPositionX() + 50, this->getPositionY() - 50);
 				this->runAction(Sequence::create(
 					DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 6),
@@ -1403,8 +1452,22 @@ HeroSprite::HeroSprite()
 					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 60)),
 					//MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 15)),
 					nullptr));
+				*/
 			}
 			else if (this->facingLeft){
+				this->runAction(Sequence::create(
+					MoveTo::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 1, Vec2(this->targetToSlamDunk->getPositionX() + this->targetToSlamDunk->getContentSize().width / 3, this->targetToSlamDunk->getPositionY() + this->targetToSlamDunk->getContentSize().height / 3)),
+					DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 3),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 5, Vec2(0, this->targetToSlamDunk->getContentSize().height / 2)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 4, Vec2(0, 0)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, this->targetToSlamDunk->getContentSize().height / 2)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, -this->targetToSlamDunk->getContentSize().height)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(0, 0)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 3, Vec2(this->getContentSize().width, this->getContentSize().height / 2)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(this->getContentSize().width / 2, 0)),
+					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(this->getContentSize().width / 6, -this->getContentSize().height / 12)),
+					nullptr));
+				/*
 				this->targetToSlamDunk->setPosition(this->getPositionX() - 50, this->getPositionY() - 50);
 				this->runAction(Sequence::create(
 					DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 6),
@@ -1419,7 +1482,19 @@ HeroSprite::HeroSprite()
 					MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 60)),
 					//MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 15)),
 					nullptr));
+				*/
 			}
+
+
+			this->targetToSlamDunk->runAction(Sequence::create(
+				DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 4), 
+				MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 5, Vec2(0, this->targetToSlamDunk->getContentSize().height / 2)),
+				MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 4, Vec2(0, 0)),
+				MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, this->targetToSlamDunk->getContentSize().height / 2)),
+				MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, -this->targetToSlamDunk->getContentSize().height)),
+				MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL * 2, Vec2(0, 0)), 
+				nullptr));
+
 		}
 		if (*userData->userInfo == slamDunkingBossThrowBossInfo){
 			log("Here is slamDunkingBossThrowInfo");
@@ -1429,10 +1504,21 @@ HeroSprite::HeroSprite()
 			//this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, -60)), MoveBy::create(0.3f, Vec2(0, -75)), nullptr));
 
 			//不妨假设摔下去的速度是每秒5000像素
-			int distanceFromTargetToWaterface = this->targetToSlamDunk->getPositionY();
+			int distanceFromTargetToWaterface = this->targetToSlamDunk->getPositionY() -  this->targetToSlamDunk->getContentSize().height / 2;
 			this->targetToSlamDunk->runAction(Sequence::create(DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL),
 				MoveBy::create(distanceFromTargetToWaterface / 5000.0, Vec2(0, -distanceFromTargetToWaterface)),
-				CallFunc::create([this]{((Stage1GameplayLayer *)this->getParent())->cameraShake_vertical_significant(); }),
+				CallFunc::create([this]{
+				if (targetToSlamDunk != nullptr){
+					this->targetToSlamDunk->getSlamDunkOnWater(this->DAMAGE_SLAMDUNK);
+					((Stage1GameplayLayer *)this->getParent())->cameraShake_vertical_significant();
+
+					Sprite * bigSplash = Sprite::create("landscapes/splash_big_00.png");
+					bigSplash->setPositionX(targetToSlamDunk->getPositionX());
+					bigSplash->setPositionY(((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY());
+					this->getParent()->addChild(bigSplash);
+					bigSplash->runAction(Animate::create(this->waterSplashingAnimation_big));
+				}
+			}),
 				MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 15)),
 				nullptr));
 		}
@@ -1496,8 +1582,11 @@ HeroSprite::HeroSprite()
 	this->slamDunkingBossLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->slamDunkingBossLeftAnimation->setRestoreOriginalFrame(true);
 	this->slamDunkingBossLeftAnimation->retain();
-	/*
-	*/
+
+	this->slamDunkingBossLeftAnimation->getFrames().at(0)->setUserInfo(slamDunkingBossStartInfo);
+	this->slamDunkingBossLeftAnimation->getFrames().at(15)->setUserInfo(slamDunkingBossThrowBossInfo);
+	this->slamDunkingBossLeftAnimation->getFrames().at(20)->setUserInfo(slamDunkingBossRecoverAllAbilitiesInfo);
+	this->slamDunkingBossLeftAnimation->getFrames().at(24)->setUserInfo(slamDunkingBossEndInfo);
 
 
 
