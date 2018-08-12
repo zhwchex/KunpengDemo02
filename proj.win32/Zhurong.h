@@ -109,9 +109,9 @@ public:
 
 	void die();
 
-	void getSlamDunkOnGround(int damage);
+	//void getSlamDunkOnGround(int damage);
 
-	void getSlamDunkOnWater(int damage);
+	//void getSlamDunkOnWater(int damage);
 
 	void idle();//呆站着，什么也不做
 

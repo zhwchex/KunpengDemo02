@@ -429,11 +429,11 @@ EnemyFish::EnemyFish()
 	EventListenerCustom * newAttackAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, newAttackAnimationReachesLastFrameInfo, newAttackInkBallReleseInfo, newAttackAnimationReachesfirstFrameInfo](EventCustom *event) {
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == newAttackAnimationReachesLastFrameInfo) {
-			log("Last ljjFrame of newAttackAnimation reached.");
+			//log("Last ljjFrame of newAttackAnimation reached.");
 			this->acceptCall = true;
 		}
 		if (*userData->userInfo == newAttackInkBallReleseInfo) {
-			log("NewAttack InkBall release start.");
+			//log("NewAttack InkBall release start.");
 
 			this->acceptCall = false;//在动画开始的第0帧开始禁止外面调用wanderAbout()
 			Sprite * inkBall = Sprite::create("characters/enemyfish/enemyfish_inkBallAttack_00.png");
@@ -587,6 +587,12 @@ EnemyFish* EnemyFish::create(const std::string & filename) {
 	}
 	CC_SAFE_DELETE(mySprite);
 	return nullptr;
+}
+
+void EnemyFish::setGuardPos(int guardPosX, int guardPosY)
+{
+	this->guardPostionX = guardPosX;
+	this->guardPostionY = guardPosY;
 }
 
 /*
@@ -1008,19 +1014,11 @@ void EnemyFish::getSlamDunkOnWater(int)
 
 void EnemyFish::getCollided(int d)
 {
-<<<<<<< HEAD
 	this->getHurt(d);
-	if (((Stage1GameplayLayer*)this->getParent())->getPositionX() < this->getPositionX()) {
-		this->runAction(MoveBy::create(0.2f,Vec2(50,0)));
-	}
-	else {
-=======
-	this->getHurt(damage);
 	if (((Stage1GameplayLayer *)this->getParent())->getPositionX() < this->getPositionX()){
 		this->runAction(MoveBy::create(0.2f, Vec2(50, 0)));
 	}
 	else{
->>>>>>> 830c6dec176c62555fb3c2d08576f0dc91d158db
 		this->runAction(MoveBy::create(0.2f, Vec2(-50, 0)));
 	}
 }
@@ -1034,6 +1032,4 @@ void EnemyFish::die() {
 		this->setPositionY(-11111);
 		this->removeFromParent();
 	}), nullptr));
-
-
 }
