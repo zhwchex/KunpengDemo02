@@ -1,5 +1,6 @@
 #include "Zhurong.h"
 #include "Stage1GameplayLayer.h"
+#include "AudioManager.h"
 #include <iostream>
 using namespace std;
 
@@ -72,6 +73,7 @@ Zhurong::Zhurong()
 
 	//扔的动画
 	this->thrownAnimation = Animation::create();
+	AudioManager::getInstance()->play(boss_hurt, false);
 	this->thrownAnimation->addSpriteFrameWithFileName("characters/zhurong/fall_0.png");
 	this->thrownAnimation->addSpriteFrameWithFileName("characters/zhurong/fall_1.png");
 	this->thrownAnimation->addSpriteFrameWithFileName("characters/zhurong/fall_2.png");
@@ -143,6 +145,7 @@ Zhurong::Zhurong()
 
 	//左受伤
 	this->hurtleftAnimation = Animation::create();
+	AudioManager::getInstance()->play(boss_hurt, false);
 	this->hurtleftAnimation->addSpriteFrameWithFileName("characters/zhurong/hurtleft_0.png");
 	this->hurtleftAnimation->addSpriteFrameWithFileName("characters/zhurong/hurtleft_1.png");
 	this->hurtleftAnimation->addSpriteFrameWithFileName("characters/zhurong/hurtleft_2.png");
@@ -176,6 +179,7 @@ Zhurong::Zhurong()
 
 	//右受伤
 	this->hurtrightAnimation = Animation::create();
+	AudioManager::getInstance()->play(boss_hurt, false);
 	this->hurtrightAnimation->addSpriteFrameWithFileName("characters/zhurong/hurtright_0.png");
 	this->hurtrightAnimation->addSpriteFrameWithFileName("characters/zhurong/hurtright_1.png");
 	this->hurtrightAnimation->addSpriteFrameWithFileName("characters/zhurong/hurtright_2.png");
@@ -209,6 +213,7 @@ Zhurong::Zhurong()
 
 	//左死亡
 	this->dieleftAnimation = Animation::create();
+	AudioManager::getInstance()->play(boss_die, false);
 	this->dieleftAnimation->addSpriteFrameWithFileName("characters/zhurong/dieleft_0.png");
 	this->dieleftAnimation->addSpriteFrameWithFileName("characters/zhurong/dieleft_1.png");
 	this->dieleftAnimation->addSpriteFrameWithFileName("characters/zhurong/dieleft_2.png");
@@ -256,6 +261,7 @@ Zhurong::Zhurong()
 
 	//右死亡
 	this->dierightAnimation = Animation::create();
+	AudioManager::getInstance()->play(boss_die, false);
 	this->dierightAnimation->addSpriteFrameWithFileName("characters/zhurong/dieright_0.png");
 	this->dierightAnimation->addSpriteFrameWithFileName("characters/zhurong/dieright_1.png");
 	this->dierightAnimation->addSpriteFrameWithFileName("characters/zhurong/dieright_2.png");
@@ -302,6 +308,7 @@ Zhurong::Zhurong()
 	
 	//近攻击
 	this->closeAnimation = Animation::create();
+	AudioManager::getInstance()->play(boss_close, false);
 	this->closeAnimation->addSpriteFrameWithFileName("characters/zhurong/shootleft_0.png");//图片没改
 	this->closeAnimation->addSpriteFrameWithFileName("characters/zhurong/shootleft_1.png");
 	this->closeAnimation->addSpriteFrameWithFileName("characters/zhurong/shootleft_2.png");
@@ -359,6 +366,7 @@ Zhurong::Zhurong()
 	//近攻击—-右边
 	
 	this->closerightAnimation = Animation::create();
+	AudioManager::getInstance()->play(boss_close, false);
 	this->closerightAnimation->addSpriteFrameWithFileName("characters/zhurong/shootright_0.png");//图片没改
 	this->closerightAnimation->addSpriteFrameWithFileName("characters/zhurong/shootright_1.png");
 	this->closerightAnimation->addSpriteFrameWithFileName("characters/zhurong/shootright_2.png");
@@ -414,6 +422,7 @@ Zhurong::Zhurong()
 	_eventDispatcher->addEventListenerWithFixedPriority(rightcloseEventListener, -1);
 
 	this->weakfightAnimation = Animation::create();
+	AudioManager::getInstance()->play(boss_hurt, false);
 	this->weakfightAnimation->addSpriteFrameWithFileName("characters/zhurong/shootleft_0.png");//图片没改
 	this->weakfightAnimation->addSpriteFrameWithFileName("characters/zhurong/shootleft_1.png");
 	this->weakfightAnimation->addSpriteFrameWithFileName("characters/zhurong/shootleft_2.png");
@@ -473,6 +482,7 @@ Zhurong::Zhurong()
 
 	//海水温度升高动画
 	this->heatupAnimation = Animation::create();
+	AudioManager::getInstance()->play(boss_sea, false);
 	this->heatupAnimation->addSpriteFrameWithFileName("characters/zhurong/water_0.png");//图片没改
 	this->heatupAnimation->addSpriteFrameWithFileName("characters/zhurong/water_1.png");
 	this->heatupAnimation->addSpriteFrameWithFileName("characters/zhurong/water_2.png");
@@ -571,6 +581,7 @@ Zhurong::Zhurong()
 
 
 	this->shootingFireBallWhileFacingLeftAnimation = Animation::create();
+	AudioManager::getInstance()->play(boss_fire, false);
 	this->shootingFireBallWhileFacingLeftAnimation->addSpriteFrameWithFileName("characters/zhurong/shooting_fireball_while_facing_left_00.png");
 	this->shootingFireBallWhileFacingLeftAnimation->addSpriteFrameWithFileName("characters/zhurong/shooting_fireball_while_facing_left_01.png");
 	this->shootingFireBallWhileFacingLeftAnimation->addSpriteFrameWithFileName("characters/zhurong/shooting_fireball_while_facing_left_02.png");
@@ -668,6 +679,7 @@ Zhurong::Zhurong()
 
 	//不规范的yyh：火球雨动画
 	this->firerainAnimation = Animation::create();
+	AudioManager::getInstance()->play(boss_rain, false);
 	this->firerainAnimation->addSpriteFrameWithFileName("characters/zhurong/firerain_while_facing_left_00.png");
 	this->firerainAnimation->addSpriteFrameWithFileName("characters/zhurong/firerain_while_facing_left_01.png");
 	this->firerainAnimation->addSpriteFrameWithFileName("characters/zhurong/firerain_while_facing_left_02.png");
@@ -1188,6 +1200,8 @@ void Zhurong::getHurtByWind(int damage){
 		health = health - damage;
 		if (health >= 0)
 		{	
+			AudioManager::getInstance()->play(boss_hurt, false);
+			/*
 			if (hero_x - zhu_x > 0)
 			{
 			this->runAction(Animate::create(this->hurtrightAnimation));
@@ -1195,7 +1209,7 @@ void Zhurong::getHurtByWind(int damage){
 			else{
 			this->runAction(Animate::create(this->hurtleftAnimation));
 			}
-
+			*/
 			
 
 		}

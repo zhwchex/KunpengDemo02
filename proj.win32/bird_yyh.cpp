@@ -3,21 +3,32 @@
 #include<math.h>
 #include "Stage1GameplayLayer.h"
 #include "Bullet.h"
+#include "AudioManager.h"
 using namespace std;
 Bird_yyh::Bird_yyh()
 {
 	//auto sprite = cocos2d::Sprite::create();
 	//sprite->setAnchorPoint(cocos2d::Vec2(0, 0));
 	//sprite->setPosition(300, 200);
+	//this->setScale(0.3);
 	this->setAnchorPoint(Point(0.5f, 0.5f));
 	Bullet* bullet = Bullet::create(this);
 	this->addChild(bullet, 1, "bu");
 	this->leftAnimation = Animation::create();
-	this->leftAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/left1.png");
-	this->leftAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/left2.png");
-	this->leftAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/left3.png");
-	this->leftAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/left4.png");
-	this->leftAnimation->setDelayPerUnit(0.3f);  // 设置动画帧率
+	this->leftAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/fightleft1.png");
+	this->leftAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/fightleft2.png");
+	this->leftAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/fightleft3.png");
+	this->leftAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/fightleft4.png");
+	this->leftAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/fightleft5.png");
+	this->leftAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/fightleft6.png");
+	this->leftAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/left7.png");
+	this->leftAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/left8.png");
+	this->leftAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/left9.png");
+	this->leftAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/left10.png");
+	this->leftAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/left11.png");
+	this->leftAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/left12.png");
+	this->leftAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/left13.png");
+	this->leftAnimation->setDelayPerUnit(0.1f);  // 设置动画帧率
 	this->leftAnimation->setRestoreOriginalFrame(true);// 设置动画播放完毕后是否回到第一帧
 	this->leftAnimation->retain();
 
@@ -39,11 +50,20 @@ Bird_yyh::Bird_yyh()
 	this->waterSplashingAnimation->retain();
 
 	this->rightAnimation = Animation::create();
-	this->rightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/right1.png");
-	this->rightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/right2.png");
-	this->rightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/right3.png");
-	this->rightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/right4.png");
-	this->rightAnimation->setDelayPerUnit(0.3f);  // 设置动画帧率
+	this->rightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/fightright1.png");
+	this->rightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/fightright2.png");
+	this->rightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/fightright3.png");
+	this->rightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/fightright4.png");
+	this->rightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/fightright5.png");
+	this->rightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/fightright6.png");
+	this->rightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/right7.png");
+	this->rightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/right8.png");
+	this->rightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/right9.png");
+	this->rightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/right10.png");
+	this->rightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/right11.png");
+	this->rightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/right12.png");
+	this->rightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/right13.png");
+	this->rightAnimation->setDelayPerUnit(0.1f);  // 设置动画帧率
 	this->rightAnimation->setRestoreOriginalFrame(true);// 设置动画播放完毕后是否回到第一帧
 	this->rightAnimation->retain();
 
@@ -57,7 +77,10 @@ Bird_yyh::Bird_yyh()
 	this->leftturnAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/leftturn7.png");
 	this->leftturnAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/leftturn8.png");
 	this->leftturnAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/leftturn9.png");
-	this->leftturnAnimation->setDelayPerUnit(0.2f);  // 设置动画帧率
+	this->leftturnAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/leftturn10.png");
+	this->leftturnAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/leftturn11.png");
+	this->leftturnAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/leftturn12.png");
+	this->leftturnAnimation->setDelayPerUnit(0.1f);  // 设置动画帧率
 	this->leftturnAnimation->setRestoreOriginalFrame(true);// 设置动画播放完毕后是否回到第一帧
 	this->leftturnAnimation->retain();
 
@@ -71,43 +94,54 @@ Bird_yyh::Bird_yyh()
 	this->rightturnAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/rightturn7.png");
 	this->rightturnAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/rightturn8.png");
 	this->rightturnAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/rightturn9.png");
-	this->rightturnAnimation->setDelayPerUnit(0.2f);  // 设置动画帧率
+	this->rightturnAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/rightturn10.png");
+	this->rightturnAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/rightturn11.png");
+	this->rightturnAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/rightturn12.png");
+	this->rightturnAnimation->setDelayPerUnit(0.1f);  // 设置动画帧率
 	this->rightturnAnimation->setRestoreOriginalFrame(true);// 设置动画播放完毕后是否回到第一帧
 	this->rightturnAnimation->retain();
 
 	this->lefthurtAnimation = Animation::create();
+	//AudioManager::getInstance()->play(boss_hurt, false);
 	this->lefthurtAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/hurtleft1.png");
 	this->lefthurtAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/hurtleft2.png");
 	this->lefthurtAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/hurtleft3.png");
 	this->lefthurtAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/hurtleft4.png");
-	this->lefthurtAnimation->setDelayPerUnit(0.5f);  // 设置动画帧率
+	this->lefthurtAnimation->setDelayPerUnit(0.25f);  // 设置动画帧率
 	this->lefthurtAnimation->setRestoreOriginalFrame(true);// 设置动画播放完毕后是否回到第一帧
 	this->lefthurtAnimation->retain();
 
 	this->righthurtAnimation = Animation::create();
+	//AudioManager::getInstance()->play(MONSTER_HURT_FILE_NAME, false);
 	this->righthurtAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/hurtright1.png");
 	this->righthurtAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/hurtright2.png");
 	this->righthurtAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/hurtright3.png");
 	this->righthurtAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/hurtright4.png");
-	this->righthurtAnimation->setDelayPerUnit(0.5f);  // 设置动画帧率
+	this->righthurtAnimation->setDelayPerUnit(0.25f);  // 设置动画帧率
 	this->righthurtAnimation->setRestoreOriginalFrame(true);// 设置动画播放完毕后是否回到第一帧
 	this->righthurtAnimation->retain();
 
 	this->leftdieAnimation = Animation::create();
-	this->leftdieAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/bird2.png");
+	this->leftdieAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/dieleft1.png");
 	this->leftdieAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/dieleft2.png");
 	this->leftdieAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/dieleft3.png");
 	this->leftdieAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/dieleft4.png");
-	this->leftdieAnimation->setDelayPerUnit(0.5f);  // 设置动画帧率
+	this->leftdieAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/dieleft5.png");
+	this->leftdieAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/dieleft6.png");
+	this->leftdieAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/dieleft7.png");
+	this->leftdieAnimation->setDelayPerUnit(0.2f);  // 设置动画帧率
 	this->leftdieAnimation->setRestoreOriginalFrame(true);// 设置动画播放完毕后是否回到第一帧
 	this->leftdieAnimation->retain();
 
 	this->rightdieAnimation = Animation::create();
-	this->rightdieAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/bird3.png");
+	this->rightdieAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/dieright1.png");
 	this->rightdieAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/dieright2.png");
 	this->rightdieAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/dieright3.png");
 	this->rightdieAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/dieright4.png");
-	this->rightdieAnimation->setDelayPerUnit(0.5f);  // 设置动画帧率
+	this->rightdieAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/dieright5.png");
+	this->rightdieAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/dieright6.png");
+	this->rightdieAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/dieright7.png");
+	this->rightdieAnimation->setDelayPerUnit(0.2f);  // 设置动画帧率
 	this->rightdieAnimation->setRestoreOriginalFrame(true);// 设置动画播放完毕后是否回到第一帧
 	this->rightdieAnimation->retain();
 
@@ -116,7 +150,9 @@ Bird_yyh::Bird_yyh()
 	this->leftfightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/fightleft2.png");
 	this->leftfightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/fightleft3.png");
 	this->leftfightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/fightleft4.png");
-	this->leftfightAnimation->setDelayPerUnit(0.25f);  // 设置动画帧率
+	this->leftfightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/fightleft5.png");
+	this->leftfightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/fightleft6.png");
+	this->leftfightAnimation->setDelayPerUnit(0.2f);  // 设置动画帧率
 	this->leftfightAnimation->setRestoreOriginalFrame(true);// 设置动画播放完毕后是否回到第一帧
 	this->leftfightAnimation->retain();
 
@@ -125,7 +161,9 @@ Bird_yyh::Bird_yyh()
 	this->rightfightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/fightright2.png");
 	this->rightfightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/fightright3.png");
 	this->rightfightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/fightright4.png");
-	this->rightfightAnimation->setDelayPerUnit(0.25f);  // 设置动画帧率
+	this->rightfightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/fightright5.png");
+	this->rightfightAnimation->addSpriteFrameWithFileName("characters/Bird_yyh/fightright6.png");
+	this->rightfightAnimation->setDelayPerUnit(0.2f);  // 设置动画帧率
 	this->rightfightAnimation->setRestoreOriginalFrame(true);// 设置动画播放完毕后是否回到第一帧
 	this->rightfightAnimation->retain();
 
@@ -286,6 +324,7 @@ void Bird_yyh::wanderAbout(){
 				lockBirdWithinLandscape();
 				if (flag == 0 && dieflag == 0){
 					temp_bullet->schedule(schedule_selector(Bullet::ShootBullet), 2.0f);
+					//Lockfightleft();
 					//cout << "come in" << endl;
 					//this->runAction(Animate::create(this->rightAnimation));
 					/*
@@ -343,7 +382,7 @@ void Bird_yyh::Lockright(){
 	if (lock == 0){
 		lock = 1;
 		this->runAction(Animate::create(this->rightAnimation));
-		auto delayTime = DelayTime::create(1.0f);
+		auto delayTime = DelayTime::create(1.2f);
 		auto func = CallFunc::create([this](){ lock = 0; });
 		auto seq = Sequence::create(delayTime, func, nullptr);
 		this -> runAction(seq);
@@ -351,14 +390,19 @@ void Bird_yyh::Lockright(){
 	
 }
 void Bird_yyh::Lockfightleft(){
-	if (lock == 0){
+	
+
+	if (lock == 0 ){
 		lock = 1;
+		fight_lock = 1;
+		//this->runAction(RepeatForever::create(Animate::create(this->leftfightAnimation)));
 		this->runAction(Animate::create(this->leftfightAnimation));
-		auto delayTime = DelayTime::create(1.0f);
-		auto func = CallFunc::create([this](){ lock = 0; });
+		auto delayTime = DelayTime::create(1.2f);
+		auto func = CallFunc::create([this](){ lock = 0; fight_lock = 0; });
 		auto seq = Sequence::create(delayTime, func, nullptr);
 		this->runAction(seq);
 	}
+
 
 }
 
@@ -366,7 +410,7 @@ void Bird_yyh::Lockfightright(){
 	if (lock == 0){
 		lock = 1;
 		this->runAction(Animate::create(this->rightfightAnimation));
-		auto delayTime = DelayTime::create(1.0f);
+		auto delayTime = DelayTime::create(1.2f);
 		auto func = CallFunc::create([this](){ lock = 0; });
 		auto seq = Sequence::create(delayTime, func, nullptr);
 		this->runAction(seq);
@@ -394,7 +438,7 @@ void Bird_yyh::Lockleft(){
 	if (lock == 0){
 		lock = 1;
 		this->runAction(Animate::create(this->leftAnimation));
-		auto delayTime = DelayTime::create(1.0f);
+		auto delayTime = DelayTime::create(1.2f);
 		auto func = CallFunc::create([this](){ lock = 0; });
 		auto seq = Sequence::create(delayTime, func, nullptr);
 		this->runAction(seq);
@@ -415,7 +459,7 @@ void Bird_yyh::Lockturnleft(int type){
 			auto left = Animate::create(this->leftAnimation);
 			//Sequence* sequence = Sequence::create(rightturn, left, NULL);
 			//this->runAction(rightturn);
-			auto delayTime = DelayTime::create(1.8f);
+			//auto delayTime = DelayTime::create(1.2f);
 			auto func = CallFunc::create([this](){  lock = 0;  });
 			auto seq = Sequence::create(rightturn,left, func, nullptr);
 			
@@ -459,7 +503,7 @@ void Bird_yyh::Lockturnright(int type){
 			auto right = Animate::create(this->rightAnimation);
 			//Sequence* sequence = Sequence::create(leftturn, right, NULL);
 			//this->runAction(leftturn);
-			auto delayTime = DelayTime::create(1.8f);
+			//auto delayTime = DelayTime::create(1.2f);
 			auto func = CallFunc::create([this](){ lock = 0;  });
 			auto seq = Sequence::create(leftturn,right, func, nullptr);
 			this->runAction(seq);
@@ -469,7 +513,7 @@ void Bird_yyh::Lockturnright(int type){
 			auto an = Animate::create(this->rightAnimation);
 			this->runAction(an);
 			
-			auto delayTime = DelayTime::create(1.1f);
+			auto delayTime = DelayTime::create(1.2f);
 			auto func = CallFunc::create([this](){ dir = 1; lock = 0; });
 			auto seq = Sequence::create(delayTime, func, nullptr);
 			this->runAction(seq);
@@ -575,7 +619,7 @@ void Bird_yyh::getSlamDunkOnWater(int damage){
 				this->runAction(Animate::create(lefthurtAnimation));
 			if (dir == 1)
 				this->runAction(Animate::create(righthurtAnimation));
-			auto delayTime = DelayTime::create(2.0f);
+			auto delayTime = DelayTime::create(1.0f);
 			auto func = CallFunc::create([this](){ pauseflag = 0; lock = 0; flag = 0; thrownflag = 0; wa->removeFromParent(); });
 			auto seq = Sequence::create(delayTime, func, nullptr);
 			this->runAction(seq);
@@ -588,7 +632,7 @@ void Bird_yyh::getSlamDunkOnWater(int damage){
 			if (dir == 1)
 				this->runAction(Animate::create(rightdieAnimation));
 
-			auto delayTime = DelayTime::create(2.0f);
+			auto delayTime = DelayTime::create(1.4f);
 			auto func = CallFunc::create([this](){
 				auto temp = (Stage1GameplayLayer*)this->getParent();
 				temp->removeChild(this);
@@ -629,7 +673,7 @@ void Bird_yyh::getCollided(int damage){
 				this->runAction(Animate::create(lefthurtAnimation));
 			if (dir == 1)
 				this->runAction(Animate::create(righthurtAnimation));
-			auto delayTime = DelayTime::create(2.0f);
+			auto delayTime = DelayTime::create(1.0f);
 			auto func = CallFunc::create([this](){ pauseflag = 0; lock = 0; flag = 0; });
 			auto seq = Sequence::create(delayTime, func, nullptr);
 			this->runAction(seq);
@@ -642,7 +686,7 @@ void Bird_yyh::getCollided(int damage){
 			if (dir == 1)
 				this->runAction(Animate::create(rightdieAnimation));
 
-			auto delayTime = DelayTime::create(2.0f);
+			auto delayTime = DelayTime::create(1.4f);
 			auto func = CallFunc::create([this](){
 				auto temp = (Stage1GameplayLayer*)this->getParent();
 				temp->removeChild(this);
@@ -680,7 +724,7 @@ void Bird_yyh::getHurtByWind(int damage){
 				this->runAction(Animate::create(lefthurtAnimation));
 			if (dir == 1)
 				this->runAction(Animate::create(righthurtAnimation));
-			auto delayTime = DelayTime::create(2.0f);
+			auto delayTime = DelayTime::create(1.0f);
 			auto func = CallFunc::create([this](){ pauseflag = 0; lock = 0; flag = 0; });
 			auto seq = Sequence::create(delayTime, func, nullptr);
 			this->runAction(seq);
@@ -693,7 +737,7 @@ void Bird_yyh::getHurtByWind(int damage){
 			if (dir == 1)
 				this->runAction(Animate::create(rightdieAnimation));
 
-			auto delayTime = DelayTime::create(2.0f);
+			auto delayTime = DelayTime::create(1.4f);
 			auto func = CallFunc::create([this](){
 				auto temp = (Stage1GameplayLayer*)this->getParent();
 				temp->removeChild(this);
