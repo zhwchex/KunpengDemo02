@@ -5,12 +5,12 @@
 
 USING_NS_CC;
 using namespace std;
-static const string ROCK_FILE_NAME = "landscapes/jiaoshi_5.png";
+static const string THUNDERCLOUD_FILE_NAME = "audios/monster_hurt.mp3";
 
-class Rock : public GeneralUnit
+class ThunderCloud : public GeneralUnit
 {
 public:
-	static Rock* create(const std::string & filename);
+	static ThunderCloud* create(const std::string & filename);
 
 	void onEnter();
 
@@ -22,12 +22,14 @@ public:
 	void Lockhoving();
 
 	int lock = 0;
-
-	Rock();
-	~Rock();
+	
+	ThunderCloud();
+	~ThunderCloud();
 
 	Animation * hoveringAnimation;
 
 };
+
+
 
 

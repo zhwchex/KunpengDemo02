@@ -5,12 +5,12 @@
 
 USING_NS_CC;
 using namespace std;
-static const string ROCK_FILE_NAME = "landscapes/jiaoshi_5.png";
+static const string STROM_FILE_NAME = "audios/monster_hurt.mp3";
 
-class Rock : public GeneralUnit
+class Storm : public GeneralUnit
 {
 public:
-	static Rock* create(const std::string & filename);
+	static Storm* create(const std::string & filename);
 
 	void onEnter();
 
@@ -23,11 +23,12 @@ public:
 
 	int lock = 0;
 
-	Rock();
-	~Rock();
+	Storm();
+	~Storm();
 
 	Animation * hoveringAnimation;
 
 };
+
 
 
