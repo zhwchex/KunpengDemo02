@@ -21,6 +21,7 @@ public:
 
 	Bird_yyh();
 	~Bird_yyh();
+	void getSlamDunkOnGround(int damage);
 	int health = 100;
 	int flag = 0;
 	int dir = 0;
@@ -59,7 +60,7 @@ public:
 	void getHurtByWater(int damage);
 	void getHeld();
 	void getThrown();
-	void getSlamDunkOnGround(int damage);
+	//void getSlamDunkOnGround(int damage);
 	void getSlamDunkOnWater(int damage);
 	void getCollided(int damage);
 

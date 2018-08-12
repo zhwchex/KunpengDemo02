@@ -10,14 +10,13 @@ EnemyFish::EnemyFish()
 
 	//å·¦æ‚¬å?
 	this->hoveringLeftAnimation = Animation::create();
-	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
-	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_facing_left_01.png");
-	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_facing_left_02.png");
-	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_facing_left_03.png");
-	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_facing_left_04.png");
-	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_facing_left_05.png");
-	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_facing_left_06.png");
-	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_facing_left_07.png");
+	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_00.png");
+	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_01.png");
+	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_02.png");
+	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_03.png");
+	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_04.png");
+	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_05.png");
+	this->hoveringLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_06.png");
 	this->hoveringLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->hoveringLeftAnimation->setRestoreOriginalFrame(true);
 	this->hoveringLeftAnimation->retain();
@@ -30,7 +29,7 @@ EnemyFish::EnemyFish()
 
 	this->hoveringLeftAnimation->getFrames().at(0)->setUserInfo(hoveringLeftAnimationReachesfirstFrameInfo);
 
-	this->hoveringLeftAnimation->getFrames().at(7)->setUserInfo(hoveringLeftAnimationReachesLastFrameInfo);
+	this->hoveringLeftAnimation->getFrames().at(6)->setUserInfo(hoveringLeftAnimationReachesLastFrameInfo);
 
 	EventListenerCustom * hoveringLeftAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, hoveringLeftAnimationReachesLastFrameInfo, hoveringLeftAnimationReachesfirstFrameInfo](EventCustom *event) {
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
@@ -47,14 +46,13 @@ EnemyFish::EnemyFish()
 
 	//å³æ‚¬å?
 	this->hoveringRightAnimation = Animation::create();
-	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_facing_right_00.png");
-	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_facing_right_01.png");
-	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_facing_right_02.png");
-	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_facing_right_03.png");
-	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_facing_right_04.png");
-	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_facing_right_05.png");
-	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_facing_right_06.png");
-	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_facing_right_07.png");
+	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_00.png");
+	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_01.png");
+	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_02.png");
+	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_03.png");
+	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_04.png");
+	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_05.png");
+	this->hoveringRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_06.png");
 	this->hoveringRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->hoveringRightAnimation->setRestoreOriginalFrame(true);
 	this->hoveringRightAnimation->retain();
@@ -67,7 +65,7 @@ EnemyFish::EnemyFish()
 
 	this->hoveringRightAnimation->getFrames().at(0)->setUserInfo(hoveringRightAnimationReachesfirstFrameInfo);
 
-	this->hoveringRightAnimation->getFrames().at(7)->setUserInfo(hoveringRightAnimationReachesLastFrameInfo);
+	this->hoveringRightAnimation->getFrames().at(6)->setUserInfo(hoveringRightAnimationReachesLastFrameInfo);
 
 	EventListenerCustom * hoveringRightAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, hoveringRightAnimationReachesLastFrameInfo, hoveringRightAnimationReachesfirstFrameInfo](EventCustom *event) {
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
@@ -84,14 +82,13 @@ EnemyFish::EnemyFish()
 
 	//ä¸Šç§»åŠ?
 	this->movingUpAnimation = Animation::create();
-	this->movingUpAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_up_00.png");
-	this->movingUpAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_up_01.png");
-	this->movingUpAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_up_02.png");
-	this->movingUpAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_up_03.png");
-	this->movingUpAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_up_04.png");
-	this->movingUpAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_up_05.png");
-	this->movingUpAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_up_06.png");
-	this->movingUpAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_up_07.png");
+	this->movingUpAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_00.png");
+	this->movingUpAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_01.png");
+	this->movingUpAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_02.png");
+	this->movingUpAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_03.png");
+	this->movingUpAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_04.png");
+	this->movingUpAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_05.png");
+	this->movingUpAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_06.png");
 	this->movingUpAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingUpAnimation->setRestoreOriginalFrame(true);
 	this->movingUpAnimation->retain();
@@ -104,7 +101,7 @@ EnemyFish::EnemyFish()
 
 	this->movingUpAnimation->getFrames().at(0)->setUserInfo(movingUpAnimationReachesfirstFrameInfo);
 
-	this->movingUpAnimation->getFrames().at(7)->setUserInfo(movingUpAnimationReachesLastFrameInfo);
+	this->movingUpAnimation->getFrames().at(6)->setUserInfo(movingUpAnimationReachesLastFrameInfo);
 
 	EventListenerCustom * movingUpAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, movingUpAnimationReachesLastFrameInfo, movingUpAnimationReachesfirstFrameInfo](EventCustom *event) {
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
@@ -121,14 +118,13 @@ EnemyFish::EnemyFish()
 
 	//ä¸‹ç§»åŠ?
 	this->movingDownAnimation = Animation::create();
-	this->movingDownAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_down_00.png");
-	this->movingDownAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_down_01.png");
-	this->movingDownAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_down_02.png");
-	this->movingDownAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_down_03.png");
-	this->movingDownAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_down_04.png");
-	this->movingDownAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_down_05.png");
-	this->movingDownAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_down_06.png");
-	this->movingDownAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_down_07.png");
+	this->movingDownAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_00.png");
+	this->movingDownAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_01.png");
+	this->movingDownAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_02.png");
+	this->movingDownAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_03.png");
+	this->movingDownAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_04.png");
+	this->movingDownAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_05.png");
+	this->movingDownAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_06.png");
 	this->movingDownAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingDownAnimation->setRestoreOriginalFrame(true);
 	this->movingDownAnimation->retain();
@@ -141,7 +137,7 @@ EnemyFish::EnemyFish()
 
 	this->movingDownAnimation->getFrames().at(0)->setUserInfo(movingDownAnimationReachesfirstFrameInfo);
 
-	this->movingDownAnimation->getFrames().at(7)->setUserInfo(movingDownAnimationReachesLastFrameInfo);
+	this->movingDownAnimation->getFrames().at(6)->setUserInfo(movingDownAnimationReachesLastFrameInfo);
 
 	EventListenerCustom * movingDownAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, movingDownAnimationReachesLastFrameInfo, movingDownAnimationReachesfirstFrameInfo](EventCustom *event) {
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
@@ -158,14 +154,13 @@ EnemyFish::EnemyFish()
 
 	//å·¦ç§»åŠ?
 	this->movingLeftAnimation = Animation::create();
-	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_00.png");
-	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_01.png");
-	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_02.png");
-	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_03.png");
-	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_04.png");
-	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_05.png");
-	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_06.png");
-	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_07.png");
+	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_00.png");
+	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_01.png");
+	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_02.png");
+	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_03.png");
+	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_04.png");
+	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_05.png");
+	this->movingLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_06.png");
 	this->movingLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingLeftAnimation->setRestoreOriginalFrame(true);
 	this->movingLeftAnimation->retain();
@@ -178,7 +173,7 @@ EnemyFish::EnemyFish()
 
 	this->movingLeftAnimation->getFrames().at(0)->setUserInfo(movingLeftAnimationReachesfirstFrameInfo);
 
-	this->movingLeftAnimation->getFrames().at(7)->setUserInfo(movingLeftAnimationReachesLastFrameInfo);
+	this->movingLeftAnimation->getFrames().at(6)->setUserInfo(movingLeftAnimationReachesLastFrameInfo);
 
 	EventListenerCustom * movingLeftAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, movingLeftAnimationReachesLastFrameInfo, movingLeftAnimationReachesfirstFrameInfo](EventCustom *event) {
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
@@ -195,14 +190,13 @@ EnemyFish::EnemyFish()
 
 	//å³ç§»åŠ?
 	this->movingRightAnimation = Animation::create();
-	this->movingRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_00.png");
-	this->movingRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_01.png");
-	this->movingRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_02.png");
-	this->movingRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_03.png");
-	this->movingRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_04.png");
-	this->movingRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_05.png");
-	this->movingRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_06.png");
-	this->movingRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_07.png");
+	this->movingRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_00.png");
+	this->movingRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_01.png");
+	this->movingRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_02.png");
+	this->movingRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_03.png");
+	this->movingRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_04.png");
+	this->movingRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_05.png");
+	this->movingRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_06.png");
 	this->movingRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingRightAnimation->setRestoreOriginalFrame(true);
 	this->movingRightAnimation->retain();
@@ -215,7 +209,7 @@ EnemyFish::EnemyFish()
 
 	this->movingRightAnimation->getFrames().at(0)->setUserInfo(movingRightAnimationReachesfirstFrameInfo);
 
-	this->movingRightAnimation->getFrames().at(7)->setUserInfo(movingRightAnimationReachesLastFrameInfo);
+	this->movingRightAnimation->getFrames().at(6)->setUserInfo(movingRightAnimationReachesLastFrameInfo);
 
 	EventListenerCustom * movingRightAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, movingRightAnimationReachesLastFrameInfo, movingRightAnimationReachesfirstFrameInfo](EventCustom *event) {
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
@@ -232,14 +226,13 @@ EnemyFish::EnemyFish()
 
 	//å³ä¸Šç§»åŠ¨
 	this->movingUpRightAnimation = Animation::create();
-	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_00.png");
-	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_01.png");
-	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_02.png");
-	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_03.png");
-	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_04.png");
-	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_05.png");
-	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_06.png");
-	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_07.png");
+	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_00.png");
+	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_01.png");
+	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_02.png");
+	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_03.png");
+	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_04.png");
+	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_05.png");
+	this->movingUpRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_06.png");
 	this->movingUpRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingUpRightAnimation->setRestoreOriginalFrame(true);
 	this->movingUpRightAnimation->retain();
@@ -252,7 +245,7 @@ EnemyFish::EnemyFish()
 
 	this->movingUpRightAnimation->getFrames().at(0)->setUserInfo(movingUpRightAnimationReachesfirstFrameInfo);
 
-	this->movingUpRightAnimation->getFrames().at(7)->setUserInfo(movingUpRightAnimationReachesLastFrameInfo);
+	this->movingUpRightAnimation->getFrames().at(6)->setUserInfo(movingUpRightAnimationReachesLastFrameInfo);
 
 	EventListenerCustom * movingUpRightAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, movingUpRightAnimationReachesLastFrameInfo, movingUpRightAnimationReachesfirstFrameInfo](EventCustom *event) {
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
@@ -269,14 +262,13 @@ EnemyFish::EnemyFish()
 
 	//å³ä¸‹ç§»åŠ¨
 	this->movingDownRightAnimation = Animation::create();
-	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_00.png");
-	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_01.png");
-	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_02.png");
-	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_03.png");
-	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_04.png");
-	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_05.png");
-	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_06.png");
-	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_right_07.png");
+	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_00.png");
+	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_01.png");
+	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_02.png");
+	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_03.png");
+	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_04.png");
+	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_05.png");
+	this->movingDownRightAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_06.png");
 	this->movingDownRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingDownRightAnimation->setRestoreOriginalFrame(true);
 	this->movingDownRightAnimation->retain();
@@ -289,7 +281,7 @@ EnemyFish::EnemyFish()
 
 	this->movingDownRightAnimation->getFrames().at(0)->setUserInfo(movingDownRightAnimationReachesfirstFrameInfo);
 
-	this->movingDownRightAnimation->getFrames().at(7)->setUserInfo(movingDownRightAnimationReachesLastFrameInfo);
+	this->movingDownRightAnimation->getFrames().at(6)->setUserInfo(movingDownRightAnimationReachesLastFrameInfo);
 
 	EventListenerCustom * movingDownRightAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, movingDownRightAnimationReachesLastFrameInfo, movingDownRightAnimationReachesfirstFrameInfo](EventCustom *event) {
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
@@ -306,14 +298,13 @@ EnemyFish::EnemyFish()
 
 	//å·¦ä¸Šç§»åŠ¨
 	this->movingUpLeftAnimation = Animation::create();
-	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_00.png");
-	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_01.png");
-	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_02.png");
-	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_03.png");
-	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_04.png");
-	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_05.png");
-	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_06.png");
-	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_07.png");
+	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_00.png");
+	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_01.png");
+	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_02.png");
+	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_03.png");
+	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_04.png");
+	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_05.png");
+	this->movingUpLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_06.png");
 	this->movingUpLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingUpLeftAnimation->setRestoreOriginalFrame(true);
 	this->movingUpLeftAnimation->retain();
@@ -326,7 +317,7 @@ EnemyFish::EnemyFish()
 
 	this->movingUpLeftAnimation->getFrames().at(0)->setUserInfo(movingUpLeftAnimationReachesfirstFrameInfo);
 
-	this->movingUpLeftAnimation->getFrames().at(7)->setUserInfo(movingUpLeftAnimationReachesLastFrameInfo);
+	this->movingUpLeftAnimation->getFrames().at(6)->setUserInfo(movingUpLeftAnimationReachesLastFrameInfo);
 
 	EventListenerCustom * movingUpLeftAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, movingUpLeftAnimationReachesLastFrameInfo, movingUpLeftAnimationReachesfirstFrameInfo](EventCustom *event) {
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
@@ -343,14 +334,13 @@ EnemyFish::EnemyFish()
 
 	//å·¦ä¸‹ç§»åŠ¨
 	this->movingDownLeftAnimation = Animation::create();
-	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_00.png");
-	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_01.png");
-	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_02.png");
-	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_03.png");
-	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_04.png");
-	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_05.png");
-	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_06.png");
-	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_moving_facing_left_07.png");
+	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_00.png");
+	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_01.png");
+	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_02.png");
+	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_03.png");
+	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_04.png");
+	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_05.png");
+	this->movingDownLeftAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_hovering_06.png");
 	this->movingDownLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingDownLeftAnimation->setRestoreOriginalFrame(true);
 	this->movingDownLeftAnimation->retain();
@@ -363,7 +353,7 @@ EnemyFish::EnemyFish()
 
 	this->movingDownLeftAnimation->getFrames().at(0)->setUserInfo(movingDownLeftAnimationReachesfirstFrameInfo);
 
-	this->movingDownLeftAnimation->getFrames().at(7)->setUserInfo(movingDownLeftAnimationReachesLastFrameInfo);
+	this->movingDownLeftAnimation->getFrames().at(6)->setUserInfo(movingDownLeftAnimationReachesLastFrameInfo);
 
 	EventListenerCustom * movingDownLeftAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, movingDownLeftAnimationReachesLastFrameInfo, movingDownLeftAnimationReachesfirstFrameInfo](EventCustom *event) {
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
@@ -378,6 +368,7 @@ EnemyFish::EnemyFish()
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(movingDownLeftAnimationFrameEventListener, -1);
 
+	/*
 	//æ”»å‡»
 	this->attackAnimation = Animation::create();
 	this->attackAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_attack_00.png");
@@ -410,13 +401,15 @@ EnemyFish::EnemyFish()
 		}
 	});
 	_eventDispatcher->addEventListenerWithFixedPriority(attackAnimationFrameEventListener, -1);
-
+*/
 	//attack update
 	this->newAttackAnimation = Animation::create();
-	this->newAttackAnimation->addSpriteFrameWithFileName("characters/enemyfish/new_enemyfish_Attack_00.png");
-	this->newAttackAnimation->addSpriteFrameWithFileName("characters/enemyfish/new_enemyfish_Attack_01.png");
-	this->newAttackAnimation->addSpriteFrameWithFileName("characters/enemyfish/new_enemyfish_Attack_02.png");
-	this->newAttackAnimation->addSpriteFrameWithFileName("characters/enemyfish/new_enemyfish_Attack_03.png");
+	this->newAttackAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_attack_00.png");
+	this->newAttackAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_attack_01.png");
+	this->newAttackAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_attack_02.png");
+	this->newAttackAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_attack_03.png");
+	this->newAttackAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_attack_04.png");
+	this->newAttackAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_attack_05.png");
 	this->newAttackAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->newAttackAnimation->setRestoreOriginalFrame(true);
 	this->newAttackAnimation->retain();
@@ -431,37 +424,28 @@ EnemyFish::EnemyFish()
 
 	this->newAttackAnimation->getFrames().at(0)->setUserInfo(newAttackAnimationReachesfirstFrameInfo);
 	this->newAttackAnimation->getFrames().at(1)->setUserInfo(newAttackInkBallReleseInfo);
-	this->newAttackAnimation->getFrames().at(3)->setUserInfo(newAttackAnimationReachesLastFrameInfo);
+	this->newAttackAnimation->getFrames().at(5)->setUserInfo(newAttackAnimationReachesLastFrameInfo);
 
 	EventListenerCustom * newAttackAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, newAttackAnimationReachesLastFrameInfo, newAttackInkBallReleseInfo, newAttackAnimationReachesfirstFrameInfo](EventCustom *event) {
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
 		if (*userData->userInfo == newAttackAnimationReachesLastFrameInfo) {
-			log("Last ljjFrame of newAttackAnimation reached.");
+			//log("Last ljjFrame of newAttackAnimation reached.");
 			this->acceptCall = true;
 		}
 		if (*userData->userInfo == newAttackInkBallReleseInfo) {
-			log("NewAttack InkBall release start.");
+			//log("NewAttack InkBall release start.");
 
 			this->acceptCall = false;//在动画开始的第0帧开始禁止外面调用wanderAbout()
 			Sprite * inkBall = Sprite::create("characters/enemyfish/enemyfish_inkBallAttack_00.png");
 			HeroSprite * hero = ((Stage1GameplayLayer *)this->getParent())->kunpeng;
-			Point zhu = this->getPosition();
-			Point biginkBall = Vec2(zhu.x - 120, zhu.y + 150);
-			inkBall->setPosition(biginkBall);
+			Point fish = this->getPosition();
+			Point inkBallPos = Vec2(fish.x-50, fish.y);
+			inkBall->setPosition(inkBallPos);
 			ink_con = inkBall;
 			this->getParent()->addChild(inkBall);
-			int deltax = hero->getPositionX() - inkBall->getPositionX();
-			int deltay = hero->getPositionY() - inkBall->getPositionY();
-			Animation * fireanimation = Animation::create();
-			fireanimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_inkBallAttack_00.png");
-			fireanimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_inkBallAttack_02.png");
 
-			fireanimation->setDelayPerUnit(this->ANIMATION_FRAME_INTERVAL);
-			fireanimation->setRestoreOriginalFrame(true);
-			fireanimation->retain();
-			inkBall->runAction(Animate::create(fireanimation));
-			auto delayTime = DelayTime::create(this->ANIMATION_FRAME_INTERVAL * 4);
-			auto func = CallFunc::create([this]() {
+			auto delayTime = DelayTime::create(this->ANIMATION_FRAME_INTERVAL);
+			auto inkBallAttackFunc = CallFunc::create([this]() {
 
 				Sprite * hero = ((Stage1GameplayLayer *)this->getParent())->kunpeng;
 				Point fish = this->getPosition();
@@ -473,7 +457,7 @@ EnemyFish::EnemyFish()
 
 				ink_con->runAction(RepeatForever::create(MoveBy::create(distance / 200, Vec2(deltax, deltay))));
 				ink_con->runAction(RepeatForever::create(Animate::create(this->inkBallAttackAnimation))); });
-			auto seq = Sequence::create(delayTime, func, nullptr);
+			auto seq = Sequence::create(delayTime, inkBallAttackFunc, nullptr);
 			inkBall->runAction(seq);
 
 		}
@@ -486,9 +470,9 @@ EnemyFish::EnemyFish()
 
 	//ink ball attack
 	this->inkBallAttackAnimation = Animation::create();
-	this->inkBallAttackAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_inkBallAttack_00.png");
-	this->inkBallAttackAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_inkBallAttack_01.png");
-	this->inkBallAttackAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_inkBallAttack_02.png");
+	this->inkBallAttackAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_inkballAttack_01.png");
+	this->inkBallAttackAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_inkballAttack_01.png");
+	this->inkBallAttackAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_inkballAttack_01.png");
 	this->inkBallAttackAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->inkBallAttackAnimation->setRestoreOriginalFrame(true);
 	this->inkBallAttackAnimation->retain();
@@ -526,8 +510,6 @@ EnemyFish::EnemyFish()
 	this->getHurtAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_get_hurt_01.png");
 	this->getHurtAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_get_hurt_02.png");
 	this->getHurtAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_get_hurt_03.png");
-	this->getHurtAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_get_hurt_04.png");
-	this->getHurtAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_get_hurt_05.png");
 	this->getHurtAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->getHurtAnimation->setRestoreOriginalFrame(true);
 	this->getHurtAnimation->retain();
@@ -542,7 +524,7 @@ EnemyFish::EnemyFish()
 
 	this->getHurtAnimation->getFrames().at(0)->setUserInfo(getHurtAnimationReachesfirstFrameInfo);
 
-	this->getHurtAnimation->getFrames().at(5)->setUserInfo(getHurtAnimationReachesLastFrameInfo);
+	this->getHurtAnimation->getFrames().at(3)->setUserInfo(getHurtAnimationReachesLastFrameInfo);
 
 	EventListenerCustom * getHurtAnimationFrameEventListener = EventListenerCustom::create("CCAnimationFrameDisplayedNotification", [this, getHurtAnimationReachesLastFrameInfo, getHurtAnimationReachesfirstFrameInfo](EventCustom *event) {
 		AnimationFrame::DisplayedEventInfo * userData = static_cast<AnimationFrame::DisplayedEventInfo *> (event->getUserData());
@@ -605,6 +587,12 @@ EnemyFish* EnemyFish::create(const std::string & filename) {
 	}
 	CC_SAFE_DELETE(mySprite);
 	return nullptr;
+}
+
+void EnemyFish::setGuardPos(int guardPosX, int guardPosY)
+{
+	this->guardPostionX = guardPosX;
+	this->guardPostionY = guardPosY;
 }
 
 /*
@@ -783,9 +771,12 @@ void EnemyFish::wanderAbout()
 		guardDistance = sqrt(guardDistance);
 
 		if (distance < ALARMDISTANCE1 && heroy < waterfacey) {
-			srand((unsigned)time(NULL));
-			int attckOrNot = rand() % (ATTACK_PROB);
-			//int attckOrNot = 0;
+			LARGE_INTEGER seed;
+			QueryPerformanceFrequency(&seed);
+			QueryPerformanceCounter(&seed);
+			srand(seed.QuadPart);
+			//int attckOrNot = rand() % (ATTACK_PROB);
+			int attckOrNot = 0;
 			//è¿›å…¥æ”»å‡»è·ç¦» æŒ‰æ¦‚çŽ‡å‘èµ·æ”»å‡?
 			if (attckOrNot == 0) {
 				this->stopAllActions();
@@ -915,47 +906,55 @@ void EnemyFish::wanderAbout()
 				int delty = fishy - this->guardPostionY;
 				if (deltx == 0 && delty > 0) {
 					//down
+					this->stopAllActions();
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, -this->speed_flying_pixel_per_second))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingDownAnimation)));
 				}
 				else if (deltx == 0 && delty < 0) {
 					//up
+					this->stopAllActions();
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, this->speed_flying_pixel_per_second))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingUpAnimation)));
 				}
 				else if (deltx > 0 && delty == 0) {
 					//left
+					this->stopAllActions();
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second, 0))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingLeftAnimation)));
 				}
 				else if (deltx < 0 && delty == 0) {
 					//right
+					this->stopAllActions();
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.414, 0))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingRightAnimation)));
 				}
 				else if (deltx > 0 && delty > 0) {
 					//left-down
+					this->stopAllActions();
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second / 1.414, -this->speed_flying_pixel_per_second / 1.414))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingDownLeftAnimation)));
 				}
 				else if (deltx > 0 && delty < 0) {
 					//left-up
+					this->stopAllActions();
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second / 1.414, this->speed_flying_pixel_per_second / 1.414))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingUpLeftAnimation)));
 				}
 				else if (deltx < 0 && delty > 0) {
 					//right-down
+					this->stopAllActions();
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.414, -this->speed_flying_pixel_per_second / 1.414))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingDownRightAnimation)));
 				}
 				else if (deltx < 0 && delty < 0) {
 					//right-up
+					this->stopAllActions();
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.414, this->speed_flying_pixel_per_second / 1.414))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingUpRightAnimation)));
 				}
 
-				this->runAction(RepeatForever::create(MoveTo::create(1.0f, Vec2(this->guardPostionX, this->guardPostionY))));
-				this->runAction(RepeatForever::create(Animate::create(this->movingUpAnimation)));
+				//this->runAction(RepeatForever::create(MoveTo::create(1.0f, Vec2(this->guardPostionX, this->guardPostionY))));
+				//this->runAction(RepeatForever::create(Animate::create(this->movingUpAnimation)));
 			}
 		}
 	}
@@ -1013,9 +1012,9 @@ void EnemyFish::getSlamDunkOnWater(int)
 {
 }
 
-void EnemyFish::getCollided(int)
+void EnemyFish::getCollided(int d)
 {
-	this->getHurt(damage);
+	this->getHurt(d);
 	if (((Stage1GameplayLayer *)this->getParent())->getPositionX() < this->getPositionX()){
 		this->runAction(MoveBy::create(0.2f, Vec2(50, 0)));
 	}
@@ -1033,6 +1032,4 @@ void EnemyFish::die() {
 		this->setPositionY(-11111);
 		this->removeFromParent();
 	}), nullptr));
-
-
 }

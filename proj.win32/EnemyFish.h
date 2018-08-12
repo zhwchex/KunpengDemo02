@@ -8,8 +8,8 @@
 
 #define FISHHEALTHY1 100
 #define ALARMDISTANCE1 300
-#define ATTACK_PROB 8
-#define GUARD_POSTION_DISTANCE 800
+#define ATTACK_PROB 6
+#define GUARD_POSTION_DISTANCE 500
 
 class EnemyFish : public GeneralUnit
 {
@@ -61,6 +61,7 @@ public:
 
 	static EnemyFish * create(const std::string & filename);
 
+	void setGuardPos(int guardPosX, int guardPosY);
 	void wanderAbout();
 	//void wanderAbout(int guardPosX, int guardPosY);
 	void getHurt();
