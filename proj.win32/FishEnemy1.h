@@ -15,6 +15,7 @@ public:
 	void die();
 	void wander();
 	void attack(Vec2 pos);
+	void getCollided(int d);
 
 	int speed;
 	int hurt;

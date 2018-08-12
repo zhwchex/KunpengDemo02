@@ -1015,6 +1015,13 @@ void EnemyFish::getSlamDunkOnWater(int)
 
 void EnemyFish::getCollided(int)
 {
+	this->getHurt(damage);
+	if (((Stage1GameplayLayer *)this->getParent())->getPositionX() < this->getPositionX()){
+		this->runAction(MoveBy::create(0.2f, Vec2(50, 0)));
+	}
+	else{
+		this->runAction(MoveBy::create(0.2f, Vec2(-50, 0)));
+	}
 }
 
 void EnemyFish::die() {

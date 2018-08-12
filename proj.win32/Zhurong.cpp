@@ -1234,17 +1234,17 @@ void Zhurong::getHurtByWind(int damage){
 }
 
 void Zhurong::getHurtByPaw(int damage){
-
+	this->getHurtByWind(damage);
 }
 void Zhurong::getHurtByCrush(int damage){
-
+	this->getHurtByWind(damage);
 }
 
 void Zhurong::getHurtByWater(int damage){
-
+	this->getHurtByWind(damage);
 }
 void Zhurong::getHurtByFin(int damage){
-
+	this->getHurtByWind(damage);
 }
 
 void Zhurong::die(){
@@ -1252,9 +1252,9 @@ void Zhurong::die(){
 }
 
 void Zhurong::getSlamDunkOnGround(int damage){
-
+	this->getHurtByWind(damage);
 }
 
 void Zhurong::getSlamDunkOnWater(int damage){
-
+	this->getHurtByWind(damage);
 }

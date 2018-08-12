@@ -1,5 +1,6 @@
 #include "FishEnemy1.h"
 #include "Stage1GameplayLayer.h"
+#include "AudioManager.h"
 
 const static int STATE_DEFAULT = 0;
 const static int STATE_ATTACK = 1;
@@ -17,7 +18,7 @@ FishEnemy1::FishEnemy1()
 	speed = 5; // 速度
 	hurt = 10; // 伤害
 	pauseflagDist = 500; // 锁敌距离（离敌人这么远的时候才可能发现敌人）
-	attackDist = 100; // 攻击距离（离敌人这么远的时候才可能发动攻击）
+	attackDist = 200; // 攻击距离（离敌人这么远的时候才可能发动攻击）
 	discoverProb = 0.7; // 发现敌人的概率
 	attackProb = 0.4; // 发动攻击的概率
 	runProb = 0.7; // 走动的概率（有可能停在原地不走）
@@ -30,7 +31,6 @@ FishEnemy1::FishEnemy1()
 	defaultAnimation->addSpriteFrameWithFileName("crab/default4.png");
 	defaultAnimation->addSpriteFrameWithFileName("crab/default5.png");
 	defaultAnimation->addSpriteFrameWithFileName("crab/default6.png");
-	defaultAnimation->addSpriteFrameWithFileName("crab/default7.png");
 	defaultAnimation->setDelayPerUnit(FRAME_RATE);
 	defaultAnimation->setRestoreOriginalFrame(true);
 	defaultAnimation->retain();
@@ -43,7 +43,6 @@ FishEnemy1::FishEnemy1()
 	attackAnimation->addSpriteFrameWithFileName("crab/attack4.png");
 	attackAnimation->addSpriteFrameWithFileName("crab/attack5.png");
 	attackAnimation->addSpriteFrameWithFileName("crab/attack6.png");
-	attackAnimation->addSpriteFrameWithFileName("crab/attack7.png");
 	attackAnimation->setDelayPerUnit(FRAME_RATE);
 	attackAnimation->setRestoreOriginalFrame(true);
 	attackAnimation->retain();
@@ -53,6 +52,8 @@ FishEnemy1::FishEnemy1()
 	beAttackedAnimation->addSpriteFrameWithFileName("crab/beattacked1.png");
 	beAttackedAnimation->addSpriteFrameWithFileName("crab/beattacked2.png");
 	beAttackedAnimation->addSpriteFrameWithFileName("crab/beattacked3.png");
+	beAttackedAnimation->addSpriteFrameWithFileName("crab/beattacked4.png");
+	beAttackedAnimation->addSpriteFrameWithFileName("crab/beattacked5.png");
 	beAttackedAnimation->setDelayPerUnit(FRAME_RATE);
 	beAttackedAnimation->setRestoreOriginalFrame(true);
 	beAttackedAnimation->retain();
@@ -88,8 +89,10 @@ void FishEnemy1::wanderAbout()
 
 	Stage1GameplayLayer *gamePlayer = (Stage1GameplayLayer *) getParent();
 	Sprite *hero = gamePlayer->kunpeng;
-
 	Vec2 heroPos = hero->getPosition();
+	if (heroPos.x < getPositionX()) setScaleX(-1);
+	else setScaleX(1);
+
 	float dist = heroPos.distance(getPosition());
 	srand((unsigned int)time(0));
 	if (dist < pauseflagDist) // 如果敌人进入了锁敌距离
@@ -144,11 +147,17 @@ void FishEnemy1::getHurt(int h)
 
 	state = STATE_BE_ATTACKED;
 	health -= h;
+	AudioManager::getInstance()->play(MONSTER_HURT_FILE_NAME, false);
 	if (health <= 0) die();
 	else
 	{
 		stopAllActions();
-		runAction(Sequence::create(Animate::create(beAttackedAnimation), CallFunc::create([this]() {
+		Stage1GameplayLayer *gamePlayer = (Stage1GameplayLayer *)getParent();
+		Sprite *hero = gamePlayer->kunpeng;
+		Vec2 heroPos = hero->getPosition();
+		int forward = heroPos.x < getPositionX() ? 1 : -1;
+		runAction(Sequence::create(MoveTo::create(0.1, Point(getPositionX() + forward * 60, getPositionY())),
+			Animate::create(beAttackedAnimation), CallFunc::create([this]() {
 			this->state = STATE_DEFAULT;
 			this->stopAllActions();
 			this->runAction(RepeatForever::create(Animate::create(this->defaultAnimation)));
@@ -166,7 +175,8 @@ void FishEnemy1::die()
 	state = STATE_DEAD;
 	stopAllActions();
 	runAction(Sequence::create(Animate::create(deadAnimation), CallFunc::create([this]() {
-		this->runAction(Sequence::create(FadeOut::create(ANIMATION_DURATION),
+		this->setTexture("crab/dead3.png");
+		this->runAction(Sequence::create(FadeOut::create(0.1),
 			CallFunc::create([this]() { this->setPositionY(-11111); this->removeFromParent(); }), NULL));
 	}), NULL));
 }
@@ -214,15 +224,23 @@ void FishEnemy1::attack(Vec2 pos)
 
 	state = STATE_ATTACK;
 	stopAllActions();
+	AudioManager::getInstance()->play(CRAB_ATTACK_FILE_NAME, false);
+	Stage1GameplayLayer *gamePlayer = (Stage1GameplayLayer *) this->getParent();
+	HeroSprite *hero = gamePlayer->kunpeng;
+	if (hero->getPosition().distance(this->getPosition()) <= 100)
+		hero->getHurtGeneral(this->hurt);
 	runAction(Sequence::create(Animate::create(attackAnimation), CallFunc::create([this]() {
-		Stage1GameplayLayer *gamePlayer = (Stage1GameplayLayer *) this->getParent();
-		Sprite *hero = gamePlayer->kunpeng;
-		if (hero->getPosition().distance(this->getPosition()) <= this->attackDist)
-		{
-			// 主角被攻击
-		}
 		this->state = STATE_DEFAULT;
 		this->stopAllActions();
 		this->runAction(RepeatForever::create(Animate::create(this->defaultAnimation)));
 	}), NULL));
+}
+void FishEnemy1::getCollided(int d){
+	this->getHurt(d);
+	if (((Stage1GameplayLayer *)this->getParent())->getPositionX() < this->getPositionX()){
+		this->runAction(MoveBy::create(0.2f, Vec2(50,0)));
+	}
+	else{
+		this->runAction(MoveBy::create(0.2f, Vec2(-50, 0)));
+	}
 }
