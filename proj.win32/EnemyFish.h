@@ -7,9 +7,9 @@
 //小怪：鱼
 
 #define FISHHEALTHY1 100
-#define ALARMDISTANCE1 300
-#define ATTACK_PROB 8
-#define GUARD_POSTION_DISTANCE 800
+#define ALARMDISTANCE1 500
+#define ATTACK_PROB 4
+#define GUARD_POSTION_DISTANCE 500
 
 class EnemyFish : public GeneralUnit
 {

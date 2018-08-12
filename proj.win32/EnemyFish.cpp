@@ -438,23 +438,14 @@ EnemyFish::EnemyFish()
 			this->acceptCall = false;//在动画开始的第0帧开始禁止外面调用wanderAbout()
 			Sprite * inkBall = Sprite::create("characters/enemyfish/enemyfish_inkBallAttack_00.png");
 			HeroSprite * hero = ((Stage1GameplayLayer *)this->getParent())->kunpeng;
-			Point zhu = this->getPosition();
-			Point biginkBall = Vec2(zhu.x - 120, zhu.y + 150);
-			inkBall->setPosition(biginkBall);
+			Point fish = this->getPosition();
+			Point inkBallPos = Vec2(fish.x-50, fish.y);
+			inkBall->setPosition(inkBallPos);
 			ink_con = inkBall;
 			this->getParent()->addChild(inkBall);
-			int deltax = hero->getPositionX() - inkBall->getPositionX();
-			int deltay = hero->getPositionY() - inkBall->getPositionY();
-			Animation * fireanimation = Animation::create();
-			fireanimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_inkBallAttack_00.png");
-			fireanimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_inkBallAttack_02.png");
 
-			fireanimation->setDelayPerUnit(this->ANIMATION_FRAME_INTERVAL);
-			fireanimation->setRestoreOriginalFrame(true);
-			fireanimation->retain();
-			inkBall->runAction(Animate::create(fireanimation));
-			auto delayTime = DelayTime::create(this->ANIMATION_FRAME_INTERVAL * 4);
-			auto func = CallFunc::create([this]() {
+			auto delayTime = DelayTime::create(this->ANIMATION_FRAME_INTERVAL);
+			auto inkBallAttackFunc = CallFunc::create([this]() {
 
 				Sprite * hero = ((Stage1GameplayLayer *)this->getParent())->kunpeng;
 				Point fish = this->getPosition();
@@ -466,7 +457,7 @@ EnemyFish::EnemyFish()
 
 				ink_con->runAction(RepeatForever::create(MoveBy::create(distance / 200, Vec2(deltax, deltay))));
 				ink_con->runAction(RepeatForever::create(Animate::create(this->inkBallAttackAnimation))); });
-			auto seq = Sequence::create(delayTime, func, nullptr);
+			auto seq = Sequence::create(delayTime, inkBallAttackFunc, nullptr);
 			inkBall->runAction(seq);
 
 		}
@@ -479,9 +470,9 @@ EnemyFish::EnemyFish()
 
 	//ink ball attack
 	this->inkBallAttackAnimation = Animation::create();
-	this->inkBallAttackAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_inkballAttack_00.png");
 	this->inkBallAttackAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_inkballAttack_01.png");
-	this->inkBallAttackAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_inkballAttack_02.png");
+	this->inkBallAttackAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_inkballAttack_01.png");
+	this->inkBallAttackAnimation->addSpriteFrameWithFileName("characters/enemyfish/enemyfish_inkballAttack_01.png");
 	this->inkBallAttackAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->inkBallAttackAnimation->setRestoreOriginalFrame(true);
 	this->inkBallAttackAnimation->retain();
@@ -774,9 +765,12 @@ void EnemyFish::wanderAbout()
 		guardDistance = sqrt(guardDistance);
 
 		if (distance < ALARMDISTANCE1 && heroy < waterfacey) {
-			srand((unsigned)time(NULL));
-			int attckOrNot = rand() % (ATTACK_PROB);
-			//int attckOrNot = 0;
+			LARGE_INTEGER seed;
+			QueryPerformanceFrequency(&seed);
+			QueryPerformanceCounter(&seed);
+			srand(seed.QuadPart);
+			//int attckOrNot = rand() % (ATTACK_PROB);
+			int attckOrNot = 0;
 			//è¿›å…¥æ”»å‡»è·ç¦» æŒ‰æ¦‚çŽ‡å‘èµ·æ”»å‡?
 			if (attckOrNot == 0) {
 				this->stopAllActions();
@@ -906,47 +900,55 @@ void EnemyFish::wanderAbout()
 				int delty = fishy - this->guardPostionY;
 				if (deltx == 0 && delty > 0) {
 					//down
+					this->stopAllActions();
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, -this->speed_flying_pixel_per_second))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingDownAnimation)));
 				}
 				else if (deltx == 0 && delty < 0) {
 					//up
+					this->stopAllActions();
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(0, this->speed_flying_pixel_per_second))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingUpAnimation)));
 				}
 				else if (deltx > 0 && delty == 0) {
 					//left
+					this->stopAllActions();
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second, 0))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingLeftAnimation)));
 				}
 				else if (deltx < 0 && delty == 0) {
 					//right
+					this->stopAllActions();
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.414, 0))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingRightAnimation)));
 				}
 				else if (deltx > 0 && delty > 0) {
 					//left-down
+					this->stopAllActions();
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second / 1.414, -this->speed_flying_pixel_per_second / 1.414))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingDownLeftAnimation)));
 				}
 				else if (deltx > 0 && delty < 0) {
 					//left-up
+					this->stopAllActions();
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(-this->speed_flying_pixel_per_second / 1.414, this->speed_flying_pixel_per_second / 1.414))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingUpLeftAnimation)));
 				}
 				else if (deltx < 0 && delty > 0) {
 					//right-down
+					this->stopAllActions();
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.414, -this->speed_flying_pixel_per_second / 1.414))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingDownRightAnimation)));
 				}
 				else if (deltx < 0 && delty < 0) {
 					//right-up
+					this->stopAllActions();
 					this->runAction(RepeatForever::create(MoveBy::create(1.0f, Vec2(this->speed_flying_pixel_per_second / 1.414, this->speed_flying_pixel_per_second / 1.414))));
 					this->runAction(RepeatForever::create(Animate::create(this->movingUpRightAnimation)));
 				}
 
-				this->runAction(RepeatForever::create(MoveTo::create(1.0f, Vec2(this->guardPostionX, this->guardPostionY))));
-				this->runAction(RepeatForever::create(Animate::create(this->movingUpAnimation)));
+				//this->runAction(RepeatForever::create(MoveTo::create(1.0f, Vec2(this->guardPostionX, this->guardPostionY))));
+				//this->runAction(RepeatForever::create(Animate::create(this->movingUpAnimation)));
 			}
 		}
 	}
@@ -1004,8 +1006,15 @@ void EnemyFish::getSlamDunkOnWater(int)
 {
 }
 
-void EnemyFish::getCollided(int)
+void EnemyFish::getCollided(int d)
 {
+	this->getHurt(d);
+	if (((Stage1GameplayLayer*)this->getParent())->getPositionX() < this->getPositionX()) {
+		this->runAction(MoveBy::create(0.2f,Vec2(50,0)));
+	}
+	else {
+		this->runAction(MoveBy::create(0.2f, Vec2(-50, 0)));
+	}
 }
 
 void EnemyFish::die() {

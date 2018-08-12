@@ -135,34 +135,34 @@ void Stage1GameplayLayer::onEnter(){
 	*/
 
 	/*
-	GeneralUnit *fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	GeneralUnit *fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishljj->setPosition(Vec2(3876, -208));
 	this->addChild(fishljj);
 	enemyList.pushBack(fishljj);
 	
-	GeneralUnit *fishljj2 = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	GeneralUnit *fishljj2 = EnemyFish::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishljj2->setPosition(Vec2(4100, -153));
 	this->addChild(fishljj2);
 	enemyList.pushBack(fishljj2);
 
-	GeneralUnit *fishljj3 = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	GeneralUnit *fishljj3 = EnemyFish::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishljj3->setPosition(Vec2(4486, -267));
 	this->addChild(fishljj3);
 	enemyList.pushBack(fishljj3);
 	*/
 	
 /*
-	GeneralUnit *fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	GeneralUnit *fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishcw->setPosition(Vec2(4500, 0));
 	this->addChild(fishcw);
 	enemyList.pushBack(fishcw);
 
-	GeneralUnit *fishcw1 = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	GeneralUnit *fishcw1 = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishcw1->setPosition(Vec2(4700, 0));
 	this->addChild(fishcw1);
 	enemyList.pushBack(fishcw1);
 
-	GeneralUnit *fishcw2 = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	GeneralUnit *fishcw2 = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishcw2->setPosition(Vec2(4900, 0));
 	this->addChild(fishcw2);
 	enemyList.pushBack(fishcw2);
@@ -201,33 +201,33 @@ void Stage1GameplayLayer::onEnter(){
 	enemyList.pushBack(bird2);
 	
 
-	GeneralUnit *fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	GeneralUnit *fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishljj->setPosition(Vec2(6750, -200));
 	this->addChild(fishljj);
 	enemyList.pushBack(fishljj);
 
-/**/
-	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+/*
+	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishljj->setPosition(Vec2(6850, -200));
 	this->addChild(fishljj);
 	enemyList.pushBack(fishljj);
 
-	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishljj->setPosition(Vec2(6950, -200));
 	this->addChild(fishljj);
 	enemyList.pushBack(fishljj);
 
-	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishljj->setPosition(Vec2(6850, -100));
 	this->addChild(fishljj);
 	enemyList.pushBack(fishljj);
 
-	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishljj->setPosition(Vec2(6950, -100));
 	this->addChild(fishljj);
 	enemyList.pushBack(fishljj);
-
-	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+*/
+	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishljj->setPosition(Vec2(6750, -100));
 	this->addChild(fishljj);
 	enemyList.pushBack(fishljj);
@@ -276,32 +276,32 @@ void Stage1GameplayLayer::onEnter(){
 
 
 
-	GeneralUnit *fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	GeneralUnit *fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishcw->setPosition(Vec2(10250, -100));
 	this->addChild(fishcw);
 	enemyList.pushBack(fishcw);
 
-	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishcw->setPosition(Vec2(10350, -100));
 	this->addChild(fishcw);
 	enemyList.pushBack(fishcw);
 
-	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishcw->setPosition(Vec2(10450, -100));
 	this->addChild(fishcw);
 	enemyList.pushBack(fishcw);
 
-	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishcw->setPosition(Vec2(10550, -100));
 	this->addChild(fishcw);
 	enemyList.pushBack(fishcw);
 
-	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishcw->setPosition(Vec2(10650, -100));
 	this->addChild(fishcw);
 	enemyList.pushBack(fishcw);
 
-	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishcw->setPosition(Vec2(10750, -100));
 	this->addChild(fishcw);
 	enemyList.pushBack(fishcw);
@@ -315,22 +315,22 @@ void Stage1GameplayLayer::onEnter(){
 	
 
 
-	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishcw->setPosition(Vec2(11850, -100));
 	this->addChild(fishcw);
 	enemyList.pushBack(fishcw);
 
-	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishcw->setPosition(Vec2(11750, -100));
 	this->addChild(fishcw);
 	enemyList.pushBack(fishcw);
 
-	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishcw->setPosition(Vec2(11850, -200));
 	this->addChild(fishcw);
 	enemyList.pushBack(fishcw);
 
-	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishcw = FishEnemy1::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishcw->setPosition(Vec2(11750, -200));
 	this->addChild(fishcw);
 	enemyList.pushBack(fishcw);
@@ -365,27 +365,27 @@ void Stage1GameplayLayer::onEnter(){
 	enemyList.pushBack(enemyZWC);
 	this->addChild(enemyZWC);
 
-	/**/
-	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	/*
+	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishljj->setPosition(Vec2(11800, -100));
 	this->addChild(fishljj);
 	enemyList.pushBack(fishljj);
 
-	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishljj->setPosition(Vec2(11700, -100));
 	this->addChild(fishljj);
 	enemyList.pushBack(fishljj);
 
-	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishljj->setPosition(Vec2(11800, -200));
 	this->addChild(fishljj);
 	enemyList.pushBack(fishljj);
 
-	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_facing_left_00.png");
+	fishljj = EnemyFish::create("characters/enemyfish/enemyfish_hovering_00.png");
 	fishljj->setPosition(Vec2(11700, -200));
 	this->addChild(fishljj);
 	enemyList.pushBack(fishljj);
-
+*/
 	bird2 = Bird_yyh::create("characters/Bird_yyh/left1.png");
 	bird2->setPosition(11800, 100);
 	this->addChild(bird2);

@@ -21,6 +21,7 @@ public:
 
 	Bird_yyh();
 	~Bird_yyh();
+	void getSlamDunkOnGround(int damage);
 	int health = 100;
 	int flag = 0;
 	int dir = 0;
