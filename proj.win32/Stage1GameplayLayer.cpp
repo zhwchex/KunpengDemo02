@@ -10,7 +10,7 @@
 Stage1GameplayLayer::Stage1GameplayLayer()
 {
 	this->kunpeng = HeroSprite::create("characters/kunpeng/kunpeng.jpg");
-	this->background = Sprite::create("backgrounds/background_wufan1.png");
+	this->background = Sprite::create("backgrounds/background_liuyikang.jpg");
 	this->background->setAnchorPoint(Vec2(0,0.5));
 
 	this->waterSurface = WaterSurface::create("landscapes/water_surface.png");

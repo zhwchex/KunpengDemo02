@@ -26,6 +26,7 @@ public:
 	int flag = 0;
 	int dir = 0;
 	int lock = 0;
+	int fight_lock = 0;
 
 	int dieflag = 0;
 	int pauseflag = 0;
@@ -53,13 +54,13 @@ public:
 	void getHurtByWind(int damage);
 	void getHurtByPaw(int damage);
 	void getHurtByCrush(int damage);
-
-	void getHurtByWater(int damage);
-	void getHurtByFin(int damage);
 	*/
+
+	void getHurtByFin(int damage);
+	void getHurtByWater(int damage);
 	void getHeld();
 	void getThrown();
-	//void getSlamDunkOnGround(int damage);
+	void getSlamDunkOnGround(int damage);
 	void getSlamDunkOnWater(int damage);
 	void getCollided(int damage);
 

@@ -66,8 +66,8 @@ void Bullet::ShootBullet(float dt) {
 	}
 		
 	if (b->dir == 1){
-		spritebullet->setPosition(Vec2(100, 42));
-		spritebullet->setRotation(45);
+		spritebullet->setPosition(Vec2(160, 42));
+		//spritebullet->setRotation(100);
 		b->Lockfightright();
 	}
 		
