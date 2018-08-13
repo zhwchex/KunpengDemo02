@@ -1502,25 +1502,28 @@ HeroSprite::HeroSprite()
 			*/
 			//将targetToSlamDunk扔出去
 			//this->runAction(Sequence::create(MoveBy::create(0.1f, Vec2(0, -60)), MoveBy::create(0.3f, Vec2(0, -75)), nullptr));
-
+			
 			//不妨假设摔下去的速度是每秒5000像素
 			int distanceFromTargetToWaterface = this->targetToSlamDunk->getPositionY() -  this->targetToSlamDunk->getContentSize().height / 2;
 			this->targetToSlamDunk->runAction(Sequence::create(DelayTime::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL),
 				MoveBy::create(distanceFromTargetToWaterface / 5000.0, Vec2(0, -distanceFromTargetToWaterface)),
 				CallFunc::create([this]{
-				if (targetToSlamDunk != nullptr){
-					this->targetToSlamDunk->getSlamDunkOnWater(this->DAMAGE_SLAMDUNK);
-					((Stage1GameplayLayer *)this->getParent())->cameraShake_vertical_significant();
+					if (targetToSlamDunk != nullptr){
+						this->targetToSlamDunk->getSlamDunkOnWater(this->DAMAGE_SLAMDUNK);
+						((Stage1GameplayLayer *)this->getParent())->cameraShake_vertical_significant();
 
-					Sprite * bigSplash = Sprite::create("landscapes/splash_big_00.png");
-					bigSplash->setPositionX(targetToSlamDunk->getPositionX());
-					bigSplash->setPositionY(((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY());
-					this->getParent()->addChild(bigSplash);
-					bigSplash->runAction(Animate::create(this->waterSplashingAnimation_big));
-				}
-			}),
+						Sprite * bigSplash = Sprite::create("landscapes/splash_big_00.png");
+						bigSplash->setPositionX(targetToSlamDunk->getPositionX());
+						bigSplash->setPositionY(((Stage1GameplayLayer *)this->getParent())->waterSurface->getPositionY());
+						this->getParent()->addChild(bigSplash);
+						bigSplash->runAction(Animate::create(this->waterSplashingAnimation_big));
+					}
+				}),
 				MoveBy::create(this->TIME_FOR_ANIMATION_FRAME_INTERVAL, Vec2(0, 15)),
 				nullptr));
+			
+
+			//this->targetToSlamDunk->getThrown();
 		}
 		if (*userData->userInfo == slamDunkingBossRecoverAllAbilitiesInfo){
 			this->enableAllAbilities();
@@ -1636,6 +1639,11 @@ HeroSprite::HeroSprite()
 	this->TransformingFromFishToBirdAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_transforming_to_peng_01.png");
 	this->TransformingFromFishToBirdAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_transforming_to_peng_02.png");
 	this->TransformingFromFishToBirdAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_transforming_to_peng_03.png");
+	this->TransformingFromFishToBirdAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_transforming_to_peng_04.png");
+	this->TransformingFromFishToBirdAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_transforming_to_peng_05.png");
+	this->TransformingFromFishToBirdAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_transforming_to_peng_06.png");
+	this->TransformingFromFishToBirdAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_transforming_to_peng_07.png");
+	this->TransformingFromFishToBirdAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_transforming_to_peng_08.png");
 	this->TransformingFromFishToBirdAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->TransformingFromFishToBirdAnimation->setRestoreOriginalFrame(true);
 	this->TransformingFromFishToBirdAnimation->retain();
@@ -1649,8 +1657,8 @@ HeroSprite::HeroSprite()
 	transformingFTBEndInfo["37"] = Value(37);
 
 	this->TransformingFromFishToBirdAnimation->getFrames().at(0)->setUserInfo(transformingFTBStartInfo);
-	this->TransformingFromFishToBirdAnimation->getFrames().at(2)->setUserInfo(transformingFTBRecoverAllAbilitiesInfo);
-	this->TransformingFromFishToBirdAnimation->getFrames().at(3)->setUserInfo(transformingFTBEndInfo);
+	this->TransformingFromFishToBirdAnimation->getFrames().at(6)->setUserInfo(transformingFTBRecoverAllAbilitiesInfo);
+	this->TransformingFromFishToBirdAnimation->getFrames().at(8)->setUserInfo(transformingFTBEndInfo);
 
 
 	EventListenerCustom * transformingFromFishToBirdAnimationFrameEventListener = EventListenerCustom::create(AnimationFrameDisplayedNotification, [this, transformingFTBStartInfo, transformingFTBRecoverAllAbilitiesInfo, transformingFTBEndInfo](EventCustom * event){
@@ -1788,15 +1796,15 @@ HeroSprite::HeroSprite()
 	this->hoveringRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_right_00.png");
 	this->hoveringRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_right_01.png");
 	this->hoveringRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_right_02.png");
-	//this->hoveringRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_right_03.png");
+	this->hoveringRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_right_03.png");
 	this->hoveringRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_right_04.png");
 	this->hoveringRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_right_05.png");
 	this->hoveringRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_right_06.png");
 	this->hoveringRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_right_07.png");
 	//this->hoveringRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_right_08.png");
 	//this->hoveringRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_right_09.png");
-	this->hoveringRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_right_10.png");
-	this->hoveringRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_right_11.png");
+	//this->hoveringRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_right_10.png");
+	//this->hoveringRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_right_11.png");
 	//this->hoveringRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_right_12.png");
 	this->hoveringRightAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->hoveringRightAnimation_kun->setRestoreOriginalFrame(true);
@@ -1873,15 +1881,15 @@ HeroSprite::HeroSprite()
 	this->hoveringLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_left_00.png");
 	this->hoveringLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_left_01.png");
 	this->hoveringLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_left_02.png");
-	//this->hoveringLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_left_03.png");
+	this->hoveringLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_left_03.png");
 	this->hoveringLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_left_04.png");
 	this->hoveringLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_left_05.png");
 	this->hoveringLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_left_06.png");
 	this->hoveringLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_left_07.png");
 	//this->hoveringLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_left_08.png");
 	//this->hoveringLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_left_09.png");
-	this->hoveringLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_left_10.png");
-	this->hoveringLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_left_11.png");
+	//this->hoveringLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_left_10.png");
+	//this->hoveringLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_left_11.png");
 	//this->hoveringLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_hovering_left_12.png");
 	this->hoveringLeftAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->hoveringLeftAnimation_kun->setRestoreOriginalFrame(true);
@@ -1899,7 +1907,7 @@ HeroSprite::HeroSprite()
 	this->movingRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_right_03.png");
 	this->movingRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_right_04.png");
 	this->movingRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_right_05.png");
-	this->movingRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_right_06.png");
+	//this->movingRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_right_06.png");
 	this->movingRightAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingRightAnimation_kun->setRestoreOriginalFrame(true);
 	this->movingRightAnimation_kun->retain();
@@ -1959,7 +1967,7 @@ HeroSprite::HeroSprite()
 	this->movingUpRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_upright_03.png");
 	this->movingUpRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_upright_04.png");
 	this->movingUpRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_upright_05.png");
-	this->movingUpRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_upright_06.png");
+	//this->movingUpRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_upright_06.png");
 	this->movingUpRightAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingUpRightAnimation_kun->setRestoreOriginalFrame(true);
 	this->movingUpRightAnimation_kun->retain();
@@ -1970,7 +1978,7 @@ HeroSprite::HeroSprite()
 	this->movingUpRightAnimation_kun->getFrames().at(3)->setUserInfo(movingCheckIfToStayInWaterInfo);
 	this->movingUpRightAnimation_kun->getFrames().at(4)->setUserInfo(movingCheckIfToStayInWaterInfo);
 	this->movingUpRightAnimation_kun->getFrames().at(5)->setUserInfo(movingCheckIfToStayInWaterInfo);
-	this->movingUpRightAnimation_kun->getFrames().at(6)->setUserInfo(movingCheckIfToStayInWaterInfo);
+	//this->movingUpRightAnimation_kun->getFrames().at(6)->setUserInfo(movingCheckIfToStayInWaterInfo);
 
 	this->movingDownRightAnimation_kun = Animation::create();
 	this->movingDownRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_downright_00.png");
@@ -1979,7 +1987,7 @@ HeroSprite::HeroSprite()
 	this->movingDownRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_downright_03.png");
 	this->movingDownRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_downright_04.png");
 	this->movingDownRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_downright_05.png");
-	this->movingDownRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_downright_06.png");
+	//this->movingDownRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_downright_06.png");
 	this->movingDownRightAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingDownRightAnimation_kun->setRestoreOriginalFrame(true);
 	this->movingDownRightAnimation_kun->retain();
@@ -1993,7 +2001,7 @@ HeroSprite::HeroSprite()
 	this->movingLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_left_03.png");
 	this->movingLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_left_04.png");
 	this->movingLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_left_05.png");
-	this->movingLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_left_06.png");
+	//this->movingLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_left_06.png");
 	this->movingLeftAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingLeftAnimation_kun->setRestoreOriginalFrame(true);
 	this->movingLeftAnimation_kun->retain();
@@ -2005,7 +2013,7 @@ HeroSprite::HeroSprite()
 
 	this->movingLeftAnimation_kun->getFrames().at(4)->setUserInfo(movingCheckIfToStayInWaterInfo);
 	this->movingLeftAnimation_kun->getFrames().at(5)->setUserInfo(movingCheckIfToStayInWaterInfo);
-	this->movingLeftAnimation_kun->getFrames().at(6)->setUserInfo(movingCheckIfToStayInWaterInfo);
+	//this->movingLeftAnimation_kun->getFrames().at(6)->setUserInfo(movingCheckIfToStayInWaterInfo);
 
 
 
@@ -2016,7 +2024,7 @@ HeroSprite::HeroSprite()
 	this->movingUpLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_upleft_03.png");
 	this->movingUpLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_upleft_04.png");
 	this->movingUpLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_upleft_05.png");
-	this->movingUpLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_upleft_06.png");
+	//this->movingUpLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_upleft_06.png");
 	this->movingUpLeftAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingUpLeftAnimation_kun->setRestoreOriginalFrame(true);
 	this->movingUpLeftAnimation_kun->retain();
@@ -2027,7 +2035,7 @@ HeroSprite::HeroSprite()
 	this->movingUpLeftAnimation_kun->getFrames().at(3)->setUserInfo(movingCheckIfToStayInWaterInfo);
 	this->movingUpLeftAnimation_kun->getFrames().at(4)->setUserInfo(movingCheckIfToStayInWaterInfo);
 	this->movingUpLeftAnimation_kun->getFrames().at(5)->setUserInfo(movingCheckIfToStayInWaterInfo);
-	this->movingUpLeftAnimation_kun->getFrames().at(6)->setUserInfo(movingCheckIfToStayInWaterInfo);
+	//this->movingUpLeftAnimation_kun->getFrames().at(6)->setUserInfo(movingCheckIfToStayInWaterInfo);
 
 	this->movingDownLeftAnimation_kun = Animation::create();
 	this->movingDownLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_downleft_00.png");
@@ -2036,7 +2044,7 @@ HeroSprite::HeroSprite()
 	this->movingDownLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_downleft_03.png");
 	this->movingDownLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_downleft_04.png");
 	this->movingDownLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_downleft_05.png");
-	this->movingDownLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_downleft_06.png");
+	//this->movingDownLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_moving_downleft_06.png");
 	this->movingDownLeftAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->movingDownLeftAnimation_kun->setRestoreOriginalFrame(true);
 	this->movingDownLeftAnimation_kun->retain();
@@ -2161,7 +2169,7 @@ HeroSprite::HeroSprite()
 	this->dashingUpRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_dashing_upright_03.png");
 	this->dashingUpRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_dashing_upright_04.png");
 	this->dashingUpRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_dashing_upright_05.png");
-	this->dashingUpRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_dashing_upright_06.png");
+	//this->dashingUpRightAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_dashing_upright_06.png");
 	this->dashingUpRightAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->dashingUpRightAnimation_kun->setRestoreOriginalFrame(true);
 	this->dashingUpRightAnimation_kun->retain();
@@ -2198,7 +2206,7 @@ HeroSprite::HeroSprite()
 	this->dashingUpLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_dashing_upleft_03.png");
 	this->dashingUpLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_dashing_upleft_04.png");
 	this->dashingUpLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_dashing_upleft_05.png");
-	this->dashingUpLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_dashing_upleft_06.png");
+	//this->dashingUpLeftAnimation_kun->addSpriteFrameWithFile("characters/kunpeng/kun_dashing_upleft_06.png");
 	this->dashingUpLeftAnimation_kun->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->dashingUpLeftAnimation_kun->setRestoreOriginalFrame(true);
 	this->dashingUpLeftAnimation_kun->retain(); 
@@ -2231,7 +2239,7 @@ HeroSprite::HeroSprite()
 	this->blowingVortexRightAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_blowing_vortex_right_01.png");
 	this->blowingVortexRightAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_blowing_vortex_right_02.png");
 	this->blowingVortexRightAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_blowing_vortex_right_03.png");
-	//this->blowingVortexRightAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_blowing_vortex_right_04.png");
+	this->blowingVortexRightAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_blowing_vortex_right_04.png");
 	this->blowingVortexRightAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->blowingVortexRightAnimation->setRestoreOriginalFrame(true);
 	this->blowingVortexRightAnimation->retain();
@@ -2300,7 +2308,7 @@ HeroSprite::HeroSprite()
 	this->blowingVortexLeftAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_blowing_vortex_left_01.png");
 	this->blowingVortexLeftAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_blowing_vortex_left_02.png");
 	this->blowingVortexLeftAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_blowing_vortex_left_03.png");
-	//this->blowingVortexLeftAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_blowing_vortex_left_04.png");
+	this->blowingVortexLeftAnimation->addSpriteFrameWithFile("characters/kunpeng/kun_blowing_vortex_left_04.png");
 	this->blowingVortexLeftAnimation->setDelayPerUnit(this->TIME_FOR_ANIMATION_FRAME_INTERVAL);
 	this->blowingVortexLeftAnimation->setRestoreOriginalFrame(true);
 	this->blowingVortexLeftAnimation->retain();
@@ -3309,6 +3317,8 @@ void HeroSprite::getHurtGeneral(int damage){
 			this->runAction(Animate::create(this->gettingHurtRightGeneralAnimation_kun));
 		}
 	}
+	((Stage1GameplayLayer *)this->getParent())->cameraShake_vertical_significant();
+
 }
 
 void HeroSprite::getHurtByWater(int damage){

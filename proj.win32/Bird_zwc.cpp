@@ -4,6 +4,7 @@
 #include "Stage1GameplayLayer.h"
 #include "Bullet.h"
 #include "Stage1Scene.h"
+#include "AudioManager.h"
 using namespace std;
 # define hitThreshold 150 //发起冲刺的距离阈值
 # define hurtThreshold 50 //受伤的距离阈值
@@ -227,7 +228,7 @@ Bird_zwc::Bird_zwc()
 	this->leftdieAnimation->addSpriteFrameWithFileName("characters/bat/die-8.png");
 	this->leftdieAnimation->addSpriteFrameWithFileName("characters/bat/die-9.png");
 	this->leftdieAnimation->addSpriteFrameWithFileName("characters/bat/die-10.png");
-	this->leftdieAnimation->setDelayPerUnit(0.2f);  // 设置动画帧率
+	this->leftdieAnimation->setDelayPerUnit(0.1f);  // 设置动画帧率
 	this->leftdieAnimation->setRestoreOriginalFrame(false);// 设置动画播放完毕后是否回到第一帧
 	this->leftdieAnimation->retain();
 
@@ -243,7 +244,7 @@ Bird_zwc::Bird_zwc()
 	this->rightdieAnimation->addSpriteFrameWithFileName("characters/bat/dieRight-8.png");
 	this->rightdieAnimation->addSpriteFrameWithFileName("characters/bat/dieRight-9.png");
 	this->rightdieAnimation->addSpriteFrameWithFileName("characters/bat/dieRight-10.png");
-	this->rightdieAnimation->setDelayPerUnit(0.2f);  // 设置动画帧率
+	this->rightdieAnimation->setDelayPerUnit(0.1f);  // 设置动画帧率
 	this->rightdieAnimation->setRestoreOriginalFrame(false);// 设置动画播放完毕后是否回到第一帧
 	this->rightdieAnimation->retain();
 
@@ -491,9 +492,9 @@ void Bird_zwc::lockBirdWithinLandscape(){
 
 
 void Bird_zwc::getHurtByWind(int damage){
-	//this->getHurt(damage);
+	this->getHurt(damage);
 	//getHeld();//forTest
-	getThrown();//forTest
+	//getThrown();//forTest
 }
 
 void Bird_zwc::getHurtByPaw(int damage){      //yyhyyh
@@ -514,7 +515,7 @@ void Bird_zwc::getHurt(int damage){
 
 	float x_dis = hero.x - bird.x;
 	float y_dis = hero.y - bird.y;
-
+	AudioManager::getInstance()->play(MONSTER_HURT_FILE_NAME, false);
 	health = health - damage;
 	if (health > 0)
 	{
@@ -567,13 +568,13 @@ void Bird_zwc::die(bool facingLeft) {
 		this->runAction(Animate::create(rightdieAnimation));
 	}
 
-	auto fallingDown = MoveTo::create(1.0f, Vec2(this->getPosition().x, 0));//加上下落到水面的动画
-	auto delayTime = DelayTime::create(1.0f);
+	auto fallingDown = MoveTo::create(0.5f, Vec2(this->getPosition().x, 0));//加上下落到水面的动画
+	auto delayTime = DelayTime::create(0.5f);
 	auto func = CallFunc::create([this](){
 		auto temp = (Stage1GameplayLayer*)this->getParent();
 		temp->removeChild(this);
 		temp->enemyList.eraseObject(this); });
-		auto seq = Sequence::create(fallingDown, delayTime, func, nullptr);
+		auto seq = Sequence::create(fallingDown, delayTime,func, nullptr);
 		this->runAction(seq);
 }
 

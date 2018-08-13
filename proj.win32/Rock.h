@@ -1,8 +1,12 @@
 #pragma once
 #include "cocos2d.h"
 #include "Stage1GameplayLayer.h"
+#include "AudioManager.h"
 
 USING_NS_CC;
+using namespace std;
+static const string ROCK_FILE_NAME = "landscapes/jiaoshi_5.png";
+
 class Rock : public GeneralUnit
 {
 public:
